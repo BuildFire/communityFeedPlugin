@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css"/>
+    <script src="../../../../scripts/buildfire.js"></script>
+  </head>
+  <body>
+    
+    <script src="./index.js"></script>
+    <script>
+      let newPost = {
+          postId : "1321",
+          userId : "1117001",
+          username : "alikaakati",
+          userImg : "",
+          DateTime : new Date().toLocaleDateString(),
+          postText : "Hello this is a temp post",
+          postImage : [],
+          pluginName : "Community Wall",
+          pluginNav : null
+      }
+      FeedAPI.addPost(newPost , (err , result) =>{
+        if(err) console.log(err);
+        else console.log(result)
+      })
+    </script>
+</body>
+</html>
