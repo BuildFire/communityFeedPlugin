@@ -1,1 +1,54 @@
+.delete_container{
+    border-bottom: 1px solid black;
+    padding-bottom: 15px;
+}
 
+.titleContainer{
+    width: 100%;
+    background-color: #00a1f1;
+    padding: 5px;
+}
+#title{
+    font-weight: bolder;
+    color: #ffffff;
+}
+
+.delete_button{
+    border: 0px;
+    border-radius: 5px;
+    padding: 5px;
+    transition : 250ms ease-in-out;
+}
+
+.delete_button:hover{
+    background-color: red;
+    color: white;
+}
+
+.add_input > *{
+    display: block;
+    padding: 3px;
+    margin-top: 5px;
+}
+
+.add_input > button{
+    margin-bottom: 5px;
+    width: 20%;
+    border: 0px;
+    background-color: #28a745;
+    color: #e4f4e8;
+    border-radius: 5px;
+}
+.delete_button{
+    margin-bottom: 5px;
+    width: 20%;
+    border: 0px;
+    background-color: #dc3545;
+    color: #e4f4e8;
+    border-radius: 5px;
+}
+
+.delete_input{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
