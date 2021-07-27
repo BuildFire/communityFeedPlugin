@@ -3,12 +3,23 @@ const checkPost = (post) =>{
     else return false
 }
 const FeedAPI = {
-    addPost : (post , callback) =>{
-        if(!checkPost(post)){
+
+    loadPosts : (callback) =>{
+        buildfire.appData.get("CommunityFeedPost", (err, result) => {
+            if (err){
+                if(callback) return callback(err , null)
+            }
+            else{
+                if(callback) return callback(null , result)
+            }
+            })
+    },
+    addPost : (posts , callback) =>{
+        if(!checkPost(posts[posts.length - 1])){
             if(callback) callback("An error occured (Malformatted post)" , null)
         }
         else{
-            buildfire.appData.insert(post, "CommunityFeedPost", false, (err, result) => {
+            buildfire.appData.save(posts, "CommunityFeedPost", (err, result) => {
                 if (err) return callback("Error while inserting your data" , null);
                 else{
                     if(callback) callback(null , result)
@@ -60,3 +71,7 @@ const FeedAPI = {
             );
     }
 } 
+
+const createModal = () =>{
+
+}

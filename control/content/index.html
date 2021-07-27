@@ -6,24 +6,79 @@
     <script src="../../../../scripts/buildfire.js"></script>
   </head>
   <body>
-    
+    <div id="posts_container">
+      test
+    </div>
+    <div class="add_container">
+      <h4 id="add_title">Add a post</h4>
+      <div>
+        <input type="text" placeholder="postId" name="" id="newPostID">
+        <input type="text" placeholder="userId" name="" id="newPostUserID">
+        <input type="text" placeholder="username" name="" id="newPostUsername">
+        <input type="text" placeholder="postText" name="" id="newPostText">
+        <input type="text" placeholder="pluginName" name="" id="newPostPluginName">
+        <button class="add_button" onclick="addPost()">add</button>
+      </div>
+    </div>
+    <div class="delete_container">
+      <div>
+        <h4 id="delete_title">Delete a post</h4>
+        <div>
+          <input type="text" placeholder="Post ID" />
+          <button class="delete_button">Delete</button>
+        </div>
+      </div>      
+    </div>
     <script src="./index.js"></script>
     <script>
-      let newPost = {
-          postId : "1321",
-          userId : "1117001",
-          username : "alikaakati",
-          userImg : "",
-          DateTime : new Date().toLocaleDateString(),
-          postText : "Hello this is a temp post",
-          postImage : [],
-          pluginName : "Community Wall",
-          pluginNav : null
+      // buildfire.appData.save([],"CommunityFeedPost",(err , res) =>{
+      //   if(err) console.error(err)
+      //   else console.log(res)
+      // })
+
+      let communityFeed = {
+        Posts : []
       }
-      FeedAPI.addPost(newPost , (err , result) =>{
-        if(err) console.log(err);
-        else console.log(result)
+
+      const renderPosts = () =>{
+        console.log("rendering posts");
+        let temp = "";
+        communityFeed.Posts.forEach(post =>{
+          temp+= `${post.username} - ` 
+        })
+        document.getElementById("posts_container").innerHTML = temp;
+      };
+
+      FeedAPI.loadPosts((err , response) =>{
+        if(err) console.error(err);
+        else{
+          console.log(response.data);
+          communityFeed.Posts = response.data;
+          renderPosts();
+        }
       })
-    </script>
+    addPost = () =>{
+        let newPost = {
+            postId : newPostID.value,
+            userId : newPostUserID.value,
+            username : newPostUsername.value,
+            userImg : "",
+            DateTime : new Date().toLocaleDateString(),
+            postText : newPostText.value,
+            postImage : [],
+            pluginName : newPostPluginName.value,
+            pluginNav : null
+        }
+        communityFeed.Posts.push(newPost);
+        FeedAPI.addPost(communityFeed.Posts , (err , result) =>{
+          if(err) console.error(err);
+          else{
+            console.log(result);
+          }
+        });
+      }
+  
+
+  </script>
 </body>
 </html>
