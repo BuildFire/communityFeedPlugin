@@ -11,7 +11,7 @@ const FeedAPI = {
             }
             else{
                 let data = result.data;
-                data.sort((a,b) => new Date(b.DateTime) - new Date(a.DateTime));
+                if(Array.isArray(data)) data.sort((a,b) => new Date(b.DateTime) - new Date(a.DateTime));
                 result.data = data;
                 if(callback) return callback(null , result)
             }
@@ -29,6 +29,7 @@ const FeedAPI = {
                 else{
                     let data = resp.data;
                     let newPost = {...post, postId : data.length + 1, userImg : "", DateTime : new Date().toLocaleString(), postImage : [], pluginName : "Community Wall", pluginNav : null} 
+                    if(!Array.isArray(data)) data = [];
                     data.unshift(newPost)
                     buildfire.appData.save(data, "CommunityFeedPost", (err2, result) => {
                         if (err2) return callback("Error while inserting your data" , null);
@@ -38,16 +39,6 @@ const FeedAPI = {
                     });
                 }
             })
-            // let tempID = post.postId;
-            // for(let i = 0 ; i < posts.length - 1 ; i++){
-            //     if(posts[i].postId == tempID) return callback("Post ID already in use" , null); 
-            // }
-            // buildfire.appData.save(posts, "CommunityFeedPost", (err, result) => {
-            //     if (err) return callback("Error while inserting your data" , null);
-            //     else{
-            //         if(callback) callback(null , result)
-            //     }
-            // });
         } 
     },
     deletePost : (postId , callback) => {
@@ -58,6 +49,7 @@ const FeedAPI = {
                 
             }
             else{
+                if(!Array.isArray(result.data)) return callback("No posts were made yet." , null)
                 let index = result.data.findIndex(e => e.postId == postId);
                 if(index < 0) return callback(`Couldn't Find post with the ID: ${postId}` , null)
                 else{
@@ -82,6 +74,7 @@ const FeedAPI = {
                 
             }
             else{
+                if(!Array.isArray(result.data)) return callback("Could not find post" , null)
                 let index = result.data.findIndex(e => e.postId == postId);
                 if(index < 0) return callback(`Couldn't Find post with the ID: ${postId}` , null)
                 else{

@@ -84,6 +84,7 @@
       }
 
       addPost = () =>{
+        clearAllMessages();
           let newPost = {
             userId : newPostUserID.value,
             username : newPostUsername.value,
@@ -93,14 +94,15 @@
             if(err) document.getElementById("add-errorMsg").innerHTML = err;
             else{
               document.getElementById("add-successMsg").innerHTML = "Added successfully"
-              
-              communityFeed.Posts.unshift(result.data[0])
+              if(communityFeed.Posts.length == 0) communityFeed.Posts.push(result.data[0])
+              else communityFeed.Posts.unshift(result.data[0])
               addSinglePost(result.data[0] , "posts");
             }
           });
       }
       
       deletePost = () =>{
+        clearAllMessages();
         let id = document.getElementById("delete_postId").value;
         console.log(`deleting post with id : ${id}`);
         FeedAPI.deletePost(id , (err , result) =>{
@@ -120,6 +122,7 @@
       }
 
       updatePost = () =>{
+        clearAllMessages();
         let updatedPost = {
             postId : updatePostPostID.value,
             userId : updatePostUserID.value,

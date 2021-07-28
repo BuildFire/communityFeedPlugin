@@ -38,10 +38,12 @@ const addSinglePost = (post , parentHTMLElement) =>{
 }
 
 const renderPosts = (postsArray , parentElement) =>{
-    postsArray.forEach(post =>{
-        let div = createPostUi(post);
-        document.getElementById(parentElement).appendChild(div);
-    })
+    if(Array.isArray(postsArray) && postsArray.length > 0){
+        postsArray.forEach(post =>{
+            let div = createPostUi(post);
+            document.getElementById(parentElement).appendChild(div);
+        })
+    }
 };
 
 const deleteSinglePost = (childId) => document.getElementById(`post-${childId}`).remove();
@@ -50,4 +52,13 @@ const updateSinglePost = (post) => {
     document.getElementById(`post-${post.postId}-spTitle`).innerHTML = post.username;
     document.getElementById(`post-${post.postId}-spText`).innerHTML = post.postText;
     document.getElementById(`post-${post.postId}-spDate`).innerHTML = post.DateTime;  
+}
+
+const clearAllMessages = () =>{
+    document.getElementById("add-successMsg").innerHTML = "";
+    document.getElementById("delete-successMsg").innerHTML = "";
+    document.getElementById("update-successMsg").innerHTML = "";
+    document.getElementById("add-errorMsg").innerHTML = "";
+    document.getElementById("delete-errorMsg").innerHTML = "";
+    document.getElementById("update-errorMsg").innerHTML = "";
 }
