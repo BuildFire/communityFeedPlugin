@@ -8,11 +8,14 @@
     background-color: #00a1f1;
     padding: 5px;
 }
-#title{
+.title{
     font-weight: bolder;
     color: #ffffff;
 }
-
+.errorMsg {
+    color: red;
+    font-weight: bold;
+}
 .delete_button{
     border: 0px;
     border-radius: 5px;
@@ -51,4 +54,15 @@
 .delete_input{
     margin-top: 5px;
     margin-bottom: 5px;
+}
+
+.spContainer{
+    background-color: #eef0f0;
+    padding: 4px;
+    margin-bottom: 3px;
+    padding-left: 15px;
+}
+
+.spTitle{
+    font-weight: bold;
 }
