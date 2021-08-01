@@ -6,7 +6,7 @@ class Follows {
       if(err) followErrorMsg.innerHTML = err;
       else {
           let userId = resp._id;
-          buildfire.appData.search({userId} , Follows.TAG , (e , f) =>{
+          buildfire.appData.search({filter :{"$json.userId" : userId}} , Follows.TAG , (e , f) =>{
             if(e) return callback(e , null);
             else {
               if(f.length == 0){
@@ -37,7 +37,7 @@ class Follows {
       if(err) return callback(err , null)
       else {
         let userId = resp._id;
-        buildfire.appData.search({userId} , Follows.TAG , (e , f) =>{
+        buildfire.appData.search({filter :{"$json.userId" : userId} }, Follows.TAG , (e , f) =>{
           if(e) return callback(e , null);
           else {
             if(Array.isArray(f) && f.length > 0){
