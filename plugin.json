@@ -1,22 +1,25 @@
 {
-  "author": "Buildfire",
-  "pluginName": "Default Template",
-  "pluginDescription": "Bare bones plugin showing simple autonomy of a plugin",
-  "supportEmail": "devSupport@buildfire.com",
-  "control": {
-    "content": {
-      "enabled": true
-    },
-    "design":{
-      "enabled": false
-    },
-    "settings": {
-      "enabled": false
-    }
-  },
-  "widget": {
+  "author":"Daniel Hindi"
+,"pluginName":"<enter your plugin name here>"
+,"pluginDescription":"<enter your plugin description here>"
+,"supportEmail":"<enter your support email here>"
+,"control":{
+  "content":{
+    "enabled":true
+  }
+, "design":{
+    "enabled":true
+  }
+, "settings":{
+    "enabled":true
+  }
+, "customTabs": [
+    { "title": "Language", "url": "/strings/index.html" }
+  ]
+}
+,"widget":{
 
-  },
-  "features": [],
-  "languages": ["en"]
+},
+  "features" : [],
+  "languages" : ["en"]
 }

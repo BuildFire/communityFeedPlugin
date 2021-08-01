@@ -2,150 +2,29 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="buildfire" content="enableMDTheme" />
-    <link rel="stylesheet" href="style.css"/>
+
+    <link rel="stylesheet" href="../assets/base.css">
+
+    <!-- build:bundleControlBFMinJS  -->
     <script src="../../../../scripts/buildfire.js"></script>
-    <script src="./renderer.js"></script>
-    <!-- Include material design css and js -->
-    <link href="../../../../styles/materialDesign/material-components-web@4.0.0.min.css" rel="stylesheet" />
-    <script src="../../../../scripts/materialDesign/material-components-web@4.0.0.min.js" type="text/javascript" ></script>
-  </head>
-  <body>
-    <div id="posts_container">
-      <div class="titleContainer">
-        <h4 class="title">Posts</h4>
-      </div>
-      <div id="posts">
+    <!-- endbuild -->
 
-      </div>
-    </div>
-    
-    <div class="add_container">
-      <div class="titleContainer">
-        <h4 class="title">Add a post</h4>
-      </div>
-      <div class="add_input">
-        <input type="text" placeholder="UserID" name="" id="newPostUserID">
-        <input type="text" placeholder="Username" name="" id="newPostUsername">
-        <input type="text" placeholder="post" name="" id="newPostText">
-        <button class="add_button" onclick="addPost()">add</button>
-        <p id="add-errorMsg" class="mdc-theme--error"></p>
-        <p id="add-successMsg" class="mdc-theme--primary"></p>
-      </div>
-    </div>
+     <!-- build:bundleDataJSFiles  -->
+     <script src="../../data/section.js"></script>
+     <script src="../../dataAccess/sections.js"></script>
+     <!-- End of Scripts -->
 
-    <div class="update_container">
-      <div class="titleContainer">
-        <h4 class="title">update a post</h4>
-      </div>
-      <div class="update_input">
-        <input type="text" placeholder="PostID" name="" id="updatePostPostID">
-        <input type="text" placeholder="UserID" name="" id="updatePostUserID">
-        <input type="text" placeholder="Username" name="" id="updatePostUsername">
-        <input type="text" placeholder="post" name="" id="updatePostText">
-        <button class="update_button" onclick="updatePost()">Update</button>
-        <p id="update-errorMsg" class="mdc-theme--error"></p>
-        <p id="update-successMsg" class="mdc-theme--primary"></p>
-      </div>
-    </div>
 
-    <div class="delete_container">
-      <div>
-        <div class="titleContainer">
-          <h4 class="title">Delete a post</h4>
-        </div>
-        <div class="delete_input">
-          <input type="text" placeholder="Post ID" id="delete_postId"/>
-          <button class="delete_button" onclick="deletePost()">Delete</button>
-          <p id="delete-errorMsg" class="mdc-theme--error"></p>
-          <p id="delete-successMsg" class="mdc-theme--primary"></p>
-        </div>
-      </div>      
-    </div>
-    
-    <script src="./index.js"></script>
-    <script>
-        // buildfire.appData.save([],"CommunityFeedPost",(err , res) =>{
-        //   if(err) console.error(err)
-        //   else console.log(res)
-        // })
-      let communityFeed = {
-        Posts : []
-      }
-
-      loadPosts = () =>{
-        FeedAPI.loadPosts((err , response) =>{
-        if(err) console.error(err);
-        else{
-          communityFeed.Posts = response.data;
-          renderPosts(communityFeed.Posts , "posts");
-        }
-      })
-      }
-
-      addPost = () =>{
-        clearAllMessages();
-          let newPost = {
-            userId : newPostUserID.value,
-            username : newPostUsername.value,
-            postText : newPostText.value,
-          }
-          FeedAPI.addPost(newPost, (err , result) =>{
-            if(err) document.getElementById("add-errorMsg").innerHTML = err;
-            else{
-              document.getElementById("add-successMsg").innerHTML = "Added successfully"
-              if(communityFeed.Posts.length == 0) communityFeed.Posts.push(result.data[0])
-              else communityFeed.Posts.unshift(result.data[0])
-              addSinglePost(result.data[0] , "posts");
-            }
-          });
-      }
-      
-      deletePost = () =>{
-        clearAllMessages();
-        let id = document.getElementById("delete_postId").value;
-        console.log(`deleting post with id : ${id}`);
-        FeedAPI.deletePost(id , (err , result) =>{
-          if(err) document.getElementById("delete-errorMsg").innerHTML = err;
-          else {
-            let index = communityFeed.Posts.findIndex(e => e.postId == id)
-            if(index >= 0){
-              deleteSinglePost(communityFeed.Posts[index].postId , "posts");
-              communityFeed.Posts.splice(index , 1);
-              document.getElementById("delete-successMsg").innerHTML = "Post deleted successfully";
-            }
-            else{
-              document.getElementById("delete-errorMsg").innerHTML = "An error occured";
-            }
-          }
-        })
-      }
-
-      updatePost = () =>{
-        clearAllMessages();
-        let updatedPost = {
-            postId : updatePostPostID.value,
-            userId : updatePostUserID.value,
-            username : updatePostUsername.value,
-            postText : updatePostText.value,
-        }
-        FeedAPI.updatePost(updatedPost , (err , result) =>{
-          if(err) document.getElementById("update-errorMsg").innerHTML = err;
-          else {
-            let index = communityFeed.Posts.findIndex(e => e.postId == updatedPost.postId);
-            if(index >= 0){
-              communityFeed.Posts[index] = result.data[index];
-              updateSinglePost(communityFeed.Posts[index]);
-              document.getElementById("update-successMsg").innerHTML = "Post updated successfully";
-            }
-            else{
-              document.getElementById("update-errorMsg").innerHTML = "An error occured";
-            }
-          }
-        })
-      }
-
-      loadPosts();
-  </script>
+</head>
+<body>
+    <h3 class="section__title">StarterKit Sample Pages</h3>
+    <ul>
+        <li onclick="location='samples/sortableList/sortableList.html'" >Draggable List</li>
+        <li onclick="location='samples/subPage/index.html'" >Sub Screen</li>
+        <li onclick="location='samples/searchTable/searchTable.html'" >Search Table</li>
+    </ul>
+<script>
+    //location = "samples/sortableList/sortableList.html";
+</script>
 </body>
 </html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!-- build:bundleWidgetBFMinJS  -->
+    <script src="../../../../../scripts/buildfire.js"></script>
+    <!-- endbuild -->
+
+    <link rel="stylesheet" href="../../css/a.css">
+    <link rel="stylesheet" href="listView.css">
+    <script src="./../../js/shared/authManager.js"></script>
+    <script src="../../js/shared/ui.js"></script>
+    <script src="listView.js"></script>
+    <script src="./../../../data/follow.js"></script>
+    <script src="./../../../dataAccess/follows.js"></script>
+    <script src="./../../../data/post.js"></script>
+    <script src="./../../../dataAccess/posts.js"></script>
+    <script src="dummyData.js"></script>
+
+</head>
+<body>
+
+
+    <div>
+        <input placeholder="ID.." id="followUserId" />
+        <button style="display: inline;background-color: aqua;" class="btn" onclick="followUser()">Follow user</button>
+        <p id="followErrorMsg"></p>
+    </div>
+    <div id="followedUsers">
+        Followed users : 
+    </div>
+    
+    <h5>Click on a post to copy its id</h5>
+    <h1>Followed users posts</h1>
+    <div id="followedUsersPosts">
+
+    </div>
+
+    
+    
+    <h1>My posts :</h1>     
+    <div id="viewpostsbyme">
+    </div>
+    <h1>Add post : </h1>
+    <div id="createposts">
+        <input type="text" placeholder="Post text"  id="postText">
+        <button onclick="addPost()">Add post</button>
+        <p id="addPostMsg"></p>
+    </div>
+    <h1>Delete post : </h1>
+    <div id="deletePost">
+        <input type="text" placeholder="Post ID"  id="deletePostId">
+        <button onclick="deletePost()">Delete post</button>
+        <p id="addPostMsg"></p>
+    </div>
+    <hr>
+    <h1>edit post</h1>
+    <div id="editposts">
+        <input type="text" placeholder="Post id" id="edit-postId">
+        <input type="text" placeholder="Post text" id="edit-postText">
+        <button onclick="editPost()">Edit post</button>
+        <p id="addPostMsg"></p>
+    </div>
+    
+    <h1>Search post</h1>
+    <div id="searchPosts">
+        <input type="text" placeholder="Username" id="searchUsername">
+        <button onclick="searchPost()">Search posts</button>
+        <p id="addPostMsg"></p>
+    </div>
+    <div id="searchUsersPosts">
+
+    </div>
+    <script>
+        /* UNCOMMENT IN CASE YOU NEED TO DELETE POSTS / FOLLOWS APP DATA 
+        */
+    //    Posts.clearAppData();
+    //    Follows.clearAppData();   
+        authManager.enforceLogin();   
+        let mylv = new ListView("viewpostsbyme",{enableAddButton:false,Title:""});
+        let otherslv = new ListView("followedUsersPosts" , {enableAddButton:false , Title : ""});
+        let slv = new ListView("searchUsersPosts" , {enableAddButton:false , Title : ""});
+        
+        // mock a follow request using this id ->
+        buildfire.auth.getCurrentUser((err , user) =>{
+            if(err) console.log(err);
+            else console.log(user);
+        })
+
+        followUser = () =>{
+            followErrorMsg.innerHTML = "";
+            if(!followUserId.value) return followErrorMsg.innerHTML = "Input cannot be empty";
+            Follows.followUser(followUserId.value , (err , resp) => {
+                if(err) console.log(err);
+                else{ 
+                    followErrorMsg.innerHTML = "Successfully followed user " + followUserId.value;
+                    getFollowedUsers();
+                }
+            })
+        }
+
+        getFollowedUsersPosts = () =>{
+            console.log('getFollowedUsersPosts');
+            Posts.getFollowedPosts((err , resp) =>{
+                if(err) console.log(err);
+                else{
+                    console.log('logging from widget');
+                    console.log(resp);
+                    otherslv.clear();
+                    otherslv.loadListViewItems(resp)
+                }
+            });
+        }
+
+        getFollowedUsers = () =>{
+            Follows.getFollowedUsers((err , resp) => {
+                resp.forEach((user) => {
+                    followedUsers.innerHTML += `${user} - ` 
+                })
+            })
+        }
+
+        addPost = () =>{
+            Posts.add({postText : postText.value} , (err , resp) => {
+                if(err) console.log(err);
+                else{ 
+                    addPostMsg.innerHTML = "Added successfully";
+                    getUserPosts();
+                }
+            });
+        }
+
+        getUserPosts = () =>{
+            // console.log('getting current users posts');
+            Posts.getUserPosts((err , resp) => {
+                if(err) console.log(err);
+                else {
+                    // console.log(resp[0].data.postText);
+                    mylv.clear();
+                    mylv.loadListViewItems(resp)
+                }
+            })
+        }
+      
+        editPost = () =>{
+            let pId = document.getElementById("edit-postId").value;
+            let pText = document.getElementById("edit-postText").value;
+            Posts.editPost(pId , pText , (err , resp) =>{
+                if(err) console.log(err);
+                else {
+                    console.log(resp);
+                    getUserPosts();
+                }
+            })
+        }
+      
+        deletePost = () =>{
+            let pId = document.getElementById("deletePostId").value;
+            Posts.deletePost(pId , (err , resp) =>{
+                if(err) console.log(err);
+                else {
+                    getUserPosts();
+                }
+            })
+        }
+
+        searchPost = () =>{
+            Posts.getPostsByUsername({"$json.username": {$regex: searchUsername.value, $options: 'i' }},(err , resp) =>{
+                if(err) console.log(err);
+                else{
+                    slv.clear();
+                    slv.loadListViewItems(resp);
+                }
+            })
+        }
+
+        getFollowedUsers();
+        getFollowedUsersPosts();
+        getUserPosts();
+
+    </script>
+</body>
+</html>
