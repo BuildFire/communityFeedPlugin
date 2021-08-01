@@ -140,15 +140,16 @@
         }
 
         addPost = () =>{
-            addPostMsg.innerHTML = "Added successfully";
-            addPostMsg.innerHTML = "Added successfully";
-            addPostMsg.innerHTML = "Added successfully";
-
+            if(addPost.value == ""){
+                document.getElementById("addPostMsg").style.color = "red";
+                addPostMsg.innerHTML = "Post text cannot be empty";
+                return;
+            }
             Posts.add({postText : postText.value} , (err , resp) => {
                 if(err) console.log(err);
                 else{ 
-                    addPostMsg.innerHTML = "Added successfully";
                     document.getElementById("addPostMsg").style.color = "green";
+                    addPostMsg.innerHTML = "Added successfully";
                     setTimeout(() => {
                         document.getElementById("addPostMsg").innerHTML = "";                        
                     }, 3000);
@@ -173,11 +174,16 @@
         editPost = () =>{
             let pId = document.getElementById("edit-postId").value;
             let pText = document.getElementById("edit-postText").value;
+            if(pId == "" || pText == ""){
+                document.getElementById("editPostMsg").style.color = "red";
+                editPostMsg.innerHTML = "Post id and text are required";
+                return;
+            }
             Posts.editPost(pId , pText , (err , resp) =>{
                 if(err) console.log(err);
                 else {
-                    editPostMsg.innerHTML = "Post updated successfully";
                     document.getElementById("editPostMsg").style.color = "green";
+                    editPostMsg.innerHTML = "Post updated successfully";
                     setTimeout(() => {
                         editPostMsg.innerHTML = "";
                     }, 3000);
@@ -189,6 +195,11 @@
       
         deletePost = () =>{
             let pId = document.getElementById("deletePostId").value;
+            if(pId == ""){
+                document.getElementById("deletePostId").style.color = "red";
+                editPostMsg.innerHTML = "Post id is required";
+                return;
+            }
             Posts.deletePost(pId , (err , resp) =>{
                 if(err) console.log(err);
                 else {
@@ -203,6 +214,9 @@
         }
 
         searchPost = () =>{
+            if(searchUsername.value == ""){
+                return;                
+            }
             Posts.getPostsByUsername({"$json.username": {$regex: searchUsername.value, $options: 'i' }},(err , resp) =>{
                 if(err) console.log(err);
                 else{
