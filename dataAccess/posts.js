@@ -150,7 +150,7 @@ class Posts {
         data.createdBy = `${authManager.currentUser.email} - ${authManager.currentUser.username}`;
         data.createdOn = new Date();
         data.userId = resp._id;
-        data.username = resp.username;
+        data.username = resp?.displayName || resp.username;
         let temp = new Post(data)
         buildfire.appData.insert(temp, Posts.TAG, (error, record) => {
           if (error) return callback(error);
