@@ -57,7 +57,7 @@
     <div id="deletePost">
         <input type="text" placeholder="Post ID"  id="deletePostId">
         <button onclick="deletePost()">Delete post</button>
-        <p id="addPostMsg"></p>
+        <p id="deletePostMsg"></p>
     </div>
     <hr>
     <h1>edit post</h1>
@@ -65,14 +65,13 @@
         <input type="text" placeholder="Post id" id="edit-postId">
         <input type="text" placeholder="Post text" id="edit-postText">
         <button onclick="editPost()">Edit post</button>
-        <p id="addPostMsg"></p>
+        <p id="editPostMsg"></p>
     </div>
     
     <h1>Search post</h1>
     <div id="searchPosts">
         <input type="text" placeholder="Username" id="searchUsername">
         <button onclick="searchPost()">Search posts</button>
-        <p id="addPostMsg"></p>
     </div>
     <div id="searchUsersPosts">
 
@@ -141,10 +140,19 @@
         }
 
         addPost = () =>{
+            addPostMsg.innerHTML = "Added successfully";
+            addPostMsg.innerHTML = "Added successfully";
+            addPostMsg.innerHTML = "Added successfully";
+
             Posts.add({postText : postText.value} , (err , resp) => {
                 if(err) console.log(err);
                 else{ 
                     addPostMsg.innerHTML = "Added successfully";
+                    document.getElementById("addPostMsg").style.color = "green";
+                    setTimeout(() => {
+                        document.getElementById("addPostMsg").innerHTML = "";                        
+                    }, 3000);
+                    document.getElementById("postText").value = ""
                     getUserPosts();
                 }
             });
@@ -168,7 +176,12 @@
             Posts.editPost(pId , pText , (err , resp) =>{
                 if(err) console.log(err);
                 else {
-                    console.log(resp);
+                    editPostMsg.innerHTML = "Post updated successfully";
+                    document.getElementById("editPostMsg").style.color = "green";
+                    setTimeout(() => {
+                        editPostMsg.innerHTML = "";
+                    }, 3000);
+
                     getUserPosts();
                 }
             })
@@ -179,6 +192,11 @@
             Posts.deletePost(pId , (err , resp) =>{
                 if(err) console.log(err);
                 else {
+                    deletePostMsg.innerHTML = "Post deleted successfully"
+                    document.getElementById("deletePostMsg").style.color = "green";
+                    setTimeout(() => {
+                        deletePostMsg.innerHTML = "";
+                    }, 3000);
                     getUserPosts();
                 }
             })
