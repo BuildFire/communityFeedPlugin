@@ -140,9 +140,12 @@
         }
 
         addPost = () =>{
-            if(addPost.value == ""){
+            if(postText.value == ""){
                 document.getElementById("addPostMsg").style.color = "red";
                 addPostMsg.innerHTML = "Post text cannot be empty";
+                setTimeout(() => {
+                    document.getElementById("addPostMsg").innerHTML = "";                        
+                }, 3000);
                 return;
             }
             Posts.add({postText : postText.value} , (err , resp) => {
@@ -177,6 +180,9 @@
             if(pId == "" || pText == ""){
                 document.getElementById("editPostMsg").style.color = "red";
                 editPostMsg.innerHTML = "Post id and text are required";
+                setTimeout(() => {
+                    editPostMsg.innerHTML = "";
+                }, 3000);
                 return;
             }
             Posts.editPost(pId , pText , (err , resp) =>{
@@ -196,8 +202,11 @@
         deletePost = () =>{
             let pId = document.getElementById("deletePostId").value;
             if(pId == ""){
-                document.getElementById("deletePostId").style.color = "red";
-                editPostMsg.innerHTML = "Post id is required";
+                document.getElementById("deletePostMsg").style.color = "red";
+                deletePostMsg.innerHTML = "Post id is required";
+                setTimeout(() => {
+                    deletePostMsg.innerHTML = "";
+                }, 3000);
                 return;
             }
             Posts.deletePost(pId , (err , resp) =>{
