@@ -23,6 +23,10 @@
 <body>
 
 
+
+    <div>
+        <button onclick="copyThisUsersId()"> Copy this user's ID</button>
+    </div>
     <div>
         <input placeholder="ID.." id="followUserId" />
         <button style="display: inline;background-color: aqua;" class="btn" onclick="followUser()">Follow user</button>
@@ -87,7 +91,21 @@
         buildfire.auth.getCurrentUser((err , user) =>{
             if(err) console.log(err);
             else console.log(user);
-        })
+        });
+
+        copyThisUsersId = () =>{
+            buildfire.auth.getCurrentUser((err , user) => {
+                if(err || !user) console.log("error");
+                else {
+                    const elem = document.createElement('textarea');
+                    elem.value = user._id;
+                    document.body.appendChild(elem);
+                    elem.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(elem);
+                }
+            })
+        }
 
         followUser = () =>{
             followErrorMsg.innerHTML = "";
