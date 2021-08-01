@@ -193,8 +193,8 @@
                     setTimeout(() => {
                         editPostMsg.innerHTML = "";
                     }, 3000);
-                    pId.value = ""
-                    pText.value = ""
+                    document.getElementById("edit-postId").value = ""
+                    document.getElementById("edit-postText").value = ""
                     getUserPosts();
                 }
             })
@@ -218,7 +218,7 @@
                     setTimeout(() => {
                         deletePostMsg.innerHTML = "";
                     }, 3000);
-                    pId.innerHTML = "";
+                    document.getElementById("deletePostId").value = "";
                     getUserPosts();
                 }
             })

@@ -76,7 +76,7 @@ class Posts {
         else {
           let id = user._id;
           console.log(id);
-          buildfire.appData.search({filter :{"$json.userId" : id} } , Posts.TAG , (err , resp) =>{
+          buildfire.appData.search({filter :{"$json.userId" : id} , sort:{createdOn : -1}  } , Posts.TAG , (err , resp) =>{
             if(err) return callback(err , null);
             else {
               if(Array.isArray(resp) && resp.length > 0){
@@ -95,6 +95,8 @@ class Posts {
      * @param {Function} cb callback for handling response
      */
 
+
+
   static getFollowedPosts = (callback) =>{
     // to change to authmanager getId later
 
@@ -109,7 +111,7 @@ class Posts {
               let tempArray = [];
               resp[0].followedUsers.forEach(id => tempArray.push({"$json.userId" : id}));
               resp[0].followedPlugins.forEach(id => tempArray.push({"json.pluginName" : id}));
-              buildfire.appData.search({filter : {$or: tempArray}} , Posts.TAG , (err , record) =>{
+              buildfire.appData.search({filter : {$or: tempArray} , sort:{createdOn : -1}} , Posts.TAG , (err , record) =>{
                 if (err) return callback(err);
                 return callback(null, record);
               })
