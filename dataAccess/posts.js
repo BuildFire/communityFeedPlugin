@@ -49,26 +49,26 @@ class Posts {
      * @param {Object} filter Filtering the Posts records
      * @param {Function} callback callback for handling response
      */
-    static getPostsByUsername = (filter, callback) => {
-      buildfire.appData.search(
-        {
-          filter: filter,
-        }, Posts.TAG, (error, record) => {
-        if (error) return callback(error);
-        return callback(null, record);
-      });
-    };
+  static getPostsByUsername = (filter, callback) => {
+    buildfire.appData.search(
+      {
+        filter: filter,
+      }, Posts.TAG, (error, record) => {
+      if (error) return callback(error);
+      return callback(null, record);
+    });
+  };
 
     /**
        * Returns All Posts saved in appData
        * @param {Function} callback callback for handling response
        */
-    static getAllData = (callback) => {
-      buildfire.appData.search({}, Posts.TAG, (error, record) => {
-        if (error) return callback(error);
-        return callback(null, record);
-      });
-    };
+    // static getAllData = (callback) => {
+    //   buildfire.appData.search({}, Posts.TAG, (error, record) => {
+    //     if (error) return callback(error);
+    //     return callback(null, record);
+    //   });
+    // };
     // TEST
     static getUserPosts = (callback) =>{
       buildfire.auth.getCurrentUser((err , user) =>{

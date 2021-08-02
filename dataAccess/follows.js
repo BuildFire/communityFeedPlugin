@@ -67,13 +67,13 @@ class Follows {
      * Returns all Follows
      * @param {Function} callback callback for handling response
      */
-    static getAllByFilter = (filter , callback) => {
-      buildfire.appData.search(filter, Follows.TAG, (error, record) => {
-        if (error) return callback(error);
-        const records = record.map(data => new Post(data))
-        return callback(null, records);
-      });
-    };
+    // static getAllByFilter = (filter , callback) => {
+    //   buildfire.appData.search(filter, Follows.TAG, (error, record) => {
+    //     if (error) return callback(error);
+    //     const records = record.map(data => new Post(data))
+    //     return callback(null, records);
+    //   });
+    // };
 
 
     static getDataByUserId = (filter, callback) => {
@@ -92,24 +92,24 @@ class Follows {
      * @param {String} id id of member to be retrieved
      * @param {Function} callback callback for handling response
      */
-  static getById = (id, callback) => {
-    buildfire.appData.getById(id, Follows.TAG, (error, record) => {
-      if (error) return callback(error);
+  // static getById = (id, callback) => {
+  //   buildfire.appData.getById(id, Follows.TAG, (error, record) => {
+  //     if (error) return callback(error);
 
-      return callback(null, new Post(record));
-    });
-  };
+  //     return callback(null, new Post(record));
+  //   });
+  // };
 
 
-  static getAllData = (callback) =>{
-    buildfire.appData.search({} , Follows.TAG , (err , record) =>{
-      if(err) callback(err , null);
-      else{
-        const records = record.map(data => new Follow(data.data))
-        return callback(null, records);
-      }
-    })
-  }
+  // static getAllData = (callback) =>{
+  //   buildfire.appData.search({} , Follows.TAG , (err , record) =>{
+  //     if(err) callback(err , null);
+  //     else{
+  //       const records = record.map(data => new Follow(data.data))
+  //       return callback(null, records);
+  //     }
+  //   })
+  // }
 
   /**
      * Adds a Follows
@@ -131,35 +131,35 @@ class Follows {
      * @param {Object} data data of Post to be updated
      * @param {Function} callback callback for handling response
      */
-  static set = (data, callback) => {
-    data.lastUpdatedBy = `${authManager.currentUser.email} - ${authManager.currentUser.username}`;
-    data.lastUpdatedOn = new Date();
-    data._buildfire.index = Follows.buildIndex(data);
+  // static set = (data, callback) => {
+  //   data.lastUpdatedBy = `${authManager.currentUser.email} - ${authManager.currentUser.username}`;
+  //   data.lastUpdatedOn = new Date();
+  //   data._buildfire.index = Follows.buildIndex(data);
 
-    buildfire.appData.update(data.id, data, Follows.TAG, (error, record) => {
-      if (error) return callback(error);
+  //   buildfire.appData.update(data.id, data, Follows.TAG, (error, record) => {
+  //     if (error) return callback(error);
 
 
-      return callback(null, new Post(record));
-    });
-  };
+  //     return callback(null, new Post(record));
+  //   });
+  // };
 
   /**
      * Archives a Post
      * @param {Object} data data of member to be deleted
      * @param {Function} callback callback for handling response
      */
-  static delete = (data, callback) => {
-    data.deletedBy = `${authManager.currentUser.email} - ${authManager.currentUser.username}`;
-    data.deletedOn = new Date();
-    data.isActive = false;
+  // static delete = (data, callback) => {
+  //   data.deletedBy = `${authManager.currentUser.email} - ${authManager.currentUser.username}`;
+  //   data.deletedOn = new Date();
+  //   data.isActive = false;
 
-    buildfire.appData.update(data.id, data, Post.TAG, (error, record) => {
-      if (error) return callback(error);
+  //   buildfire.appData.update(data.id, data, Post.TAG, (error, record) => {
+  //     if (error) return callback(error);
   
-      return callback(null, new Post(record));
-    });
-  };
+  //     return callback(null, new Post(record));
+  //   });
+  // };
 
   /**
      * Builds index
