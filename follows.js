@@ -266,6 +266,27 @@ class Follows {
       }
     });
   }
+  static isFollowingPlugin = (pluginId , callback) =>{
+    let result;
+    buildfire.auth.getCurrentUser((err , user) =>{
+      if(err) return callback(err, null)
+      else if(!user) return callback("Must be logged in first" , null);
+      else {
+        buildfire.appData.search({filter :{"$json.userId" : user._id}}, Follows.TAG , (err , resp) => {
+          if(err) return callback()
+          else {
+            if(!(Array.isArray(resp))) return callback(resp , null);
+            else if(resp.length == 0) return callback(null , false)
+            else {
+              let index = resp[0].data.followedPlugins.findIndex(e => e == pluginId);
+              if(index >= 0) return callback(null , true);
+              else return callback(null , false);
+            } 
+          }
+        })
+      }
+    });
+  }
 
   static validData = (fUserId) =>{
     return fUserId.length == 24 ? 1 : 0;
