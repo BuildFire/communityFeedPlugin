@@ -226,7 +226,7 @@ class Follows {
     })
   }
 
-  static followPlugin = (pluginId) => {
+  static followPlugin = (pluginId , callback) => {
       buildfire.auth.getCurrentUser((err , user) => {        
         if(err || !user) return callback("You must be logged in to follow a plugin" , null);
         else {
@@ -266,7 +266,55 @@ class Follows {
       })
 
   }
+  static toggleFollowPlugin = (pluginId , callback) => {
+      buildfire.auth.getCurrentUser((err , user) => {        
+        if(err || !user) return callback("You must be logged in to follow a plugin" , null);
+        else {
+          buildfire.appData.search({filter :{"$json.userId" : user._id}} , Follows.TAG , async(err , resp) =>{
+            if(err) return callback(err , "first return callback");
+            else if(!(Array.isArray(resp))) return callback(resp , null);
+            else if(resp.length == 0){
+              let saveObj = {
+                userId : user._id , 
+                followedUsers : [] ,
+                followedPlugins : [pluginId],
+                createdBy : `${authManager.currentUser.email} - ${authManager.currentUser.username}` , 
+                createdOn : new Date()
+              } 
+              
+              return buildfire.appData.insert(saveObj , Follows.TAG, (error, record) => {
+                if (error) return callback(error , null);
+                return callback(null, record);
+              });
+            }
+            else {
+              let {data , id} = resp[0];
+              let followedPlugins = data.followedPlugins;
+                
+                let index = followedPlugins.findIndex(e => e == pluginId);
+                if(index >= 0){
+                  let newfollowedPlugins = [...followedPlugins];
+                  newfollowedPlugins.splice(index , 1);
+                  let update = {...data , followedPlugins : newfollowedPlugins};
+                  return await buildfire.appData.update(id , update , Follows.TAG, (err , resp) =>{
+                    if(err) return callback(err , null)
+                    else return callback(null , resp)
+                  })
+                }
+                else{
+                  let update = {...data , followedPlugins : [...followedPlugins , pluginId]};
+                  return await buildfire.appData.update(id , update , Follows.TAG, (err , resp) =>{
+                    if(err) return callback(err , null)
+                    else return callback(null , resp)
+                  })
+                }
+            }
+          })
+        }
+      })
 
+  }
+  
   static unfollowPlugin = (fUserId , callback) =>{
 
     buildfire.auth.getCurrentUser((err , user) => {        

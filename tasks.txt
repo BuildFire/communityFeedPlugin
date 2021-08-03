@@ -5,5 +5,5 @@ UnfollowUser - done
 UnfollowPlugin - done
 getFollowedUsers - done
 getFollowedPlugins - done
-toggleFollowUser 
-toggleFollowPlugin 
+toggleFollowUser - done
+toggleFollowPlugin - done
