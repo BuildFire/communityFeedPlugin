@@ -218,7 +218,7 @@ class Follows {
           else if(!(Array.isArray(resp))) return callback(resp , null);
           else if(resp.length == 0) return callback("You are not following anyone yet" , null);
           else if(resp.length == 1) {
-            if(resp[0].data.followedUsers.length == 0) return callback("You are not following any users yet" , null);
+            if(resp[0].data.followedUsers.length == 0 && resp[0].data.followedPlugins.length == 0) return callback("You are not following any users / plugins yet" , null);
             return callback(null , resp[0]);
           } 
         })
