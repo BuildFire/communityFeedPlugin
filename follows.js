@@ -211,7 +211,7 @@ class Follows {
   static getUserFollowData = (callback) =>{
     buildfire.auth.getCurrentUser((err , user) =>{
       if(err) return callback(err , null);
-      else if(!user) return callback("Please login first");
+      else if(!user) return callback("Please login first" , null);
       else {
         buildfire.appData.search({filter :{"$json.userId" : user._id}}, Follows.TAG , (err , resp) => {
           if(err) return callback(err , null);
