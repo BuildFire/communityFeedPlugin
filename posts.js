@@ -133,7 +133,6 @@ class Posts{
     
         
     }
-    
     static getFollowedUsersPosts = (callback) =>{
 
         Follows.getUserFollowData((err , resp) => {
@@ -168,6 +167,36 @@ class Posts{
             }
         })
         
+    }
+    static search = (options , callback) =>{
+        buildfire.auth.getCurrentUser((err , user) => {
+            if(err) return callback(err , null);
+            else if(!user) return callback("Must be logged in", null);
+            else {
+                let searchFilter = options?.filter || null;
+                let sortFilter = options?.sort || null;
+                let sortFields = options?.fields || null;
+                let sortrecordCount = options?.recordCount || null;
+                let sortPage = options?.page || null;
+                let sortPageSize = options?.pageSize || null;
+                let sortSkip = options?.skip || null;
+                let sortLimit = options?.limit || null;
+                let tempObj = {};
+                if(searchFilter) tempObj.filter = searchFilter;
+                if(sortFilter) tempObj.sort = sortFilter;
+                if(sortFields) tempObj.fields = sortFields;
+                if(sortrecordCount) tempObj.recordCount = sortrecordCount;
+                if(sortPage) tempObj.page = sortPage;
+                if(sortPageSize) tempObj.pageSize = sortPageSize;
+                if(sortSkip) tempObj.skip = sortSkip;
+                if(sortLimit) tempObj.limit = sortLimit;
+                console.log(options);
+                buildfire.appData.search( options, Posts.TAG , (err , resp) =>{
+                    if(err) return callback(err , null);
+                    else return callback(null , resp);
+                })
+            }
+        })
     }
 
 }
