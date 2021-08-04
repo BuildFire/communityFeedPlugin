@@ -24,8 +24,7 @@ class Posts{
     static TAG = "posts";
 
     static addPost = (post , callback) =>{
-        // if(Posts.isValidData(post)){
-            if(!post.postText && !post.postImages) return callback("Post text cannot be empty" , null);
+        if(!post.postText && !post.postImages) return callback("Post text cannot be empty" , null);
             else {
                 buildfire.auth.getCurrentUser((err , user) =>{
                     if(err) return callback(err , null);
@@ -44,10 +43,6 @@ class Posts{
                     }
                 })
             }
-        // }
-        // else{
-        //     return callback("Malformtted argument" , null);
-        // }
     }
 
     static updatePost = (id , update , callback) =>{
@@ -120,15 +115,15 @@ class Posts{
     }
 
     static getFollowedPosts = (callback) =>{
-        // to change to authmanager getId later
+
         Follows.getUserFollowData((err , resp) => {
             if(err) return callback(err , null);
             else{
                 let followedUsers = resp.data.followedUsers;
                 let followedPlugins = resp.data.followedPlugins;
                 let tempArray = [];
+                followedPlugins.forEach(id => tempArray.push({"json.pluginInstance.id" : id}));
                 followedUsers.forEach(id => tempArray.push({"$json.userId" : id}));
-                followedPlugins.forEach(id => tempArray.push({"json.pluginName.id" : id}));
                 buildfire.appData.search({filter : {$or: tempArray} , sort:{createdOn : -1}} , Posts.TAG , (err , resp) =>{
                     if (err) return callback(err , null);
                     return callback(null, resp);
@@ -138,8 +133,9 @@ class Posts{
     
         
     }
+    
     static getFollowedUsersPosts = (callback) =>{
-        // to change to authmanager getId later
+
         Follows.getUserFollowData((err , resp) => {
             if(err) return callback(err , null);
             else{
@@ -153,33 +149,25 @@ class Posts{
             }
         })
     }
+
     static getFollowedPluginsPosts = (callback) =>{
 
         Follows.getUserFollowData((err , resp) => {
             if(err) return callback(err , null);
             else{
                 let followedPlugins = resp.data.followedPlugins;
-                if(Array.isArray(followedPlugins) && followedPlugins.length == 0) return callback(err , []);
+                // if(Array.isArray(followedPlugins) && followedPlugins.length == 0) return callback(err , []);
                 let tempArray = [];
-                buildfire.appData.search({filter : {} , sort:{createdOn : -1}} , Posts.TAG , (err , resp) =>{
-                    if (err) return callback(err , null);
-                    else if(!(Array.isArray(resp))) return callback(resp , null);
-                    else if(resp.length == 0) return callback(null , []);
-                    else {
-                        for(let i = 0 ; i < resp.length ; i++){
-                            let tempId = resp[i]?.data?.pluginInstance?.id || null; 
-                            if(tempId){
-                                if(followedPlugins.findIndex(tempId) >= 0) tempArray.push(resp[i]);
-                            }
-                            if(i == resp.length - 1){
-                                console.log("returning from here");
-                                return callback(null , tempArray);
-                            }
-                        }
-                    }
+                followedPlugins.forEach(id => tempArray.push({"json.pluginInstance.id" : id}));
+
+                buildfire.appData.search({filter : {$or : tempArray} , sort:{createdOn : -1}} , Posts.TAG , (err , resp) =>{
+                    console.log("returning from here");
+                    if(err) return callback(err , null)
+                    else return callback(null , resp)
                 });
             }
         })
+        
     }
 
 }
