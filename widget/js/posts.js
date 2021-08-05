@@ -3,13 +3,13 @@
 class Post {
     constructor(data = {}) {
       // DONT DELETE THESE DATA OBJECTS 
-      this.isActive = data.isActive || true; 
+    //   this.isActive = data.isActive || true; 
       this.createdOn = data.createdOn || new Date(); 
       this.createdBy = data.createdBy || this.displayName; 
-      this.lastUpdatedOn = new Date(); 
+      this.lastUpdatedOn = data.lastUpdatedOn; 
       this.lastUpdatedBy = data.lastUpdatedBy || null; 
-      this.deletedOn = data.deletedOn || null; 
-      this.deletedBy = data.deletedBy || null; 
+    //   this.deletedOn = data.deletedOn || null; 
+    //   this.deletedBy = data.deletedBy || null; 
       this.userId = data.userId || null;
       this.displayName = data.username || null;
       this.postText = data.postText || null;      
@@ -22,7 +22,7 @@ class Post {
 
 class Posts{
     static TAG = "posts";
-
+    // fix object structure inside the function
     static addPost = (post , callback) =>{
         if(!post.postText && !post.postImages) return callback("Post text cannot be empty" , null);
             else {
@@ -34,17 +34,19 @@ class Posts{
                         let username = user.displayName || user.username || user.email;
                         let postText = post?.postText || null;
                         let postImages = post?.images || [];
-                        let isPublic = post?.isPublic || [];
+                        let isPublic = post?.isPublic;
                         let obj = { userId , username , postText , postImages , isPublic }
                         return buildfire.appData.insert(new Post(obj) , Posts.TAG, (error, record) => {
                             if (error) return callback(error , null);
                             return callback(null, record);
+                            // if theres a record response
+                            // add the analytics
                           });
                     }
                 })
             }
     }
-
+    // change update to post
     static updatePost = (id , update , callback) =>{
         if(!id) return callback("Post ID cannot be null" , null);
         else if(!update || !update.postText || update.postText == "") return callback("Post text cannot be empty" , null);
@@ -113,7 +115,7 @@ class Posts{
             else return resp;
         })
     }
-
+    // add parameter for pagination (options)
     static getFollowedPosts = (callback) =>{
 
         Follows.getUserFollowData((err , resp) => {

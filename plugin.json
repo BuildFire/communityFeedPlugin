@@ -1,0 +1,22 @@
+{
+  "author": "Buildfire",
+  "pluginName": "Default Template",
+  "pluginDescription": "Community feed",
+  "supportEmail": "devSupport@buildfire.com",
+  "control": {
+    "content": {
+      "enabled": true
+    },
+    "design":{
+      "enabled": false
+    },
+    "settings": {
+      "enabled": false
+    }
+  },
+  "widget": {
+
+  },
+  "features": [],
+  "languages": ["en"]
+}
