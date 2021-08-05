@@ -36,7 +36,7 @@ class Follows {
                 userId : user._id , 
                 followedUsers : [fUserId] ,
                 followedPlugins : [],
-                createdBy : `${authManager.currentUser.email} - ${authManager.currentUser.username}` , 
+                createdBy : `${user.email} - ${user.username}` , 
                 createdOn : new Date()
               } 
               
@@ -95,7 +95,7 @@ class Follows {
                 userId : user._id , 
                 followedUsers : [fUserId] ,
                 followedPlugins : [],
-                createdBy : `${authManager.currentUser.email} - ${authManager.currentUser.username}` , 
+                createdBy : `${user.email} - ${user.username}` , 
                 createdOn : new Date()
               } 
               
@@ -238,7 +238,7 @@ class Follows {
                 userId : user._id , 
                 followedUsers : [] ,
                 followedPlugins : [pluginId],
-                createdBy : `${authManager.currentUser.email} - ${authManager.currentUser.username}` , 
+                createdBy : `${user.email} - ${user.username}` , 
                 createdOn : new Date()
               } 
               
@@ -278,7 +278,7 @@ class Follows {
                 userId : user._id , 
                 followedUsers : [] ,
                 followedPlugins : [pluginId],
-                createdBy : `${authManager.currentUser.email} - ${authManager.currentUser.username}` , 
+                createdBy : `${user.email} - ${user.username}` , 
                 createdOn : new Date()
               } 
               
