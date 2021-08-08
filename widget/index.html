@@ -16,10 +16,14 @@
 
   <script>
     getPosts = () => {
-      Posts.getPostById("61100acc1608f9060e2842dd",(err , resp) => {
-        err ? console.log(err) : console.log(resp);
+      Posts.getFollowedPluginsPosts((err , r) => {
+        err ? console.log(err) : console.log(r);
       });
     }
+    //1626289633739-037033340024959716
+    // Follows.followPlugin("1626289633739-037033340024959716" , (err , r) => {
+    //   err ? console.log(err) : console.log(r);
+    // })
 
     updatePost = () =>{
       Posts.updatePost("61100acc1608f9060e2842dd" , {postText : "Hello from Ali !"} , (err , res) => {

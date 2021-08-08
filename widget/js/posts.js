@@ -14,7 +14,7 @@ class Post {
       this.displayName = data.username || null;
       this.postText = data.postText || null;      
       this.postImages  = data.postImages  || [];          
-      this.pluginInstance  = data.pluginInstace || {};     
+      this.pluginInstance  = data.pluginInstance || {};     
       // pluginInstance {ID , TITLE}
       this.isPublic = data.isPublic || false;
     }
@@ -35,7 +35,11 @@ class Posts{
                             username : user.displayName || user.username || user.email,
                             postText : post?.postText || null,
                             postImages : post?.postImages || [],
-                            isPublic : post?.isPublic || false
+                            isPublic : post?.isPublic || false,
+                            pluginInstance : {
+                                pluginInstanceId : buildfire.context.instanceId,
+                                pluginInstanceTitle : buildfire.context.title || buildfire.context.pluginId
+                            }
                         }) , Posts.TAG, (error, record) => {
                             if (error) return callback(error , null);
                             return callback(null, record);
@@ -119,7 +123,7 @@ class Posts{
                 let followedUsers = resp.data.followedUsers;
                 let followedPlugins = resp.data.followedPlugins;
                 let tempArray = [];
-                followedPlugins.forEach(id => tempArray.push({"json.pluginInstance.id" : id}));
+                followedPlugins.forEach(id => tempArray.push({"$json.pluginInstance.pluginInstanceId" : id}));
                 followedUsers.forEach(id => tempArray.push({"$json.userId" : id}));
                 buildfire.appData.search({filter : {$or: tempArray} , sort:{createdOn : -1} ,skip: 0,limit: 10} , Posts.TAG , (err , resp) =>{
                     if (err) return callback(err , null);
@@ -175,9 +179,10 @@ class Posts{
             if(err) return callback(err , null);
             else{
                 let followedPlugins = resp.data.followedPlugins;
+                console.log(followedPlugins);
                 // if(Array.isArray(followedPlugins) && followedPlugins.length == 0) return callback(err , []);
                 let tempArray = [];
-                followedPlugins.forEach(id => tempArray.push({"json.pluginInstance.id" : id}));
+                followedPlugins.forEach(id => tempArray.push({"$json.pluginInstance.pluginInstanceId" : id}));
 
                 buildfire.appData.search({filter : {$or : tempArray} , sort:{createdOn : -1}} , Posts.TAG , (err , resp) =>{
                     console.log("returning from here");
