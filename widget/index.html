@@ -10,11 +10,25 @@
   <title>Document</title>
 </head>
 <body>
-  <button onclick="goToTestPage()">Go to test page</button>
+  <button onclick="getPosts()">Get Posts</button>
+  <button onclick="addPost()">Add Posts</button>
 
   <script>
-    goToTestPage = () => {
-      window.location.href = "./test/index.html"
+    getPosts = () => {
+      Posts.getMorePosts({skip:3,limit:5},(err , resp) => {
+        err ? console.log(err) : console.log(resp);
+      });
+    }
+
+    let counter = 0;
+    addPost = () => {
+      let obj = {
+        postText : "Hello this is a test post" + counter
+      };
+      counter++;
+      Posts.addPost(obj , (err , succ) => {
+        err ? console.log(err) : console.log(succ);
+      });
     }
 
 

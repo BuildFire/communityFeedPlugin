@@ -126,7 +126,7 @@ class Posts{
                 let tempArray = [];
                 followedPlugins.forEach(id => tempArray.push({"json.pluginInstance.id" : id}));
                 followedUsers.forEach(id => tempArray.push({"$json.userId" : id}));
-                buildfire.appData.search({filter : {$or: tempArray} , sort:{createdOn : -1}} , Posts.TAG , (err , resp) =>{
+                buildfire.appData.search({filter : {$or: tempArray} , sort:{createdOn : -1} ,skip: 0,limit: 10} , Posts.TAG , (err , resp) =>{
                     if (err) return callback(err , null);
                     return callback(null, resp);
                 });
@@ -135,6 +135,29 @@ class Posts{
     
         
     }
+
+    // A FUNCTION THAT RETRIEVES POSTS BASED ON SKIP AND LIMIT
+    // FOR LAZY LOADING AND PAGINATION
+    
+    static getPosts = (options , callback) =>{
+        if(typeof(options) === 'undefined') return callback("Error: options cannot be undefined" , null);
+        Follows.getUserFollowData((err , resp) => {
+            if(err) return callback(err , null);
+            else{
+                let followedUsers = resp.data.followedUsers;
+                let followedPlugins = resp.data.followedPlugins;
+                let tempArray = [];
+                followedPlugins.forEach(id => tempArray.push({"json.pluginInstance.id" : id}));
+                followedUsers.forEach(id => tempArray.push({"$json.userId" : id}));
+                buildfire.appData.search({filter : {$or: tempArray} , sort:{createdOn : -1} ,skip: options?.skip || 0,limit: options?.limit || 5} , Posts.TAG , (err , resp) =>{
+                    if (err) return callback(err , null);
+                    return callback(null, resp);
+                });
+            }
+        })
+
+    }
+
     static getFollowedUsersPosts = (callback) =>{
 
         Follows.getUserFollowData((err , resp) => {
