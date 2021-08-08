@@ -12,25 +12,31 @@
 <body>
   <button onclick="getPosts()">Get Posts</button>
   <button onclick="addPost()">Add Posts</button>
+  <button onclick="updatePost()">Update Posts</button>
 
   <script>
     getPosts = () => {
-      Posts.getMorePosts({skip:3,limit:5},(err , resp) => {
+      Posts.getPostById("61100acc1608f9060e2842dd",(err , resp) => {
         err ? console.log(err) : console.log(resp);
       });
     }
 
-    let counter = 0;
+    updatePost = () =>{
+      Posts.updatePost("61100acc1608f9060e2842dd" , {postText : "Hello from Ali !"} , (err , res) => {
+        err ? console.log(err) : console.log(res);
+      })
+    }
+    
     addPost = () => {
       let obj = {
-        postText : "Hello this is a test post" + counter
+        postText : "Hello this is a test post after updating the add post method"
       };
-      counter++;
       Posts.addPost(obj , (err , succ) => {
         err ? console.log(err) : console.log(succ);
       });
     }
-
+    //61100acc1608f9060e2842dd
+    //61100acc1608f9060e2842dd
 
   </script>
 </body>

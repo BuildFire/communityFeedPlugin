@@ -30,13 +30,13 @@ class Posts{
                     if(err) return callback(err , null);
                     else if(!user) return callback("Must be logged in to add a post" ,null );
                     else{
-                        let userId = user._id;
-                        let username = user.displayName || user.username || user.email;
-                        let postText = post?.postText || null;
-                        let postImages = post?.images || [];
-                        let isPublic = post?.isPublic;
-                        let obj = { userId , username , postText , postImages , isPublic }
-                        return buildfire.appData.insert(new Post(obj) , Posts.TAG, (error, record) => {
+                        return buildfire.appData.insert(new Post({
+                            userId : user._id,
+                            username : user.displayName || user.username || user.email,
+                            postText : post?.postText || null,
+                            postImages : post?.postImages || [],
+                            isPublic : post?.isPublic || false
+                        }) , Posts.TAG, (error, record) => {
                             if (error) return callback(error , null);
                             return callback(null, record);
                             // if theres a record response
@@ -60,15 +60,10 @@ class Posts{
                         else if(!(resp)) return callback(resp , null);
                         else if(resp.data.userId != user._id) return callback("You can only update your own posts" , null);
                         else {
-                            console.log("Update");
-                            console.log(update);
-                            let updateO = {
-                                postText : update.postText,
-                                postImages : update.postImages,
-                            }
-                            console.log("Update O");
-                            console.log(updateo);
-                            return buildfire.appData.update(id , new Post(updateO) , Posts.TAG ,  (err , resp) =>{
+                            return buildfire.appData.update(id , new Post({
+                                postText : update?.postText || "",
+                                postImages : update?.postImages || []
+                            }) , Posts.TAG ,  (err , resp) =>{
                                 if(err) return callback(err , null);
                                 else return callback(null , resp);
                             })
@@ -80,7 +75,7 @@ class Posts{
         }
     }
 
-    static getPostById = (id , callback) =>{
+    static getById = (id , callback) =>{
         buildfire.auth.getCurrentUser((err , user) =>{
             if(err) return callback(err , null);
             else if(!user) return callback("Must be logged in first" , null);
