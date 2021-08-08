@@ -31,45 +31,48 @@ class Follows {
           buildfire.appData.search({filter :{"$json.userId" : user._id}} , Follows.TAG , async(err , resp) =>{
             if(err) return callback(err , "first return callback");
             else if(!(Array.isArray(resp))) return callback(resp , null);
-            else if(resp.length == 0){
-              let saveObj = {
-                userId : user._id , 
-                followedUsers : [fUserId] ,
-                followedPlugins : [],
-                createdBy : `${user.email} - ${user.username}` , 
-                createdOn : new Date()
-              } 
-              
-              return buildfire.appData.insert(saveObj , Follows.TAG, (error, record) => {
-                if (error) return callback(error , null);
-                return callback(null, record);
+            else{
+              buildfire.auth.getUserProfile({userId : fUserId},(err , _) =>{
+                if(err || !_) console.log("User not found" , null);
+                else {
+                  if(resp.length == 0){
+                    let saveObj = {
+                      userId : user._id , 
+                      followedUsers : [fUserId] ,
+                      followedPlugins : [],
+                      createdBy : `${user.email} - ${user.username}` , 
+                      createdOn : new Date()
+                    } 
+                    
+                    return buildfire.appData.insert(saveObj , Follows.TAG, (error, record) => {
+                      if (error) return callback(error , null);
+                      return callback(null, record);
+                    });
+                  }
+                  else {
+                    let {data , id} = resp[0];
+                    let followedUsers = data.followedUsers;
+                    let index = followedUsers.findIndex(e => e == fUserId);
+                    if(index >= 0){
+                      let newFollowedUsers = [...followedUsers];
+                      newFollowedUsers.splice(index , 1);
+                      let update = {...data , followedUsers : newFollowedUsers};
+                      buildfire.appData.update(id , update , Follows.TAG, (err , resp) =>{
+                        if(err) return callback(err , null)
+                        else return callback(null , resp)
+                      });
+                    }
+                    else{
+                      let update = {...data , followedUsers : [...followedUsers , fUserId]};
+                      buildfire.appData.update(id , update , Follows.TAG, (err , resp) =>{
+                        if(err) return callback(err , null)
+                        else return callback(null , resp)
+                      })
+                      }
+
+                  }
+                }
               });
-            }
-            else {
-              let {data , id} = resp[0];
-              let followedUsers = data.followedUsers;
-              if(Follows.isValidUser(fUserId)){
-                let index = followedUsers.findIndex(e => e == fUserId);
-                if(index >= 0){
-                  let newFollowedUsers = [...followedUsers];
-                  newFollowedUsers.splice(index , 1);
-                  let update = {...data , followedUsers : newFollowedUsers};
-                  return await buildfire.appData.update(id , update , Follows.TAG, (err , resp) =>{
-                    if(err) return callback(err , null)
-                    else return callback(null , resp)
-                  });
-                }
-                else{
-                  let update = {...data , followedUsers : [...followedUsers , fUserId]};
-                  return await buildfire.appData.update(id , update , Follows.TAG, (err , resp) =>{
-                    if(err) return callback(err , null)
-                    else return callback(null , resp)
-                  })
-                }
-              }
-              else {
-                return callback("Invalid user ID" , null);
-              }
             }
           })
         }
@@ -90,37 +93,38 @@ class Follows {
           buildfire.appData.search({filter :{"$json.userId" : user._id}} , Follows.TAG , async(err , resp) =>{
             if(err) return callback(err , "first return callback");
             else if(!(Array.isArray(resp))) return callback(resp , null);
-            else if(resp.length == 0){
-              let saveObj = {
-                userId : user._id , 
-                followedUsers : [fUserId] ,
-                followedPlugins : [],
-                createdBy : `${user.email} - ${user.username}` , 
-                createdOn : new Date()
-              } 
-              
-              return buildfire.appData.insert(saveObj , Follows.TAG, (error, record) => {
-                if (error) return callback(error , null);
-                return callback(null, record);
-              });
-            }
-            else {
-              let {data , id} = resp[0];
-              let followedUsers = data.followedUsers;
-              if(Follows.isValidUser(fUserId)){
-                let index = followedUsers.findIndex(e => e == fUserId);
-                if(index >= 0) return callback("You are already following this user" , null);
-                else{
-                  let update = {...data , followedUsers : [...followedUsers , fUserId]};
-                  return await buildfire.appData.update(id , update , Follows.TAG, (err , resp) =>{
-                    if(err) return callback(err , null)
-                    else return callback(null , resp)
-                  })
+            else{
+              buildfire.auth.getUserProfile({userId : fUserId},(err , _) =>{
+                if(err || !_) return callback("User not found" , null);              
+                if(resp.length == 0){
+                  let saveObj = {
+                    userId : user._id , 
+                    followedUsers : [fUserId] ,
+                    followedPlugins : [],
+                    createdBy : `${user.email} - ${user.username}` , 
+                    createdOn : new Date()
+                  } 
+                  
+                  buildfire.appData.insert(saveObj , Follows.TAG, (error, record) => {
+                    if (error) return callback(error , null);
+                    return callback(null, record);
+                  });
                 }
-              }
-              else {
-                return callback("Invalid user ID" , null);
-              }
+                else {
+                  let {data , id} = resp[0];
+                  let followedUsers = data.followedUsers;
+                  let index = followedUsers.findIndex(e => e == fUserId);
+                  if(index >= 0) return callback("You are already following this user" , null);
+                  else{
+                    let update = {...data , followedUsers : [...followedUsers , fUserId]};
+                    buildfire.appData.update(id , update , Follows.TAG, (err , resp) =>{
+                      if(err) return callback(err , null)
+                      else return callback(null , resp)
+                    })
+                  }
+  
+                }
+              });
             }
           })
         }
@@ -144,22 +148,23 @@ class Follows {
                 else if(!(Array.isArray(resp))) return callback(resp , null);
                 else if(resp.length <= 0) return callback("You are not following anyone yet" , null);
                 else{
-                  let {data , id} = resp[0];
-                  let followedUsers = data.followedUsers;
-                  let index = followedUsers.findIndex(e => e == fUserId);
-                  if(index < 0) return callback("Must be following the user to unfollow" , null);
-                  if(Follows.isValidUser(fUserId)){
-                    let newFollowedUsers = [...followedUsers];
-                    newFollowedUsers.splice(index , 1);
-                    let update = {...data , followedUsers : newFollowedUsers};
-                    return await buildfire.appData.update(id , update , Follows.TAG, (err , resp) =>{
-                      if(err) return callback(err , null)
-                      else return callback(null , resp)
-                    })
-                  }
-                  else{
-                    return callback("Invalid user ID" , null)
-                  }
+                  buildfire.auth.getUserProfile({userId : fUserId} , (err , _) => {
+                    if(err || !_) return callback("Couldn't find user" , null);
+                    else{
+                      let {data , id} = resp[0];
+                      let followedUsers = data.followedUsers;
+                      let index = followedUsers.findIndex(e => e == fUserId);
+                      if(index < 0) return callback("Must be following the user to unfollow" , null);
+                      let newFollowedUsers = [...followedUsers];
+                      newFollowedUsers.splice(index , 1);
+                      let update = {...data , followedUsers : newFollowedUsers};
+                      buildfire.appData.update(id , update , Follows.TAG, (err , resp) =>{
+                        if(err) return callback(err , null)
+                        else return callback(null , resp)
+                      })
+                    }
+                  })
+
                 }
               });
             }
@@ -414,8 +419,6 @@ class Follows {
     })
   }
 
-  static isValidUser = async(fUserId) =>{
-    return await buildfire.auth.getUserProfile({userId : fUserId},(err , user) => err || !user ? 0 : 1);
-  }
+
 
 }
