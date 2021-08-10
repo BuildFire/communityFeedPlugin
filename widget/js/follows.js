@@ -2,7 +2,6 @@
 
 class Follow {
   constructor(data = {}) {
-    // DONT DELETE THESE DATA OBJECTS 
     this.isActive = data.isActive || true; 
     this.createdOn = data.createdOn || new Date(); 
     this.createdBy = data.createdBy || null; 
@@ -14,7 +13,6 @@ class Follow {
     this.followedUsers = data.followedUsers || [];
     this.followedPlugins = data.followedPlugins || [];
     this._buildfire = data._buildfire || {};
-    //ADD NEW ONES BELOW
   }
 }
 
