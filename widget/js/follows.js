@@ -13,7 +13,7 @@ class Follow {
     this.userId = data.userId || null;
     this.followedUsers = data.followedUsers || [];
     this.followedPlugins = data.followedPlugins || [];
-    
+    this._buildfire = data._buildfire || {};
     //ADD NEW ONES BELOW
   }
 }
@@ -22,31 +22,32 @@ class Follow {
 
 class Follows {
   static TAG = 'follows';
-  
+  // updated
   static toggleFollowUser = (fUserId , callback) =>{
     if(Follows.validData(fUserId)){
       buildfire.auth.getCurrentUser((err , user) => {        
         if(err || !user) return callback("You must be logged in to follow a user" , null);
         else {
-          buildfire.appData.search({filter :{"$json.userId" : user._id}} , Follows.TAG , async(err , resp) =>{
+          buildfire.appData.search({filter :{"_buildfire.index.string1" : user._id}} , Follows.TAG , async(err , resp) =>{
             if(err) return callback(err , "first return callback");
             else if(!(Array.isArray(resp))) return callback(resp , null);
             else{
               buildfire.auth.getUserProfile({userId : fUserId},(err , _) =>{
                 if(err || !_) console.log("User not found" , null);
                 else {
-                  if(resp.length == 0){
-                    let saveObj = {
+                  if(resp.length == 0){                    
+                    return buildfire.appData.insert(new Follow({
                       userId : user._id , 
                       followedUsers : [fUserId] ,
                       followedPlugins : [],
                       createdBy : `${user.email} - ${user.username}` , 
-                      createdOn : new Date()
-                    } 
-                    
-                    return buildfire.appData.insert(saveObj , Follows.TAG, (error, record) => {
+                      createdOn : new Date(),
+                      _buildfire : {
+                        index : Follows.buildIndex(user._id)
+                      }
+                    }) , Follows.TAG, (error, record) => {
                       if (error) return callback(error , null);
-                      return callback(null, record);
+                      return callback(null, new Follow(record.data));
                     });
                   }
                   else {
@@ -54,19 +55,21 @@ class Follows {
                     let followedUsers = data.followedUsers;
                     let index = followedUsers.findIndex(e => e == fUserId);
                     if(index >= 0){
+                      console.log("going to remove");
                       let newFollowedUsers = [...followedUsers];
                       newFollowedUsers.splice(index , 1);
                       let update = {...data , followedUsers : newFollowedUsers};
                       buildfire.appData.update(id , update , Follows.TAG, (err , resp) =>{
                         if(err) return callback(err , null)
-                        else return callback(null , resp)
+                        else return callback(null , new Follow(resp.data))
                       });
                     }
                     else{
+                      console.log(" going to add ");
                       let update = {...data , followedUsers : [...followedUsers , fUserId]};
                       buildfire.appData.update(id , update , Follows.TAG, (err , resp) =>{
                         if(err) return callback(err , null)
-                        else return callback(null , resp)
+                        else return callback(null , new Follow(resp.data))
                       })
                       }
 
@@ -83,31 +86,32 @@ class Follows {
     }
   }
 
-
+  // updated
   static followUser = (fUserId , callback) =>{
     
     if(Follows.validData(fUserId)){
       buildfire.auth.getCurrentUser((err , user) => {        
         if(err || !user) return callback("You must be logged in to follow a user" , null);
         else {
-          buildfire.appData.search({filter :{"$json.userId" : user._id}} , Follows.TAG , async(err , resp) =>{
+          buildfire.appData.search({filter :{"_buildfire.index.string1" : user._id}} , Follows.TAG , async(err , resp) =>{
             if(err) return callback(err , "first return callback");
             else if(!(Array.isArray(resp))) return callback(resp , null);
             else{
               buildfire.auth.getUserProfile({userId : fUserId},(err , _) =>{
                 if(err || !_) return callback("User not found" , null);              
                 if(resp.length == 0){
-                  let saveObj = {
+                  buildfire.appData.insert(new Follow({
                     userId : user._id , 
                     followedUsers : [fUserId] ,
                     followedPlugins : [],
                     createdBy : `${user.email} - ${user.username}` , 
-                    createdOn : new Date()
-                  } 
-                  
-                  buildfire.appData.insert(saveObj , Follows.TAG, (error, record) => {
+                    createdOn : new Date(),
+                    _buildfire : {
+                      index : Follows.buildIndex(user._id)
+                    }
+                  }), Follows.TAG, (error, record) => {
                     if (error) return callback(error , null);
-                    return callback(null, record);
+                    return callback(null, new Follow(record.data));
                   });
                 }
                 else {
@@ -119,7 +123,7 @@ class Follows {
                     let update = {...data , followedUsers : [...followedUsers , fUserId]};
                     buildfire.appData.update(id , update , Follows.TAG, (err , resp) =>{
                       if(err) return callback(err , null)
-                      else return callback(null , resp)
+                      else return callback(null , new Follow(resp.data))
                     })
                   }
   
@@ -140,14 +144,12 @@ class Follows {
       buildfire.auth.getCurrentUser((err , user) => {        
         if(err || !user) return callback("You must be logged in to unfollow a user" , null);
         else {
-          buildfire.appData.search({filter :{"$json.userId" : user._id}} , Follows.TAG , async(err , resp) =>{
-            if(err) return callback(err , "first return callback");
-            else{
-              buildfire.appData.search({filter :{"$json.userId" : user._id}} , Follows.TAG , async(err , resp) =>{
+              buildfire.appData.search( {filter :{"_buildfire.index.string1" : user._id}} , Follows.TAG , async(err , resp) =>{
                 if(err) return callback(err , null);
                 else if(!(Array.isArray(resp))) return callback(resp , null);
                 else if(resp.length <= 0) return callback("You are not following anyone yet" , null);
                 else{
+                  
                   buildfire.auth.getUserProfile({userId : fUserId} , (err , _) => {
                     if(err || !_) return callback("Couldn't find user" , null);
                     else{
@@ -160,29 +162,26 @@ class Follows {
                       let update = {...data , followedUsers : newFollowedUsers};
                       buildfire.appData.update(id , update , Follows.TAG, (err , resp) =>{
                         if(err) return callback(err , null)
-                        else return callback(null , resp)
+                        else return callback(null , new Follow(resp.data))
                       })
                     }
-                  })
+                  });
 
                 }
-              });
-            }
-          });
+            });
+          }
+        });
 
         }
-      })
-    }else{
-      return callback("Malformatted data" , null);
-    }
+     
   }
-
+  // updated
   static getFollowedUsers = (callback) =>{
     buildfire.auth.getCurrentUser((err , user) =>{
       if(err) return callback(err , null);
       else if(!user) return callback("Please login first");
       else {
-        buildfire.appData.search({filter :{"$json.userId" : user._id}}, Follows.TAG , (err , resp) => {
+        buildfire.appData.search({filter :{"_buildfire.index.string1" : user._id}}, Follows.TAG , (err , resp) => {
           if(err) return callback(err , null);
           else if(!(Array.isArray(resp))) return callback(resp , null);
           else if(resp.length == 0) return callback("You are not following anyone yet" , null);
@@ -194,13 +193,13 @@ class Follows {
       }
     })
   }
-
+  // updated
   static getFollowedPlugins = (callback) =>{
     buildfire.auth.getCurrentUser((err , user) =>{
       if(err) return callback(err , null);
       else if(!user) return callback("Please login first");
       else {
-        buildfire.appData.search({filter :{"$json.userId" : user._id}}, Follows.TAG , (err , resp) => {
+        buildfire.appData.search({filter :{"_buildfire.index.string1" : user._id}}, Follows.TAG , (err , resp) => {
           if(err) return callback(err , null);
           else if(!(Array.isArray(resp))) return callback(resp , null);
           else if(resp.length == 0) return callback("You are not following any plugin yet" , null);
@@ -212,44 +211,46 @@ class Follows {
       }
     })
   }
-
+  // updated
   static getUserFollowData = (callback) =>{
     buildfire.auth.getCurrentUser((err , user) =>{
       if(err) return callback(err , null);
       else if(!user) return callback("Please login first" , null);
       else {
-        buildfire.appData.search({filter :{"$json.userId" : user._id}}, Follows.TAG , (err , resp) => {
+        buildfire.appData.search({filter :{"_buildfire.index.string1" : user._id}}, Follows.TAG , (err , resp) => {
           if(err) return callback(err , null);
           else if(!(Array.isArray(resp))) return callback(resp , null);
           else if(resp.length == 0) return callback("You are not following anyone yet" , null);
           else if(resp.length == 1) {
             if(resp[0].data.followedUsers.length == 0 && resp[0].data.followedPlugins.length == 0) return callback("You are not following any users / plugins yet" , null);
-            return callback(null , resp[0]);
+            return callback(null , new Follow(resp[0].data));
           } 
         })
       }
     })
   }
-
+  // updated
   static followPlugin = (pluginId , callback) => {
       buildfire.auth.getCurrentUser((err , user) => {        
         if(err || !user) return callback("You must be logged in to follow a plugin" , null);
         else {
-          buildfire.appData.search({filter :{"$json.userId" : user._id}} , Follows.TAG , async(err , resp) =>{
+          buildfire.appData.search({filter :{"_buildfire.index.string1" : user._id}} , Follows.TAG , async(err , resp) =>{
             if(err) return callback(err , "first return callback");
             else if(!(Array.isArray(resp))) return callback(resp , null);
             else if(resp.length == 0){
-              let saveObj = {
+              
+              return buildfire.appData.insert(new Follow({
                 userId : user._id , 
                 followedUsers : [] ,
                 followedPlugins : [pluginId],
                 createdBy : `${user.email} - ${user.username}` , 
-                createdOn : new Date()
-              } 
-              
-              return buildfire.appData.insert(saveObj , Follows.TAG, (error, record) => {
+                createdOn : new Date(),
+                _buildfire : {
+                  index : Follows.buildIndex(user._id)
+                }
+              }), Follows.TAG, (error, record) => {
                 if (error) return callback(error , null);
-                return callback(null, record);
+                return callback(null, new Follow(record.data));
               });
             }
             else {
@@ -262,7 +263,7 @@ class Follows {
                   let update = {...data , followedPlugins : [...followedPlugins , pluginId]};
                   return await buildfire.appData.update(id , update , Follows.TAG, (err , resp) =>{
                     if(err) return callback(err , null)
-                    else return callback(null , resp)
+                    else return callback(null , new Follow(resp.data))
                   })
                 }
             }
@@ -271,25 +272,30 @@ class Follows {
       })
 
   }
+
+  // updated
   static toggleFollowPlugin = (pluginId , callback) => {
       buildfire.auth.getCurrentUser((err , user) => {        
         if(err || !user) return callback("You must be logged in to follow a plugin" , null);
         else {
-          buildfire.appData.search({filter :{"$json.userId" : user._id}} , Follows.TAG , async(err , resp) =>{
+          buildfire.appData.search({filter :{"_buildfire.index.string1" : user._id}} , Follows.TAG , async(err , resp) =>{
             if(err) return callback(err , "first return callback");
             else if(!(Array.isArray(resp))) return callback(resp , null);
             else if(resp.length == 0){
-              let saveObj = {
+
+              
+              return buildfire.appData.insert(new Follow({
                 userId : user._id , 
                 followedUsers : [] ,
                 followedPlugins : [pluginId],
                 createdBy : `${user.email} - ${user.username}` , 
-                createdOn : new Date()
-              } 
-              
-              return buildfire.appData.insert(saveObj , Follows.TAG, (error, record) => {
+                createdOn : new Date(),
+                _buildfire : {
+                  index : Follows.buildIndex(user._id)
+                }
+              })  , Follows.TAG, (error, record) => {
                 if (error) return callback(error , null);
-                return callback(null, record);
+                return callback(null, new Follow(record.data));
               });
             }
             else {
@@ -303,14 +309,14 @@ class Follows {
                   let update = {...data , followedPlugins : newfollowedPlugins};
                   return await buildfire.appData.update(id , update , Follows.TAG, (err , resp) =>{
                     if(err) return callback(err , null)
-                    else return callback(null , resp)
+                    else return callback(null , new Follow(resp.data))
                   })
                 }
                 else{
                   let update = {...data , followedPlugins : [...followedPlugins , pluginId]};
                   return await buildfire.appData.update(id , update , Follows.TAG, (err , resp) =>{
                     if(err) return callback(err , null)
-                    else return callback(null , resp)
+                    else return callback(null , new Follow(resp.data))
                   })
                 }
             }
@@ -325,10 +331,10 @@ class Follows {
     buildfire.auth.getCurrentUser((err , user) => {        
       if(err || !user) return callback("You must be logged in to unfollow a plugin" , null);
       else {
-        buildfire.appData.search({filter :{"$json.userId" : user._id}} , Follows.TAG , async(err , resp) =>{
+        buildfire.appData.search({filter :{"_buildfire.index.string1" : user._id}} , Follows.TAG , async(err , resp) =>{
           if(err) return callback(err , "first return callback");
           else{
-            buildfire.appData.search({filter :{"$json.userId" : user._id}} , Follows.TAG , async(err , resp) =>{
+            buildfire.appData.search({filter :{"_buildfire.index.string1" : user._id}} , Follows.TAG , async(err , resp) =>{
               if(err) return callback(err , null);
               else if(!(Array.isArray(resp))) return callback(resp , null);
               else if(resp.length <= 0) return callback("You are not following any plugin yet" , null);
@@ -362,7 +368,7 @@ class Follows {
       if(err) return callback(err, null)
       else if(!user) return callback("Must be logged in first" , null);
       else {
-        buildfire.appData.search({filter :{"$json.userId" : user._id}}, Follows.TAG , (err , resp) => {
+        buildfire.appData.search({filter :{"_buildfire.index.string1" : user._id}}, Follows.TAG , (err , resp) => {
           if(err) return callback()
           else {
             if(!(Array.isArray(resp))) return callback(resp , null);
@@ -377,13 +383,14 @@ class Follows {
       }
     });
   }
+
   static isFollowingPlugin = (pluginId , callback) =>{
     let result;
     buildfire.auth.getCurrentUser((err , user) =>{
       if(err) return callback(err, null)
       else if(!user) return callback("Must be logged in first" , null);
       else {
-        buildfire.appData.search({filter :{"$json.userId" : user._id}}, Follows.TAG , (err , resp) => {
+        buildfire.appData.search({filter :{"_buildfire.index.string1" : user._id}}, Follows.TAG , (err , resp) => {
           if(err) return callback()
           else {
             if(!(Array.isArray(resp))) return callback(resp , null);
@@ -419,6 +426,13 @@ class Follows {
     })
   }
 
+
+  static buildIndex = userId => {
+    const index = {
+      string1: userId 
+    };
+    return index;
+  }
 
 
 }
