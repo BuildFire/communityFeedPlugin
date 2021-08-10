@@ -18,6 +18,7 @@ class Post {
 
 class Posts{
     static TAG = "posts";
+    // updated
     static addPost = (post , callback) =>{
         if(!post.postText && !post.postImages) return callback("Post text cannot be empty" , null);
             else {
@@ -40,7 +41,7 @@ class Posts{
                             }
                         }) , Posts.TAG, (error, record) => {
                             if (error) return callback(error , null);
-                            return callback(null, new Post(record.data));
+                            return callback(null, record);
                             // if theres a record response
                             // add the analytics
                           });
@@ -48,7 +49,7 @@ class Posts{
                 })
             }
     }
-    // change update to post
+    // updated
     static updatePost = (id , update , callback) =>{
         if(!id) return callback("Post ID cannot be null" , null);
         else if(!update || !update.postText || update.postText == "") return callback("Post text cannot be empty" , null);
