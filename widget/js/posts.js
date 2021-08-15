@@ -42,7 +42,7 @@ class Posts{
             if(e) callback(e);
             else {
                 callback(null , r);
-                // onAddPostAnalytics();
+                buildfire.analytics.trackAction(analyticKeys.POST_ADDED);
             }
         });
     }
@@ -68,7 +68,7 @@ class Posts{
                     if(e) return callback(e);
                     else{
                         callback(null , r);
-                        // onUpdatePostAnalaytics()
+                        buildfire.analytics.trackAction(analyticKeys.POST_UPDATED);
                     } 
                 } )
             }
@@ -129,7 +129,9 @@ class Posts{
             else{
                 buildfire.appData.delete(id , Posts.TAG , (e , r) => {
                     if(e) return callback(e);
-                    else return callback(null , r);
+                    callback(null , r);
+                    buildfire.analytics.trackAction(analyticKeys.POST_DELETED);
+
                 })
             }
         });

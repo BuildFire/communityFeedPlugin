@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css"/>
-
+    <script src="./../../widget/js/analyticKey.js"></script>
     <!--
     NOTE:
     1. You can reference the file in SDK via relative path
@@ -24,6 +24,18 @@
     <script src="../../../../scripts/angular/ui-bootstrap.min.js"></script>
    <script src="../../../../scripts/jquery/jquery-1.11.2.min.js"></script>
    -->
+
+
+   <script>
+    for (let propName in analyticKeys) {
+      buildfire.analytics.registerEvent(
+        analyticKeys[propName], 
+        {
+          silentNotification: true
+        }
+      );
+    }
+   </script>
 </head>
 <body>
 <span>Settings - Hello world!</span>

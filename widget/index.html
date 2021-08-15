@@ -6,8 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="../../../scripts/buildfire.js"></script>
   <script src="./js/authManager.js"></script>
+  <script src="./js/analyticKey.js"></script>
   <script src="./js/follows.js"></script>
-  <script src="./js/updatedPosts.js"></script>
+  <script src="./js/posts.js"></script>
   <title>Document</title>
 </head>
 <body>
@@ -19,7 +20,7 @@
   <button onclick="searchPosts()">search Posts</button>
   <p id="msg"></p>
   <script>
-    // authManager.enforceLogin();
+    authManager.enforceLogin();
     searchPosts = () => Posts.searchPosts({text : postText.value } , (e , r) => e ? console.log(e) : console.log(r))
     addPost = () => Posts.addPost({postText : "Hello this is a post :D"} , (e , r) => e ? console.log(e) : console.log(r));
     getPosts = () => Posts.getPosts({byFollowedUsers : true , byFollowedPlugins : false , publicPosts : false } , (e , r) => e ? console.log(e) : console.log(r))
