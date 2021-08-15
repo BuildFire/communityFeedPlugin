@@ -7,7 +7,7 @@
   <script src="../../../scripts/buildfire.js"></script>
   <script src="./js/authManager.js"></script>
   <script src="./js/analyticKey.js"></script>
-  <script src="./js/follows.js"></script>
+  <script src="./js/updatedFollow.js"></script>
   <script src="./js/posts.js"></script>
   <title>Document</title>
 </head>
@@ -18,14 +18,40 @@
   <button onclick="updatePost()">Update Posts</button>
   <button onclick="deletePosts()">deletePosts</button>
   <button onclick="searchPosts()">search Posts</button>
+  <hr />
+  <button onclick="followUser()">follow user</button>
+  <button onclick="unfollowUser()">unfollow user</button>
+  <button onclick="toggleFollowUser()">toggle follow user</button>
+  <button onclick="isFollowingUser()">isFollowingUser</button>
+  <hr />
+  <button onclick="getUserFollowData()">getUserFollowData</button>
+  <hr />
+  <button onclick="followPlugin()">follow plugin</button>
+  <button onclick="unfollowPlugin()">unfollow plugin</button>
+  <button onclick="toggleFollowPlugin()">toggle follow plugin</button>
+  <button onclick="isFollowingPlugin()">isFollowingPlugin</button>
   <p id="msg"></p>
   <script>
     authManager.enforceLogin();
+    // Follows.clearAppData();
     searchPosts = () => Posts.searchPosts({text : postText.value } , (e , r) => e ? console.log(e) : console.log(r))
     addPost = () => Posts.addPost({postText : "Hello this is a post :D"} , (e , r) => e ? console.log(e) : console.log(r));
     getPosts = () => Posts.getPosts({byFollowedUsers : true , byFollowedPlugins : false , publicPosts : false } , (e , r) => e ? console.log(e) : console.log(r))
     updatePost = () => Posts.updatePost("6115608c7ebcff063c192af2" , {postText : "f" , postImages : ["asd"]} , (e , r) => e ? console.log(e) : console.log(r));
     deletePosts = () => Posts.clearAppData();
+
+    followUser = () => Follows.followUser('6106b9dedcd13351aefb093a' , (e , r) => e ? console.log(e) : console.log(r));
+    unfollowUser = () => Follows.unfollowUser('6106b9dedcd13351aefb093a' , (e , r) => e ? console.log(e) : console.log(r));
+    toggleFollowUser = () => Follows.toggleFollowUser("6106b9dedcd13351aefb093a",(e , r) => e ? console.log(e) : console.log(r));
+    isFollowingUser = () => Follows.isFollowingUser("6106b9dedcd13351aefb093a",(e , r) => e ? console.log(e) : console.log(r));
+
+    followPlugin = () => Follows.followPlugin(buildfire.context.instanceId,(e , r) => e ? console.log(e) : console.log(r));
+    unfollowPlugin = () => Follows.unfollowPlugin(buildfire.context.instanceId,(e , r) => e ? console.log(e) : console.log(r));
+    toggleFollowPlugin = () => Follows.toggleFollowPlugin(buildfire.context.instanceId,(e , r) => e ? console.log(e) : console.log(r));
+    isFollowingPlugin = () => Follows.isFollowingPlugin(buildfire.context.instanceId,(e , r) => e ? console.log(e) : console.log(r));
+    
+    getUserFollowData = () => Follows.getUserFollowData((e , r) => e ? console.log(e) : console.log(r));
+    
     // Daniel - 611557e58838fb065bea1da2
     // 6115608c7ebcff063c192af2
 

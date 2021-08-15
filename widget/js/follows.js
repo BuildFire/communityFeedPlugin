@@ -18,420 +18,240 @@ class Follow {
 }
 
 
-
 class Follows {
-  static TAG = 'follows';
-  // updated
-  static toggleFollowUser = (fUserId , callback) =>{
-    if(Follows.validData(fUserId)){
-      buildfire.auth.getCurrentUser((err , user) => {        
-        if(err || !user) return callback("You must be logged in to follow a user" , null);
-        else {
-          buildfire.appData.search({filter :{"_buildfire.index.string1" : user._id}} , Follows.TAG , async(err , resp) =>{
-            if(err) return callback(err , "first return callback");
-            else if(!(Array.isArray(resp))) return callback(resp , null);
+    static TAG = 'follows';
+
+    static createFollowData = (user , fUser , fPlugin) =>{
+        let data = {
+            userId : user._id,
+            _buildfire:{index : Follows.buildIndex(user._id)}
+        }
+        if(user && fUser) return new Follow({ ...data, followedUsers : [fUser], _buildfire: {index: Follows.buildIndex(user._id) } });
+        else if(user && !fUser && fPlugin) return new Follow({ ...data, followedPlugins : [fPlugin], _buildfire: {index: Follows.buildIndex(user._id) }  })
+        else return "error missing arguments"
+        
+    }
+
+    static followPlugin = (pluginId , callback) =>{
+        if(!authManager.currentUser) return callback("Must be logged in before following a user");
+        buildfire.appData.search({filter : {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
+            if(e || !r) return callback(e);
+            else if(r.length == 0){
+                buildfire.appData.insert(Follows.createFollowData(authManager.currentUser , null , pluginId),Follows.TAG , (e , r) => {
+                    if(e) return callback(e);
+                    else return callback(null , r)
+                });
+            }
             else{
-              buildfire.auth.getUserProfile({userId : fUserId},(err , _) =>{
-                if(err || !_) console.log("User not found" , null);
-                else {
-                  if(resp.length == 0){                    
-                    return buildfire.appData.insert(new Follow({
-                      userId : user._id , 
-                      followedUsers : [fUserId] ,
-                      followedPlugins : [],
-                      createdBy : `${user.email} - ${user.username}` , 
-                      createdOn : new Date(),
-                      _buildfire : {
-                        index : Follows.buildIndex(user._id)
-                      }
-                    }) , Follows.TAG, (error, record) => {
-                      if (error) return callback(error , null);
-                      return callback(null, new Follow(record.data));
-                    });
-                  }
-                  else {
-                    let {data , id} = resp[0];
-                    let followedUsers = data.followedUsers;
-                    let index = followedUsers.findIndex(e => e == fUserId);
-                    if(index >= 0){
-                      console.log("going to remove");
-                      let newFollowedUsers = [...followedUsers];
-                      newFollowedUsers.splice(index , 1);
-                      let update = {...data , followedUsers : newFollowedUsers};
-                      buildfire.appData.update(id , update , Follows.TAG, (err , resp) =>{
-                        if(err) return callback(err , null)
-                        else return callback(null , new Follow(resp.data))
-                      });
-                    }
-                    else{
-                      console.log(" going to add ");
-                      let update = {...data , followedUsers : [...followedUsers , fUserId]};
-                      buildfire.appData.update(id , update , Follows.TAG, (err , resp) =>{
-                        if(err) return callback(err , null)
-                        else return callback(null , new Follow(resp.data))
-                      })
-                      }
-
-                  }
-                }
-              });
-            }
-          })
-        }
-      })
-    }
-    else{
-      return callback("Malformatted data" , null);
-    }
-  }
-
-  // updated
-  static followUser = (fUserId , callback) =>{
-    
-    if(Follows.validData(fUserId)){
-      buildfire.auth.getCurrentUser((err , user) => {        
-        if(err || !user) return callback("You must be logged in to follow a user" , null);
-        else {
-          buildfire.appData.search({filter :{"_buildfire.index.string1" : user._id}} , Follows.TAG , async(err , resp) =>{
-            if(err) return callback(err , "first return callback");
-            else if(!(Array.isArray(resp))) return callback(resp , null);
-            else{
-              buildfire.auth.getUserProfile({userId : fUserId},(err , _) =>{
-                if(err || !_) return callback("User not found" , null);              
-                if(resp.length == 0){
-                  buildfire.appData.insert(new Follow({
-                    userId : user._id , 
-                    followedUsers : [fUserId] ,
-                    followedPlugins : [],
-                    createdBy : `${user.email} - ${user.username}` , 
-                    createdOn : new Date(),
-                    _buildfire : {
-                      index : Follows.buildIndex(user._id)
-                    }
-                  }), Follows.TAG, (error, record) => {
-                    if (error) return callback(error , null);
-                    return callback(null, new Follow(record.data));
-                  });
-                }
-                else {
-                  let {data , id} = resp[0];
-                  let followedUsers = data.followedUsers;
-                  let index = followedUsers.findIndex(e => e == fUserId);
-                  if(index >= 0) return callback("You are already following this user" , null);
-                  else{
-                    let update = {...data , followedUsers : [...followedUsers , fUserId]};
-                    buildfire.appData.update(id , update , Follows.TAG, (err , resp) =>{
-                      if(err) return callback(err , null)
-                      else return callback(null , new Follow(resp.data))
-                    })
-                  }
-  
-                }
-              });
-            }
-          })
-        }
-      })
-    }
-    else{
-      return callback("Malformatted data" , null);
-    }
-  }
-
-  static unfollowUser = (fUserId , callback) =>{
-    if(Follows.validData(fUserId)){
-      buildfire.auth.getCurrentUser((err , user) => {        
-        if(err || !user) return callback("You must be logged in to unfollow a user" , null);
-        else {
-              buildfire.appData.search( {filter :{"_buildfire.index.string1" : user._id}} , Follows.TAG , async(err , resp) =>{
-                if(err) return callback(err , null);
-                else if(!(Array.isArray(resp))) return callback(resp , null);
-                else if(resp.length <= 0) return callback("You are not following anyone yet" , null);
-                else{
-                  
-                  buildfire.auth.getUserProfile({userId : fUserId} , (err , _) => {
-                    if(err || !_) return callback("Couldn't find user" , null);
-                    else{
-                      let {data , id} = resp[0];
-                      let followedUsers = data.followedUsers;
-                      let index = followedUsers.findIndex(e => e == fUserId);
-                      if(index < 0) return callback("Must be following the user to unfollow" , null);
-                      let newFollowedUsers = [...followedUsers];
-                      newFollowedUsers.splice(index , 1);
-                      let update = {...data , followedUsers : newFollowedUsers};
-                      buildfire.appData.update(id , update , Follows.TAG, (err , resp) =>{
-                        if(err) return callback(err , null)
-                        else return callback(null , new Follow(resp.data))
-                      })
-                    }
-                  });
-
-                }
-            });
-          }
-        });
-
-        }
-     
-  }
-  // updated
-  static getFollowedUsers = (callback) =>{
-    buildfire.auth.getCurrentUser((err , user) =>{
-      if(err) return callback(err , null);
-      else if(!user) return callback("Please login first");
-      else {
-        buildfire.appData.search({filter :{"_buildfire.index.string1" : user._id}}, Follows.TAG , (err , resp) => {
-          if(err) return callback(err , null);
-          else if(!(Array.isArray(resp))) return callback(resp , null);
-          else if(resp.length == 0) return callback("You are not following anyone yet" , null);
-          else if(resp.length == 1) {
-            if(resp[0].data.followedUsers.length == 0) return callback("You are not following any users yet" , null);
-            return callback(null , resp[0].data.followedUsers);
-          } 
-        })
-      }
-    })
-  }
-  // updated
-  static getFollowedPlugins = (callback) =>{
-    buildfire.auth.getCurrentUser((err , user) =>{
-      if(err) return callback(err , null);
-      else if(!user) return callback("Please login first");
-      else {
-        buildfire.appData.search({filter :{"_buildfire.index.string1" : user._id}}, Follows.TAG , (err , resp) => {
-          if(err) return callback(err , null);
-          else if(!(Array.isArray(resp))) return callback(resp , null);
-          else if(resp.length == 0) return callback("You are not following any plugin yet" , null);
-          else if(resp.length == 1) {
-            if(resp[0].data.followedPlugins.length == 0) return callback("You are not following any plugin yet" , null);
-            return callback(null , resp[0].data.followedPlugins);
-          } 
-        })
-      }
-    })
-  }
-  // updated
-  static getUserFollowData = (callback) =>{
-    buildfire.auth.getCurrentUser((err , user) =>{
-      if(err) return callback(err , null);
-      else if(!user) return callback("Please login first" , null);
-      else {
-        buildfire.appData.search({filter :{"_buildfire.index.string1" : user._id}}, Follows.TAG , (err , resp) => {
-          if(err) return callback(err , null);
-          else if(!(Array.isArray(resp))) return callback(resp , null);
-          else if(resp.length == 0) return callback("You are not following anyone yet" , null);
-          else if(resp.length == 1) {
-            if(resp[0].data.followedUsers.length == 0 && resp[0].data.followedPlugins.length == 0) return callback("You are not following any users / plugins yet" , null);
-            return callback(null , new Follow(resp[0].data));
-          } 
-        })
-      }
-    })
-  }
-  // updated
-  static followPlugin = (pluginId , callback) => {
-      buildfire.auth.getCurrentUser((err , user) => {        
-        if(err || !user) return callback("You must be logged in to follow a plugin" , null);
-        else {
-          buildfire.appData.search({filter :{"_buildfire.index.string1" : user._id}} , Follows.TAG , async(err , resp) =>{
-            if(err) return callback(err , "first return callback");
-            else if(!(Array.isArray(resp))) return callback(resp , null);
-            else if(resp.length == 0){
-              
-              return buildfire.appData.insert(new Follow({
-                userId : user._id , 
-                followedUsers : [] ,
-                followedPlugins : [pluginId],
-                createdBy : `${user.email} - ${user.username}` , 
-                createdOn : new Date(),
-                _buildfire : {
-                  index : Follows.buildIndex(user._id)
-                }
-              }), Follows.TAG, (error, record) => {
-                if (error) return callback(error , null);
-                return callback(null, new Follow(record.data));
-              });
-            }
-            else {
-              let {data , id} = resp[0];
-              let followedPlugins = data.followedPlugins;
-                
-                let index = followedPlugins.findIndex(e => e == pluginId);
-                if(index >= 0) return callback("You are already following this plugin" , null);
-                else{
-                  let update = {...data , followedPlugins : [...followedPlugins , pluginId]};
-                  return await buildfire.appData.update(id , update , Follows.TAG, (err , resp) =>{
-                    if(err) return callback(err , null)
-                    else return callback(null , new Follow(resp.data))
-                  })
-                }
-            }
-          })
-        }
-      })
-
-  }
-
-  // updated
-  static toggleFollowPlugin = (pluginId , callback) => {
-      buildfire.auth.getCurrentUser((err , user) => {        
-        if(err || !user) return callback("You must be logged in to follow a plugin" , null);
-        else {
-          buildfire.appData.search({filter :{"_buildfire.index.string1" : user._id}} , Follows.TAG , async(err , resp) =>{
-            if(err) return callback(err , "first return callback");
-            else if(!(Array.isArray(resp))) return callback(resp , null);
-            else if(resp.length == 0){
-
-              
-              return buildfire.appData.insert(new Follow({
-                userId : user._id , 
-                followedUsers : [] ,
-                followedPlugins : [pluginId],
-                createdBy : `${user.email} - ${user.username}` , 
-                createdOn : new Date(),
-                _buildfire : {
-                  index : Follows.buildIndex(user._id)
-                }
-              })  , Follows.TAG, (error, record) => {
-                if (error) return callback(error , null);
-                return callback(null, new Follow(record.data));
-              });
-            }
-            else {
-              let {data , id} = resp[0];
-              let followedPlugins = data.followedPlugins;
-                
-                let index = followedPlugins.findIndex(e => e == pluginId);
-                if(index >= 0){
-                  let newfollowedPlugins = [...followedPlugins];
-                  newfollowedPlugins.splice(index , 1);
-                  let update = {...data , followedPlugins : newfollowedPlugins};
-                  return await buildfire.appData.update(id , update , Follows.TAG, (err , resp) =>{
-                    if(err) return callback(err , null)
-                    else return callback(null , new Follow(resp.data))
-                  })
-                }
-                else{
-                  let update = {...data , followedPlugins : [...followedPlugins , pluginId]};
-                  return await buildfire.appData.update(id , update , Follows.TAG, (err , resp) =>{
-                    if(err) return callback(err , null)
-                    else return callback(null , new Follow(resp.data))
-                  })
-                }
-            }
-          })
-        }
-      })
-
-  }
-  
-  static unfollowPlugin = (fUserId , callback) =>{
-
-    buildfire.auth.getCurrentUser((err , user) => {        
-      if(err || !user) return callback("You must be logged in to unfollow a plugin" , null);
-      else {
-        buildfire.appData.search({filter :{"_buildfire.index.string1" : user._id}} , Follows.TAG , async(err , resp) =>{
-          if(err) return callback(err , "first return callback");
-          else{
-            buildfire.appData.search({filter :{"_buildfire.index.string1" : user._id}} , Follows.TAG , async(err , resp) =>{
-              if(err) return callback(err , null);
-              else if(!(Array.isArray(resp))) return callback(resp , null);
-              else if(resp.length <= 0) return callback("You are not following any plugin yet" , null);
-              else{
-                let {data , id} = resp[0];
-                let followedPlugins = data.followedPlugins;
-                let index = followedPlugins.findIndex(e => e == fUserId);
-                if(index < 0) return callback("Must be following the plugin to unfollow" , null);
-
-                let newfollowedPlugins = [...followedPlugins];
-                newfollowedPlugins.splice(index , 1);
-                let update = {...data , followedPlugins : newfollowedPlugins};
-                return await buildfire.appData.update(id , update , Follows.TAG, (err , resp) =>{
-                  if(err) return callback(err , null)
-                  else return callback(null , resp)
+                if(r[0].data.followedPlugins.findIndex(e => e == pluginId) >= 0) return callback("Already following this plugin");
+                buildfire.appData.update(r[0].id , {...r[0].data , followedPlugins : [...r[0].data.followedPlugins , pluginId]} , Follows.TAG , (e , r) =>{
+                    if(e) return callback(e);
+                    callback(null , r)
+                    // IN CASE OF ANALYTICS
                 })
+            }
 
-              }
-            });
-          }
+        })
+    }
+
+    static unfollowPlugin = (pluginId , callback) =>{
+        if(!authManager.currentUser) return callback("Must be logged in before following a user");
+        buildfire.appData.search({filter : {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
+            if(e || !r) return callback(e);
+            if(e) return callback(e);
+            else if(r.length == 0) return callback("You are not following this plugin")
+            else{
+                let obj = {...r[0].data};
+                let index = obj.followedPlugins.findIndex(e => e == pluginId);
+                if(index < 0) return callback("You are not following this plugin");
+                else{
+                    obj.followedPlugins.splice(index , 1);
+                    buildfire.appData.update(r[0].id , obj , Follows.TAG , (e , r) => {
+                        if(e) return callback(e);
+                        callback(r)
+                    })
+                }
+            }
+        })
+    }
+
+    static toggleFollowPlugin = (pluginId , callback) =>{
+        if(!authManager.currentUser) return callback("Must be logged in before following a user");
+        buildfire.appData.search({filter : {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
+            if(e || !r) return callback(e);
+            else if(r.length == 0){
+                buildfire.appData.insert(Follows.createFollowData(authManager.currentUser , null , pluginId),Follows.TAG , (e , r) => {
+                    if(e) return callback(e);
+                    else return callback(null , r)
+                });
+            }
+            else{
+                let obj = {...r[0].data};
+                let index = obj.followedPlugins.findIndex(e => e == pluginId);
+                if(index >= 0){
+                    obj.followedPlugins.splice(index , 1);
+                    buildfire.appData.update(r[0].id , obj , Follows.TAG , (e , r) => {
+                        if(e) return callback(e);
+                        callback(r)
+                    })
+                }
+                else{
+                    buildfire.appData.update(r[0].id , {...r[0].data , followedPlugins : [...r[0].data.followedPlugins , pluginId]} , Follows.TAG , (e , r) =>{
+                        if(e) return callback(e);
+                        callback(null , r)
+                        // IN CASE OF ANALYTICS
+                    })
+                }
+            }
+
+        })
+    }
+
+    static followUser = (fUserId , callback) =>{
+        if(!authManager.currentUser) return callback("Must be logged in before following a user");
+        if(fUserId == authManager.currentUser._id) return callback("You can't follow yourself");
+        buildfire.appData.search({filter : {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
+            if(e || !r) return callback(e);
+            buildfire.auth.getUserProfile({userId : fUserId} , (e , u) => {
+                if(e) return callback(e);
+                else if(!u) return callback("User does not exist");
+                console.log(r);
+                if(r.length == 0){
+                    buildfire.appData.insert(Follows.createFollowData(authManager.currentUser , fUserId),Follows.TAG , (e , r) => {
+                        if(e) return callback(e);
+                        else return callback(null , r)
+                    });
+                }
+                else{
+                    if(r[0].data.followedUsers.findIndex(e => e == fUserId) >= 0) return callback("Already following this user");
+                    buildfire.appData.update(r[0].id , {...r[0].data , followedUsers : [...r[0].data.followedUsers , fUserId]} , Follows.TAG , (e , r) =>{
+                        if(e) return callback(e);
+                        callback(null , r)
+                        // IN CASE OF ANALYTICS
+                    })
+                }
+            })
+        })
+    }
+
+    static unfollowUser = (fUserId , callback) =>{
+        if(!authManager.currentUser) return callback("Must be logged in before following a user");
+        if(fUserId == authManager.currentUser._id) return callback("You can't follow yourself");
+        buildfire.appData.search({filter : {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
+            if(e || !r) return callback(e);
+            buildfire.auth.getUserProfile({userId : fUserId} , (e , u) => {
+                if(e) return callback(e);
+                else if(!u) return callback("User does not exist");
+                else if(r.length == 0) return callback("You are not following this user")
+                else{
+                    let obj = {...r[0].data};
+                    let index = obj.followedUsers.findIndex(e => e == fUserId);
+                    if(index < 0) return callback("You are not following this user");
+                    else{
+                        obj.followedUsers.splice(index , 1);
+                        buildfire.appData.update(r[0].id , obj , Follows.TAG , (e , r) => {
+                            if(e) return callback(e);
+                            callback(r)
+                        })
+                    }
+                }
+            })
+        })
+    }
+    
+    static toggleFollowUser = (fUserId , callback) =>{
+        if(!authManager.currentUser) return callback("Must be logged in before following a user");
+        if(fUserId == authManager.currentUser._id) return callback("You can't follow yourself");
+        buildfire.appData.search({filter : {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
+            if(e || !r) return callback(e);
+            buildfire.auth.getUserProfile({userId : fUserId} , (e , u) => {
+                if(e) return callback(e);
+                else if(!u) return callback("User does not exist");
+                console.log(r);
+                if(r.length == 0){
+                    buildfire.appData.insert(Follows.createFollowData(authManager.currentUser , fUserId),Follows.TAG , (e , r) => {
+                        if(e) return callback(e);
+                        else return callback(null , r)
+                    });
+                }
+                else{
+                    let obj = {...r[0].data};
+                    let index = obj.followedUsers.findIndex(e => e == fUserId);
+                    if(index >= 0){
+                        obj.followedUsers.splice(index , 1);
+                        buildfire.appData.update(r[0].id , obj , Follows.TAG , (e , r) => {
+                            if(e) return callback(e);
+                            callback(r)
+                        })
+                    }
+                    else{
+                        buildfire.appData.update(r[0].id , {...r[0].data , followedUsers : [...r[0].data.followedUsers , fUserId]} , Follows.TAG , (e , r) =>{
+                            if(e) return callback(e);
+                            callback(null , r)
+                            // IN CASE OF ANALYTICS
+                        })
+                    }
+                }
+            })
+        })
+    }
+
+    static isFollowingUser = (userId , callback) =>{
+        if(!authManager.currentUser) return callback("Must be logged in");
+        buildfire.appData.search({filter: {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
+            if(e || !r) return callback(e);
+            else if(r.length == 0) return callback(null , false);
+            else{
+                let index = r[0].data.followedUsers.findIndex(e => e == userId);
+                if(index < 0) return callback(null , false);
+                else return callback(null , true);
+            }
+        })
+    }
+
+    static isFollowingPlugin = (pluginId , callback) =>{
+        if(!authManager.currentUser) return callback("Must be logged in");
+        buildfire.appData.search({filter : {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
+            if(e || !r) return callback(e);
+            else if(r.length == 0) return callback(null , false);
+            else{
+                let index = r[0].data.followedPlugins.findIndex(e => e == pluginId);
+                if(index < 0) return callback(null , false);
+                else return callback(null , true);
+            }
+        })
+    }
+    
+    static getUserFollowData = (callback) =>{
+        if(!authManager.currentUser) return callback("Must be logged in");
+        buildfire.appData.search({filter : {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
+            if(e) return callback(e);
+            else if(!r || r.length == 0) return callback(r);
+            else return callback(null , new Follow(r[0].data))
         });
-
       }
-    })
 
-  }
-  
-  static isFollowingUser = (userId , callback) =>{
-    let result;
-    buildfire.auth.getCurrentUser((err , user) =>{
-      if(err) return callback(err, null)
-      else if(!user) return callback("Must be logged in first" , null);
-      else {
-        buildfire.appData.search({filter :{"_buildfire.index.string1" : user._id}}, Follows.TAG , (err , resp) => {
-          if(err) return callback()
-          else {
-            if(!(Array.isArray(resp))) return callback(resp , null);
-            else if(resp.length == 0) return callback(null , false)
-            else {
-              let index = resp[0].data.followedUsers.findIndex(e => e == userId);
-              if(index >= 0) return callback(null , true);
-              else return callback(null , false);
-            } 
+    static clearAppData = () =>{
+        buildfire.appData.search({} , Follows.TAG , (err , resp) =>{
+          if(err) console.log(err);
+          else{
+            resp.forEach(r =>{
+              buildfire.appData.delete(r.id , Follows.TAG , (err2 , resp2) =>{
+                if(err2) console.log(err2);
+                else {
+                  console.log(resp2);
+                } 
+              })
+            })
           }
         })
+    }
+
+    static buildIndex = userId => {
+        const index = {
+          string1: userId 
+        };
+        return index;
       }
-    });
-  }
-
-  static isFollowingPlugin = (pluginId , callback) =>{
-    let result;
-    buildfire.auth.getCurrentUser((err , user) =>{
-      if(err) return callback(err, null)
-      else if(!user) return callback("Must be logged in first" , null);
-      else {
-        buildfire.appData.search({filter :{"_buildfire.index.string1" : user._id}}, Follows.TAG , (err , resp) => {
-          if(err) return callback()
-          else {
-            if(!(Array.isArray(resp))) return callback(resp , null);
-            else if(resp.length == 0) return callback(null , false)
-            else {
-              let index = resp[0].data.followedPlugins.findIndex(e => e == pluginId);
-              if(index >= 0) return callback(null , true);
-              else return callback(null , false);
-            } 
-          }
-        })
-      }
-    });
-  }
-
-  static validData = (fUserId) =>{
-    return fUserId.length == 24 ? 1 : 0;
-  }
-
-  static clearAppData = () =>{
-    buildfire.appData.search({} , Follows.TAG , (err , resp) =>{
-      if(err) console.log(err);
-      else{
-        resp.forEach(r =>{
-          buildfire.appData.delete(r.id , Follows.TAG , (err2 , resp2) =>{
-            if(err2) console.log(err2);
-            else {
-              console.log(resp2);
-            } 
-          })
-        })
-      }
-    })
-  }
-
-
-  static buildIndex = userId => {
-    const index = {
-      string1: userId 
-    };
-    return index;
-  }
-
 
 }
