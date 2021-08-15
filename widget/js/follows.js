@@ -1,4 +1,5 @@
 // PLEASE IMPORT BUILDFIRE.JS BEFORE ATTEMPTING TO EXECUTE ANY FUNCTION
+if(typeof(buildfire) === "undefined") throw "Please add buildfire.js first to use BuildFire services";
 
 class Follow {
   constructor(data = {}) {

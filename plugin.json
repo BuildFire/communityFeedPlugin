@@ -1,7 +1,7 @@
 {
-  "author": "Buildfire",
-  "pluginName": "Default Template",
-  "pluginDescription": "Community feed",
+  "author": "Ali kaakati",
+  "pluginName": "Community Feed Plugin",
+  "pluginDescription": "Community feed Plugin - test",
   "supportEmail": "devSupport@buildfire.com",
   "control": {
     "content": {
