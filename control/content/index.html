@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css"/>
-
+    <script src="./../../widget/js/analyticKey.js"></script>
     <!--
     NOTE:
     1. You can reference the file in SDK via relative path
@@ -18,24 +18,30 @@
 
   <!-- JS -->
   <script src="../../../../scripts/buildfire.js"></script>
-  <script src="./../../widget/js/follows.js"></script>
-  <script src="./../../widget/js/posts.js"></script>
+
   <!--
     <script src="../../../../scripts/angular/angular.min.js"></script>
     <script src="../../../../scripts/angular/ui-bootstrap.min.js"></script>
    <script src="../../../../scripts/jquery/jquery-1.11.2.min.js"></script>
    -->
+
+
+   <script>
+     
+    // buildfire.analytics.unregisterEvent("PostsCreated");
+    // buildfire.analytics.unregisterEvent("PostsDeleted");
+    for (let propName in analyticKeys) {
+      buildfire.analytics.registerEvent(
+        analyticKeys[propName], 
+        {
+          silentNotification: true
+        }
+      );
+    }
+   </script>
 </head>
 <body>
-<span>Content - Hello world!</span>
-
-<script>
-  // console.log("from controller");
-  //     Follows.getFollowedUsers((err , resp) => {
-  //     if(err) console.log(err);
-  //     else console.log(resp);
-  //   });
-</script>
-
+<span>Settings - Hello world!</span>
 </body>
 </html>
+

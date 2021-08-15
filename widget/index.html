@@ -5,17 +5,37 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="../../../scripts/buildfire.js"></script>
+  <script src="./js/authManager.js"></script>
+  <script src="./js/analyticKey.js"></script>
   <script src="./js/follows.js"></script>
   <script src="./js/posts.js"></script>
   <title>Document</title>
 </head>
 <body>
+  <input type="text" name="" id="postText">
   <button onclick="getPosts()">Get Posts</button>
-  <button onclick="addPost()">Add Posts</button>
+  <button onclick="addPost()">addPost</button>
   <button onclick="updatePost()">Update Posts</button>
-
+  <button onclick="deletePosts()">deletePosts</button>
+  <button onclick="searchPosts()">search Posts</button>
+  <p id="msg"></p>
   <script>
+    authManager.enforceLogin();
+    searchPosts = () => Posts.searchPosts({text : postText.value } , (e , r) => e ? console.log(e) : console.log(r))
+    addPost = () => Posts.addPost({postText : "Hello this is a post :D"} , (e , r) => e ? console.log(e) : console.log(r));
+    getPosts = () => Posts.getPosts({byFollowedUsers : true , byFollowedPlugins : false , publicPosts : false } , (e , r) => e ? console.log(e) : console.log(r))
+    updatePost = () => Posts.updatePost("6115608c7ebcff063c192af2" , {postText : "f" , postImages : ["asd"]} , (e , r) => e ? console.log(e) : console.log(r));
+    deletePosts = () => Posts.clearAppData();
+    // Daniel - 611557e58838fb065bea1da2
+    // 6115608c7ebcff063c192af2
 
-  </script>
+
+    //// plugin instance id 
+    // 1626289633739-037033340024959716
+
+    ///// USER IDS
+    // ALI KAAKATI - 60f46102e44fed052975b0c3
+    // DANIEL HINDI - 6106b9dedcd13351aefb093a
+    </script>
 </body>
 </html>
