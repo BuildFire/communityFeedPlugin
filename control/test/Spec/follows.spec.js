@@ -22,7 +22,11 @@ describe('Follow()', function () {
             //wrong check error returned ****
             // spyOn(Follows.followUser,fUserId)
             //expect(function(){Follows.followUser("")}).toHaveBeenCalled(Error)
+            const errorSpy = spyOn(Follows,'followUser').and.returnValue(Error);
+                expect(Follows.followUser('987678')).toThrow('User does not exist');
+
         });
+
         it('Follow users should follow a valid user ID', function () {
             expect(function () { Follows.followUser("123456789012345678901234") }).not.toThrow();
         });
