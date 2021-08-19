@@ -118,7 +118,7 @@ class Follows {
                 console.log(r);
                 if(r.length == 0){
                     buildfire.appData.insert(Follows.createFollowData(authManager.currentUser , fUserId),Follows.TAG , (e , r) => {
-                        if(e) return callback(e);
+                        if(e) return callback(e , null);
                         else return callback(null , r)
                     });
                 }
