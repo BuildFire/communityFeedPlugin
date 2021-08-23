@@ -24,6 +24,25 @@ const authManager = {
         });
        
     },
+    enforceLoginWithCb(cb) {
+        buildfire.auth.getCurrentUser((err, user) => {
+            if (!user) {
+                buildfire.auth.login({ allowCancel: false }, (err, user) => {
+                    if (!user)
+                        //  authManager.enforceLogin();
+                        return cb(0)
+                    else
+                        authManager.currentUser = user;
+                        return cb(1);
+                    });
+                }
+                else{
+                    authManager.currentUser = user;
+                    return cb(1);
+                }
+        });
+       
+    },
 
     onUserChange(user) {
         // authManager.currentUser = user;
