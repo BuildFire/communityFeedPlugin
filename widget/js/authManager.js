@@ -30,10 +30,5 @@ const authManager = {
     }
 };
 buildfire.auth.onLogout(() => {
-    window.buildfire.history.get({}, (e, b) => {
-        b.forEach(() => {
-          history.pop();
-        });
-      });
-    window.location.reload();
+    authManager.enforceLogin();
 });

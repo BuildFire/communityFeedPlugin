@@ -40,7 +40,7 @@
     updatePost = () => Posts.updatePost("6115608c7ebcff063c192af2" , {postText : "f" , postImages : ["asd"]} , (e , r) => e ? console.log(e) : console.log(r));
     deletePosts = () => Posts.clearAppData();
 
-    followUser = () => Follows.followUser('6106b9dedcd13351aefb093a' , (e , r) => e ? console.log(e) : console.log(r));
+    followUser = () => Follows.followUser('xxxx' , (e , r) => e ? console.log(e) : console.log(r));
     unfollowUser = () => Follows.unfollowUser('6106b9dedcd13351aefb093a' , (e , r) => e ? console.log(e) : console.log(r));
     toggleFollowUser = () => Follows.toggleFollowUser("6106b9dedcd13351aefb093a",(e , r) => e ? console.log(e) : console.log(r));
     isFollowingUser = () => Follows.isFollowingUser("6106b9dedcd13351aefb093a",(e , r) => e ? console.log(e) : console.log(r));

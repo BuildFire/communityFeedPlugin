@@ -109,6 +109,7 @@ class Follows {
 
     static followUser = (fUserId , callback) =>{
         if(!authManager.currentUser) return callback("Must be logged in before following a user");
+        if(!fUserId) return callback("User ID cannot be null");
         if(fUserId == authManager.currentUser._id) return callback("You can't follow yourself");
         buildfire.appData.search({filter : {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
             if(e || !r) return callback(e);
