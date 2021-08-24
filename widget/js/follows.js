@@ -34,6 +34,7 @@ class Follows {
 
     static followPlugin = (pluginId , callback) =>{
         if(!authManager.currentUser) return callback("Must be logged in before following a user");
+        if(!pluginId) return callback("Plugin ID cannot be null");
         buildfire.appData.search({filter : {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
             if(e || !r) return callback(e);
             else if(r.length == 0){
@@ -56,6 +57,7 @@ class Follows {
 
     static unfollowPlugin = (pluginId , callback) =>{
         if(!authManager.currentUser) return callback("Must be logged in before following a user");
+        if(!pluginId) return callback("Plugin ID cannot be null");
         buildfire.appData.search({filter : {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
             if(e || !r) return callback(e);
             if(e) return callback(e);
@@ -77,6 +79,7 @@ class Follows {
 
     static toggleFollowPlugin = (pluginId , callback) =>{
         if(!authManager.currentUser) return callback("Must be logged in before following a user");
+        if(!pluginId) return callback("Plugin ID cannot be null");
         buildfire.appData.search({filter : {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
             if(e || !r) return callback(e);
             else if(r.length == 0){
@@ -137,6 +140,8 @@ class Follows {
 
     static unfollowUser = (fUserId , callback) =>{
         if(!authManager.currentUser) return callback("Must be logged in before following a user");
+        if(!fUserId) return callback("User ID cannot be null");
+
         if(fUserId == authManager.currentUser._id) return callback("You can't follow yourself");
         buildfire.appData.search({filter : {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
             if(e || !r) return callback(e);
@@ -162,6 +167,7 @@ class Follows {
     
     static toggleFollowUser = (fUserId , callback) =>{
         if(!authManager.currentUser) return callback("Must be logged in before following a user");
+        if(!fUserId) return callback("User ID cannot be null");
         if(fUserId == authManager.currentUser._id) return callback("You can't follow yourself");
         buildfire.appData.search({filter : {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
             if(e || !r) return callback(e);
@@ -199,6 +205,8 @@ class Follows {
 
     static isFollowingUser = (userId , callback) =>{
         if(!authManager.currentUser) return callback("Must be logged in");
+        if(!userId) return callback("User ID cannot be null");
+
         buildfire.appData.search({filter: {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
             if(e || !r) return callback(e);
             else if(r.length == 0) return callback(null , false);
@@ -212,6 +220,7 @@ class Follows {
 
     static isFollowingPlugin = (pluginId , callback) =>{
         if(!authManager.currentUser) return callback("Must be logged in");
+        if(!pluginId) return callback("Plugin ID cannot be null");
         buildfire.appData.search({filter : {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
             if(e || !r) return callback(e);
             else if(r.length == 0) return callback(null , false);
