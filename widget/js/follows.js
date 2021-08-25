@@ -35,44 +35,55 @@ class Follows {
     static followPlugin = (pluginId , callback) =>{
         if(!authManager.currentUser) return callback("Must be logged in before following a user");
         if(!pluginId) return callback("Plugin ID cannot be null");
-        buildfire.appData.search({filter : {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
-            if(e || !r) return callback(e);
-            else if(r.length == 0){
-                buildfire.appData.insert(Follows.createFollowData(authManager.currentUser , null , pluginId),Follows.TAG , (e , r) => {
-                    if(e) return callback(e);
-                    else return callback(null , r)
-                });
-            }
+        buildfire.pluginInstance.get(pluginId,(err , _) =>{
+            if(err || !_) return callback("Plugin does not exist");
             else{
-                if(r[0].data.followedPlugins.findIndex(e => e == pluginId) >= 0) return callback("Already following this plugin");
-                buildfire.appData.update(r[0].id , {...r[0].data , followedPlugins : [...r[0].data.followedPlugins , pluginId]} , Follows.TAG , (e , r) =>{
-                    if(e) return callback(e);
-                    callback(null , r)
-                    // IN CASE OF ANALYTICS
+                buildfire.appData.search({filter : {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
+                    if(e || !r) return callback(e);
+                    else if(r.length == 0){
+                        buildfire.appData.insert(Follows.createFollowData(authManager.currentUser , null , pluginId),Follows.TAG , (e , r) => {
+                            if(e) return callback(e);
+                            else return callback(null , r)
+                        });
+                    }
+                    else{
+                        if(r[0].data.followedPlugins.findIndex(e => e == pluginId) >= 0) return callback("Already following this plugin");
+                        buildfire.appData.update(r[0].id , {...r[0].data , followedPlugins : [...r[0].data.followedPlugins , pluginId]} , Follows.TAG , (e , r) =>{
+                            if(e) return callback(e);
+                            callback(null , r)
+                            // IN CASE OF ANALYTICS
+                        })
+                    }
+        
                 })
+                
             }
-
         })
     }
 
     static unfollowPlugin = (pluginId , callback) =>{
         if(!authManager.currentUser) return callback("Must be logged in before following a user");
         if(!pluginId) return callback("Plugin ID cannot be null");
-        buildfire.appData.search({filter : {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
-            if(e || !r) return callback(e);
-            if(e) return callback(e);
-            else if(r.length == 0) return callback("You are not following this plugin")
+        buildfire.pluginInstance.get(pluginId,(err , _) =>{
+            if(err || !_) return callback("Plugin does not exist");
             else{
-                let obj = {...r[0].data};
-                let index = obj.followedPlugins.findIndex(e => e == pluginId);
-                if(index < 0) return callback("You are not following this plugin");
-                else{
-                    obj.followedPlugins.splice(index , 1);
-                    buildfire.appData.update(r[0].id , obj , Follows.TAG , (e , r) => {
-                        if(e) return callback(e);
-                        callback(r)
-                    })
-                }
+                buildfire.appData.search({filter : {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
+                    if(e || !r) return callback(e);
+                    if(e) return callback(e);
+                    else if(r.length == 0) return callback("You are not following this plugin")
+                    else{
+                        let obj = {...r[0].data};
+                        let index = obj.followedPlugins.findIndex(e => e == pluginId);
+                        if(index < 0) return callback("You are not following this plugin");
+                        else{
+                            obj.followedPlugins.splice(index , 1);
+                            buildfire.appData.update(r[0].id , obj , Follows.TAG , (e , r) => {
+                                if(e) return callback(e);
+                                callback(r)
+                            })
+                        }
+                    }
+                })
             }
         })
     }
@@ -80,34 +91,39 @@ class Follows {
     static toggleFollowPlugin = (pluginId , callback) =>{
         if(!authManager.currentUser) return callback("Must be logged in before following a user");
         if(!pluginId) return callback("Plugin ID cannot be null");
-        buildfire.appData.search({filter : {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
-            if(e || !r) return callback(e);
-            else if(r.length == 0){
-                buildfire.appData.insert(Follows.createFollowData(authManager.currentUser , null , pluginId),Follows.TAG , (e , r) => {
-                    if(e) return callback(e);
-                    else return callback(null , r)
-                });
-            }
+        buildfire.pluginInstance.get(pluginId,(err , _) =>{
+            if(err || !_) return callback("Plugin does not exist");
             else{
-                let obj = {...r[0].data};
-                let index = obj.followedPlugins.findIndex(e => e == pluginId);
-                if(index >= 0){
-                    obj.followedPlugins.splice(index , 1);
-                    buildfire.appData.update(r[0].id , obj , Follows.TAG , (e , r) => {
-                        if(e) return callback(e);
-                        callback(r)
-                    })
-                }
-                else{
-                    buildfire.appData.update(r[0].id , {...r[0].data , followedPlugins : [...r[0].data.followedPlugins , pluginId]} , Follows.TAG , (e , r) =>{
-                        if(e) return callback(e);
-                        callback(null , r)
-                        // IN CASE OF ANALYTICS
-                    })
-                }
-            }
+                buildfire.appData.search({filter : {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
+                    if(e || !r) return callback(e);
+                    else if(r.length == 0){
+                        buildfire.appData.insert(Follows.createFollowData(authManager.currentUser , null , pluginId),Follows.TAG , (e , r) => {
+                            if(e) return callback(e);
+                            else return callback(null , r)
+                        });
+                    }
+                    else{
+                        let obj = {...r[0].data};
+                        let index = obj.followedPlugins.findIndex(e => e == pluginId);
+                        if(index >= 0){
+                            obj.followedPlugins.splice(index , 1);
+                            buildfire.appData.update(r[0].id , obj , Follows.TAG , (e , r) => {
+                                if(e) return callback(e);
+                                callback(r)
+                            })
+                        }
+                        else{
+                            buildfire.appData.update(r[0].id , {...r[0].data , followedPlugins : [...r[0].data.followedPlugins , pluginId]} , Follows.TAG , (e , r) =>{
+                                if(e) return callback(e);
+                                callback(null , r)
+                                // IN CASE OF ANALYTICS
+                            })
+                        }
+                    }
 
-        })
+                })
+            }
+        });
     }
 
     static followUser = (fUserId , callback) =>{
@@ -265,3 +281,23 @@ class Follows {
       }
 
 }
+/*
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+<meta charset="utf-8" /> 
+<meta name="viewport" content="width=device-width, initial-scale=1" /> 
+<title>My typeform</title> 
+<style>*{margin:0;padding:0;} 
+html,body,#wrapper{width:100%;height:100%;} 
+iframe{border-radius:0 !important;}
+</style> 
+</head> 
+<body> 
+<div id="wrapper" data-tf-widget="buFH8G05" data-tf-inline-on-mobile data-tf-hide-headers>
+</div> 
+<script src="//embed.typeform.com/next/embed.js">
+</script> 
+</body> 
+</html>
+*/
