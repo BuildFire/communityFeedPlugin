@@ -34,6 +34,10 @@
   <script>
     authManager.enforceLogin();
     // Follows.clearAppData();
+    console.log("CONTEXT");
+    buildfire.getContext((err , r) => {
+      console.log(r)
+    })
     searchPosts = () => Posts.searchPosts({text : postText.value } , (e , r) => e ? console.log(e) : console.log(r))
     addPost = () => Posts.addPost({postText : "Hello this is a post :D"} , (e , r) => e ? console.log(e) : console.log(r));
     getPosts = () => Posts.getPosts({byFollowedUsers : true , byFollowedPlugins : false , publicPosts : false } , (e , r) => e ? console.log(e) : console.log(r))
