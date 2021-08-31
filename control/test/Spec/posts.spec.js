@@ -134,25 +134,27 @@ describe('addPost()', function(){
 /****************************************/
 describe('getPosts()', function() {
 
+    beforeEach(function(done) {
+        setTimeout(function() {
+          authManager.enforceLogin();
+          done();
+        }, 100);
+      });
+
     it('getPosts function should be defined' , function(){
         expect(Posts.getPosts).toBeDefined('getPosts functionality not defined');
     });
 
     it('Get all posts' , function(done){
         Posts.getPosts({publicPosts : true},(err,resp) => {
-            expect(resp.data).toEqual(jasmine.objectContaining([{
+            expect(resp).toEqual(jasmine.objectContaining([{
                 "userId":"60f469cf784379051298e96d",
                  "displayName":"Nadia",
                  "postText":"post text sample",
               }]));
           done();
         });   
-        // Posts.getPosts('publicPosts' ,(err,resp) =>{
-        //     expect(resp).toEqual(jasmine.objectContaining({
-        //         userId : '60f469cf784379051298e96d',
-        //     }));
-        //     done();
-        //});
+
     });
 }); 
 
