@@ -21,7 +21,7 @@ describe('Follow()', function () {
 
   describe('FollowUsers()', function () {
       
-    it('Follow function should be defined', function () {
+      it('Follow function should be defined', function () {
           expect(Follows.followUser).toBeDefined('FollowUser functionality not defined');
       });
 
@@ -59,6 +59,7 @@ describe('Follow()', function () {
         done();
       });
     });
+
     it('Follow user with long invalid user id', function(done) {
       Follows.followUser(authManager.currentUser._id,(err) => {
         expect(err).toEqual("You can't follow yourself");
@@ -100,20 +101,21 @@ describe('Follow()', function () {
       });
   });
 
-  it('Unfollow user not following', function(done) {
+    it('Unfollow user not following', function(done) {
     Follows.unfollowUser('6106efbc4e626c0521472a63',(err) => {
       expect(err).toEqual('You are not following this user');
       done();
     });
   });
 
-  it('Follow user with long invalid user id', function(done) {
+    it('Follow user with long invalid user id', function(done) {
     Follows.unfollowUser('60f49004784379051298ea3760f4760f49004784379051298ea37',(err) => {
       expect(err).toEqual('User does not exist');
       done();
     });
   });
-  it('Follow user with long invalid user id', function(done) {
+
+    it('Follow user with long invalid user id', function(done) {
     Follows.unfollowUser(authManager.currentUser._id,(err) => {
       expect(err).toEqual("You can't unfollow yourself");
       done();
@@ -160,6 +162,7 @@ describe('followPlugin()', function () {
      done();
     });
   });
+
   xit('follow plugin with valid plugin id', function(done) {
     Follows.followPlugin('1627334094776-047554258642281355' , (err,resp) => {
       expect(err).toEqual("raom")
@@ -273,7 +276,6 @@ describe('isFollowingUser()', function () {
         done();
       });
     });
-
 
     xit('is Following User with long invalid user id', function(done) {
       Follows.isFollowingUser('60f49004784379051298ea3760f4760f49004784379051298ea37',(err) => {
@@ -399,6 +401,7 @@ describe('toggleFollowUser()',function () {
      done();
     });
   });
+
   xit('toggle Follow User with valid user id', function(done) {
     Follows.toggleFollowUser('6126c0e5fe743405301f11e8' , (err,resp) => {
       expect(err).toEqual(null)
@@ -452,6 +455,7 @@ describe('toggleFollowPlugin()',function () {
      done();
     });
   });
+  
   xit('toggle Follow Plugin with valid plugin id', function(done) {
     Follows.toggleFollowPlugin('1627334094776-047554258642281355' , (err,resp) => {
       expect(err).toEqual(null)
