@@ -41,9 +41,9 @@
     })
     searchPosts = () => Posts.searchPosts({text : postText.value } , (e , r) => e ? console.log(e) : console.log(r))
     addPost = () => Posts.addPost({postText:"New post"} , (e , r) => e ? console.log(e) : console.log(r));
-    getPosts = () => Posts.getPosts({byFollowedUsers : true , byFollowedPlugins : false , publicPosts : false } , (e , r) => e ? console.log(e) : console.log(r))
+    getPosts = () => Posts.getCurrentUserPosts(null,(e , r) => e ? console.log(e) : console.log(r))
     updatePost = () => Posts.updatePost("xx" , {isPublic:false} , (e , r) => e ? console.log(e) : console.log(r));
-    getById = () => Posts.getById("6134faa7a6050205dcc7f7fd" , (e , r) => e ? console.log(e) : console.log(r));
+    getById = () => Posts.getById("xx" , (e , r) => e ? console.log(e) : console.log(r));
     deletePosts = () => Posts.clearAppData();
 
     followUser = () => Follows.followUser('xxxx' , (e , r) => e ? console.log(e) : console.log(r));

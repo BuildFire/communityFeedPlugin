@@ -89,9 +89,25 @@ class Posts{
         else buildfire.appData.search({filter : {$or: tempArray} , skip : options?.skip || 0 , limit : options?.limit || 10 , sort:{createdOn : -1}} , Posts.TAG , (e , r) => e ? callback(e , null) : callback(null , r))                
     }
 
+
+    static getCurrentUserPosts = (options , callback) =>{
+        if(!authManager.currentUser) return callback("Must be logged in before following a plugin");
+        buildfire.appData.search({filter:{userId:authManager.currentUser._id} ,skip : options?.skip || 0 , limit : options?.limit || 10 , sort:{createdOn : -1}} , Posts.TAG , (e , r) => {
+            if(e){
+                console.error(e);
+                return callback(e);
+            }
+            return callback(null , r);
+        })
+    }
+
     static getById = (id , callback) =>{
+        if(!id) return callback("Post ID is required")
         buildfire.appData.getById(id , Posts.TAG , (e , r) => {
-            if(e) return callback(e);
+            if(e){
+                console.error(e);
+                return callback("Couldn't find post with this ID")
+            }
             else return callback(null , r);
         });
     }
