@@ -51,8 +51,9 @@ class Posts{
     static updatePost = (id , update , callback) =>{
         if(!authManager.currentUser) return callback("Must be logged in to update a post");
         if(!id) return callback("Post ID cannot be null");
-        else if(update?.postImages && typeof(update.postImages) !== "undefined" && !Array.isArray(update.postImages)) return callback("Post images must be an array")
+        else if(update?.postImages && typeof(update.postImages) !== "undefined" && !Array.isArray(update.postImages)) return callback("Post images must be an array");
         else if(!update || (!update.postText && !update.postImages && update.isPublic == undefined) ) return callback("Post cannot be empty");
+        else if(!update.postText && !update.isPublic && update.postImages?.length == 0) return callback("Post cannot be empty");
         buildfire.appData.getById(id , Posts.TAG , (e , r) => {
             if(e){
                 console.error(e);
