@@ -49,22 +49,21 @@ class Posts{
     }
 
     static updatePost = (id , update , callback) =>{
-        // checking if logged in
         if(!authManager.currentUser) return callback("Must be logged in to update a post");
-        // checking for post id if null
         if(!id) return callback("Post ID cannot be null");
-        // checking if postimages exists but not in form of array
         else if(update?.postImages && typeof(update.postImages) !== "undefined" && !Array.isArray(update.postImages)) return callback("Post images must be an array")
-        // checking if update is empty (text and images)
-        else if(!update || (!update.postText && !update.postImages) || (update.postText == "" && (update.postImages == null || update.postImages.length == 0))) return callback("Post cannot be empty");
+        else if(!update || (!update.postText && !update.postImages && update.isPublic == undefined) ) return callback("Post cannot be empty");
         buildfire.appData.getById(id , Posts.TAG , (e , r) => {
-            if(e) return callback(e);
+            if(e){
+                console.error(e);
+                return callback("Couldn't find post with this ID.");
+            }
             else if(!r && !r.data) return callback("Couldn't find post with this ID.");
             else if(r.data.userId != authManager.currentUser._id) callback("You can only update your own posts.");
             else {
                 buildfire.appData.update(
                     id ,
-                    Posts.createPostObj({...r.data , postText : update?.postText || "", postImages : update?.postImages || []}) , 
+                    Posts.createPostObj({...r.data , postText : update?.postText || "", postImages : update?.postImages || [] , isPublic : update?.isPublic || false}) , 
                     Posts.TAG , (e , r) => {
                     if(e) return callback(e);
                     else{
