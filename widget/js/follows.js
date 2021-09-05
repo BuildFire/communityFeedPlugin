@@ -32,12 +32,12 @@ class Follows {
         
     }
 
-    static followPlugin = (pluginId , callback) =>{
-        if(!authManager.currentUser) return callback("Must be logged in before following a user");
-        if(!pluginId) return callback("Plugin ID cannot be null");
-        buildfire.pluginInstance.get(pluginId,(err , _) =>{
-            if(err || !_) return callback("Plugin does not exist");
+    static followPlugin = (callback) =>{
+        if(!authManager.currentUser) return callback("Must be logged in before following a plugin");
+        buildfire.getContext((err , context) =>{
+            if(err || !context) return callback("Plugin does not exist");
             else{
+                let pluginId = context.instanceId;
                 buildfire.appData.search({filter : {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
                     if(e || !r) return callback(e);
                     else if(r.length == 0){
@@ -60,40 +60,41 @@ class Follows {
             }
         })
     }
-
-    static unfollowPlugin = (pluginId , callback) =>{
-        if(!authManager.currentUser) return callback("Must be logged in before following a user");
-        if(!pluginId) return callback("Plugin ID cannot be null");
-        buildfire.pluginInstance.get(pluginId,(err , _) =>{
-            if(err || !_) return callback("Plugin does not exist");
-            else{
-                buildfire.appData.search({filter : {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
-                    if(e || !r) return callback(e);
-                    if(e) return callback(e);
-                    else if(r.length == 0) return callback("You are not following this plugin")
-                    else{
-                        let obj = {...r[0].data};
-                        let index = obj.followedPlugins.findIndex(e => e == pluginId);
-                        if(index < 0) return callback("You are not following this plugin");
-                        else{
-                            obj.followedPlugins.splice(index , 1);
-                            buildfire.appData.update(r[0].id , obj , Follows.TAG , (e , r) => {
-                                if(e) return callback(e);
-                                callback(r)
-                            })
-                        }
+    static unfollowPlugin = (callback) =>{
+        if(!authManager.currentUser) return callback("Must be logged in before unfollowing a plugin");
+        buildfire.getContext((err , context) =>{
+            if(err) return callback(err);
+            let pluginId = context.instanceId;
+            buildfire.appData.search({filter : {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
+                if(e || !r) return callback(e);
+                else if(r.length == 0) return callback("You are not following this plugin");
+                else{
+                    let obj = {...r[0].data};
+                    let index = obj.followedPlugins.findIndex(e => e == pluginId);
+                    if(index >= 0){
+                        obj.followedPlugins.splice(index , 1);
+                        buildfire.appData.update(r[0].id , obj , Follows.TAG , (e , r) => {
+                            if(e) return callback(e);
+                            callback(r)
+                        })
                     }
-                })
-            }
+                    else return callback("You are not following this plugin")
+                }
+    
+            })
         })
+
     }
 
-    static toggleFollowPlugin = (pluginId , callback) =>{
+
+
+
+    static toggleFollowPlugin = (callback) =>{
         if(!authManager.currentUser) return callback("Must be logged in before following a user");
-        if(!pluginId) return callback("Plugin ID cannot be null");
-        buildfire.pluginInstance.get(pluginId,(err , _) =>{
-            if(err || !_) return callback("Plugin does not exist");
+        buildfire.getContext((err , context) =>{
+            if(err) return callback(err);
             else{
+                let pluginId = context.instanceId;
                 buildfire.appData.search({filter : {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
                     if(e || !r) return callback(e);
                     else if(r.length == 0){

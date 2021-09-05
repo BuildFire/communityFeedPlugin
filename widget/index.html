@@ -49,9 +49,9 @@
     toggleFollowUser = () => Follows.toggleFollowUser("6106b9dedcd13351aefb093a",(e , r) => e ? console.log(e) : console.log(r));
     isFollowingUser = () => Follows.isFollowingUser("6106b9dedcd13351aefb093a",(e , r) => e ? console.log(e) : console.log(r));
 
-    followPlugin = () => Follows.followPlugin("xxx",(e , r) => e ? console.log(e) : console.log(r));
-    unfollowPlugin = () => Follows.unfollowPlugin("xx",(e , r) => e ? console.log(e) : console.log(r));
-    toggleFollowPlugin = () => Follows.toggleFollowPlugin("xx",(e , r) => e ? console.log(e) : console.log(r));
+    followPlugin = () => Follows.followPlugin((e , r) => e ? console.log(e) : console.log(r));
+    unfollowPlugin = () => Follows.unfollowPlugin((e , r) => e ? console.log(e) : console.log(r));
+    toggleFollowPlugin = () => Follows.toggleFollowPlugin((e , r) => e ? console.log(e) : console.log(r));
     isFollowingPlugin = () => Follows.isFollowingPlugin(buildfire.context.instanceId,(e , r) => e ? console.log(e) : console.log(r));
     
     getUserFollowData = () => Follows.getUserFollowData((e , r) => e ? console.log(e) : console.log(r));
