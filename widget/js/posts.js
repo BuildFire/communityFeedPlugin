@@ -35,6 +35,7 @@ class Posts{
     }
 
     static addPost = (post , callback) =>{
+        if(!post) return callback("Post cannot be null")
         if(!post.postText && !post.postImages) return callback("Post text cannot be empty");
         let user = authManager.currentUser;
         if(!user) return callback("Must be logged in to add a post");
