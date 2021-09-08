@@ -135,28 +135,28 @@ describe('followPlugin()', function () {
     expect(Follows.followPlugin).toBeDefined('followPlugin functionality not defined');
 });
 
-  it('follow plugin with malformated plugin ID', function(done) {
+  xit('follow plugin with malformated plugin ID', function(done) {
       Follows.followPlugin("xxx",(err) => {
         expect(err).toEqual('Plugin does not exist');
         done();
       });
   });
 
-  it('follow plugin with null plugin ID', function(done) {
+  xit('follow plugin with null plugin ID', function(done) {
       Follows.followPlugin(null,(err) => {
         expect(err).toEqual('Plugin ID cannot be null');
         done();
       });
   });
 
-  it('follow plugin with invalid plugin ID', function(done) {
+  xit('follow plugin with invalid plugin ID', function(done) {
     Follows.followPlugin('60f49004784379051298ea38',(err) => {
       expect(err).toEqual('Plugin does not exist');
       done();
     });
   });
 
-  it('follow plugin user with long invalid plugin id', function(done) {
+  xit('follow plugin user with long invalid plugin id', function(done) {
     Follows.followPlugin('60f49004784379051298ea3760f4760f49004784379051298ea37',(err) => {
       expect(err).toEqual('Plugin does not exist');
      done();
@@ -190,35 +190,35 @@ describe('unfollowPlugin()', function () {
     expect(Follows.unfollowPlugin).toBeDefined('unfollowPlugin functionality not defined');
 });
 
-  it('unfollow plugin with malformated plugin ID', function(done) {
+  xit('unfollow plugin with malformated plugin ID', function(done) {
       Follows.unfollowPlugin("xxx",(err) => {
         expect(err).toEqual('Plugin does not exist');
         done();
       });
   });
 
-  it('unfollow plugin with null plugin ID', function(done) {
+  xit('unfollow plugin with null plugin ID', function(done) {
       Follows.unfollowPlugin(null,(err) => {
         expect(err).toEqual('Plugin ID cannot be null');
         done();
       });
   });
 
-  it('unfollow plugin with invalid plugin ID', function(done) {
+  xit('unfollow plugin with invalid plugin ID', function(done) {
     Follows.unfollowPlugin('60f49004784379051298ea38',(err) => {
       expect(err).toEqual('Plugin does not exist');
       done();
     });
   });
 
-  it('unfollow plugin with valid plugin ID', function(done) {
+  xit('unfollow plugin with valid plugin ID', function(done) {
     Follows.unfollowPlugin('1627334094776-047554258642281355',(err,resp) => {
       expect(err).toEqual('Plugin does not exist');
       done();
     });
   });
 
-  it('unfollow plugin user with long invalid plugin id', function(done) {
+  xit('unfollow plugin user with long invalid plugin id', function(done) {
   Follows.unfollowPlugin('60f49004784379051298ea3760f4760f49004784379051298ea37',(err) => {
     expect(err).toEqual('Plugin does not exist');
     done();
@@ -424,18 +424,18 @@ describe('toggleFollowUser()',function () {
 /*******************************************/
 describe('toggleFollowPlugin()',function () {
 
-  it('toggle Follow User function should be defined', function () {
+  xit('toggle Follow User function should be defined', function () {
     expect(Follows.toggleFollowPlugin).toBeDefined('toggleFollowPlugin functionality not defined');
 });
 
-  it('toggle Follow Plugin with malformated plugin ID', function(done) {
+  xit('toggle Follow Plugin with malformated plugin ID', function(done) {
       Follows.toggleFollowPlugin("xxx",(err) => {
         expect(err).toEqual('Plugin does not exist');
         done();
       });
   });
 
-  it('toggle Follow Plugin with null plugin ID', function(done) {
+  xit('toggle Follow Plugin with null plugin ID', function(done) {
       Follows.toggleFollowPlugin(null,(err) => {
         expect(err).toEqual('Plugin ID cannot be null');
         done();

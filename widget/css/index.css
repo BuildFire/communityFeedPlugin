@@ -1,0 +1,36 @@
+:root {
+    --main-bg-color: #ddd;
+    --text-color: black;
+}
+*{
+    padding:0px;
+    margin:0px;
+}
+.header {
+    min-height: 15vh;
+    width: 100%;
+    background-color: #ddd;
+}
+.promptHeaderContainer{
+    padding:2% 3% 2% 3%;
+}
+.promptHeader{
+    font-size: 17px;
+}
+.prompt{
+    position: relative;
+    box-shadow: 5px 10px #888888;
+}
+.promptButtonContainer{
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 5%;
+}
+
+.promptButton{
+    padding: 12px;
+    margin-left: 3%;
+    background-color: transparent;
+    border: 0px;
+    color: red;
+}

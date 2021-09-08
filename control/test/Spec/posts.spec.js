@@ -23,7 +23,7 @@ describe('Posts()', function () {
 
     it('Add post with empty post image and text', function (done) {
       Posts.addPost('', (err) => {
-        expect(err).toEqual('Post text cannot be empty');
+        expect(err).toEqual('Post cannot be null');
         done();
       });
     });
