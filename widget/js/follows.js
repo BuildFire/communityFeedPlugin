@@ -223,16 +223,19 @@ class Follows {
     static isFollowingUser = (userId , callback) =>{
         if(!authManager.currentUser) return callback("Must be logged in");
         if(!userId) return callback("User ID cannot be null");
-
-        buildfire.appData.search({filter: {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
-            if(e || !r) return callback(e);
-            else if(r.length == 0) return callback(null , false);
-            else{
-                let index = r[0].data.followedUsers.findIndex(e => e == userId);
-                if(index < 0) return callback(null , false);
-                else return callback(null , true);
-            }
-        })
+        if(userId == authManager.currentUser._id) return callback("You can't be following yourself");
+        buildfire.auth.getUserProfile({userId} , (e , u) => {
+            if(e || !u) return callback("User does not exist");
+            buildfire.appData.search({filter: {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
+                if(e || !r) return callback(e);
+                else if(r.length == 0) return callback("Not following this user");
+                else{
+                    let index = r[0].data.followedUsers.findIndex(e => e == userId);
+                    if(index < 0) return callback("Not following this user");
+                    else return callback(null, true);
+                }
+            })
+        });
     }
 
     static isFollowingPlugin = (pluginId , callback) =>{
@@ -240,10 +243,10 @@ class Follows {
         if(!pluginId) return callback("Plugin ID cannot be null");
         buildfire.appData.search({filter : {"_buildfire.index.string1" : authManager.currentUser._id}} , Follows.TAG , (e , r) => {
             if(e || !r) return callback(e);
-            else if(r.length == 0) return callback(null , false);
+            else if(r.length == 0) return callback("Not following this plugin");
             else{
                 let index = r[0].data.followedPlugins.findIndex(e => e == pluginId);
-                if(index < 0) return callback(null , false);
+                if(index < 0) return callback("Not following this plugin");
                 else return callback(null , true);
             }
         })

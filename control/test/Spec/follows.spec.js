@@ -60,7 +60,7 @@ describe('Follow()', function () {
       });
     });
 
-    it('Follow user with long invalid user id', function(done) {
+    it('Follow user with currentuser ID', function(done) {
       Follows.followUser(authManager.currentUser._id,(err) => {
         expect(err).toEqual("You can't follow yourself");
         done();
@@ -133,50 +133,19 @@ describe('followPlugin()', function () {
 
   it('followPlugin function should be defined', function () {
     expect(Follows.followPlugin).toBeDefined('followPlugin functionality not defined');
-});
-
-  xit('follow plugin with malformated plugin ID', function(done) {
-      Follows.followPlugin("xxx",(err) => {
-        expect(err).toEqual('Plugin does not exist');
-        done();
-      });
   });
 
-  xit('follow plugin with null plugin ID', function(done) {
-      Follows.followPlugin(null,(err) => {
-        expect(err).toEqual('Plugin ID cannot be null');
-        done();
-      });
-  });
-
-  xit('follow plugin with invalid plugin ID', function(done) {
-    Follows.followPlugin('60f49004784379051298ea38',(err) => {
-      expect(err).toEqual('Plugin does not exist');
+  it('follow valid plugin', function(done) {
+    Follows.followPlugin((err,resp) => {
+      if(err){
+        expect(err).toEqual("Already following this plugin");
+      } 
+      else if(resp){
+        expect(resp).toEqual('tghjkl');
+      } 
       done();
     });
-  });
-
-  xit('follow plugin user with long invalid plugin id', function(done) {
-    Follows.followPlugin('60f49004784379051298ea3760f4760f49004784379051298ea37',(err) => {
-      expect(err).toEqual('Plugin does not exist');
-     done();
-    });
-  });
-
-  xit('follow plugin with valid plugin id', function(done) {
-    Follows.followPlugin('1627334094776-047554258642281355' , (err,resp) => {
-      expect(err).toEqual("raom")
-      expect(resp).toEqual('tghjkl');
-      done();
-    });
-    //expect(Follows.getUserFollowData).toEqual('iuhuih');
-  //Follows.followPlugin(buildfire.context.instanceId,(err) => {
-    //follow Community Wall plugin
-    //expect(err).toEqual("Already following this plugin");
-    //done();
-  //});
 });
-//follow plugin without any error 
 });
 
 /*******************************************/
@@ -188,44 +157,16 @@ describe('unfollowPlugin()', function () {
 
   it('unfollowPlugin function should be defined', function () {
     expect(Follows.unfollowPlugin).toBeDefined('unfollowPlugin functionality not defined');
-});
-
-  xit('unfollow plugin with malformated plugin ID', function(done) {
-      Follows.unfollowPlugin("xxx",(err) => {
-        expect(err).toEqual('Plugin does not exist');
-        done();
-      });
   });
 
-  xit('unfollow plugin with null plugin ID', function(done) {
-      Follows.unfollowPlugin(null,(err) => {
-        expect(err).toEqual('Plugin ID cannot be null');
-        done();
-      });
-  });
 
-  xit('unfollow plugin with invalid plugin ID', function(done) {
-    Follows.unfollowPlugin('60f49004784379051298ea38',(err) => {
+  it('unfollow plugin with valid plugin ID', function(done) {
+    Follows.unfollowPlugin((err,resp) => {
       expect(err).toEqual('Plugin does not exist');
       done();
     });
   });
 
-  xit('unfollow plugin with valid plugin ID', function(done) {
-    Follows.unfollowPlugin('1627334094776-047554258642281355',(err,resp) => {
-      expect(err).toEqual('Plugin does not exist');
-      done();
-    });
-  });
-
-  xit('unfollow plugin user with long invalid plugin id', function(done) {
-  Follows.unfollowPlugin('60f49004784379051298ea3760f4760f49004784379051298ea37',(err) => {
-    expect(err).toEqual('Plugin does not exist');
-    done();
-    });
-  });
-
-//follow plugin without any error 
 });
 
 /*******************************************/
@@ -238,7 +179,7 @@ describe('isFollowingUser()', function () {
           expect(Follows.isFollowingUser).toBeDefined('isFollowingUser functionality not defined');
       });
 
-      xit('is Following User with malformated user ID', function(done) {
+      it('is Following User with malformated user ID', function(done) {
           Follows.isFollowingUser("xxx",(err,resp) => {
             expect(err).toEqual('User does not exist');
             expect(resp).toEqual('User does not exist');
@@ -253,7 +194,7 @@ describe('isFollowingUser()', function () {
           });
       });
 
-      xit('is Following User with invalid user ID', function(done) {
+      it('is Following User with invalid user ID', function(done) {
         Follows.isFollowingUser('60f49004784379051298ea38',(err ,resp) => {
           expect(err).toEqual('User does not exist');
           expect(resp).toEqual('User does not exist');
@@ -277,17 +218,16 @@ describe('isFollowingUser()', function () {
       });
     });
 
-    xit('is Following User with long invalid user id', function(done) {
+    it('is Following User with long invalid user id', function(done) {
       Follows.isFollowingUser('60f49004784379051298ea3760f4760f49004784379051298ea37',(err) => {
         expect(err).toEqual('User does not exist');
         done();
       });
     });
    
-    xit('is Following User with current user id', function(done) {
+    it('is Following User with current user id', function(done) {
       Follows.isFollowingUser(authManager.currentUser._id,(err,resp) => {
-        expect(err).toEqual("You can't follow yourself");
-        expect(resp).toEqual("You can't follow yourself");
+        expect(err).toEqual("You can't be following yourself");
         done();
       });
     });
@@ -306,7 +246,7 @@ describe('isFollowingPlugin()', function () {
         expect(Follows.isFollowingPlugin).toBeDefined('isFollowingPlugin functionality not defined');
     });
 
-    xit('is Following plugin with malformated plugin ID', function(done) {
+    it('is Following plugin with malformated plugin ID', function(done) {
         Follows.isFollowingPlugin("xxx",(err,resp) => {
           expect(err).toEqual('User does not exist');
           expect(resp).toEqual('User does not exist');
@@ -321,7 +261,7 @@ describe('isFollowingPlugin()', function () {
         });
     });
 
-    xit('is Following plugin with invalid plugin ID', function(done) {
+    it('is Following plugin with invalid plugin ID', function(done) {
       Follows.isFollowingPlugin('60f49004784379051298ea38',(err ,resp) => {
         expect(err).toEqual('User does not exist');
         expect(resp).toEqual('User does not exist');
@@ -329,7 +269,7 @@ describe('isFollowingPlugin()', function () {
       });
   });
 
-  xit('is Following plugin already following', function(done) {
+  it('is Following plugin already following', function(done) {
     Follows.isFollowingPlugin('1627334094776-047554258642281355',(err , resp) => {
       expect(err).toEqual("nulloi");
       expect(resp).toEqual("trueee");
@@ -337,7 +277,7 @@ describe('isFollowingPlugin()', function () {
     });
   });
 
-  xit('is Following plugin not following', function(done) {
+  it('is Following plugin not following', function(done) {
     Follows.isFollowingPlugin('6106efbc4e626c0521472a63',(err , resp) => {
       expect(err).toEqual("nulddl");
       expect(resp).toEqual("faldse");
@@ -345,7 +285,7 @@ describe('isFollowingPlugin()', function () {
     });
   });
 
-  xit('is Following plugin with long invalid plugin id', function(done) {
+  it('is Following plugin with long invalid plugin id', function(done) {
     Follows.isFollowingPlugin('60f49004784379051298ea3760f4760f49004784379051298ea37',(err,resp) => {
       expect(err).toEqual('User does not exist');
       expect(resp).toEqual('User does not exist');
@@ -353,10 +293,9 @@ describe('isFollowingPlugin()', function () {
     });
   });
  
-  xit('is Following plugin with current plugin id', function(done) {
+  it('is Following plugin with current plugin id', function(done) {
     Follows.isFollowingPlugin(authManager.currentUser._id,(err,resp) => {
-      expect(err).toEqual("You can't follow yourself");
-      expect(resp).toEqual("You can't follow yourself");
+      expect(err).toEqual("You can't be following yourself");
       done();
     });
   });
@@ -402,7 +341,7 @@ describe('toggleFollowUser()',function () {
     });
   });
 
-  xit('toggle Follow User with valid user id', function(done) {
+  it('toggle Follow User with valid user id', function(done) {
     Follows.toggleFollowUser('6126c0e5fe743405301f11e8' , (err,resp) => {
       expect(err).toEqual(null)
       expect(resp).not.toEqual("null");
@@ -410,10 +349,9 @@ describe('toggleFollowUser()',function () {
     });
   });  
 
-  xit('toggle Follow User for current user id', function(done) {
+  it('toggle Follow User for current user id', function(done) {
     Follows.toggleFollowUser(authManager.currentUser._id,(err,resp) => {
       expect(err).toEqual("You can't follow yourself");
-      expect(resp).toEqual(null);
       done();
     });
   });
@@ -424,53 +362,18 @@ describe('toggleFollowUser()',function () {
 /*******************************************/
 describe('toggleFollowPlugin()',function () {
 
-  xit('toggle Follow User function should be defined', function () {
+  it('toggle Follow User function should be defined', function () {
     expect(Follows.toggleFollowPlugin).toBeDefined('toggleFollowPlugin functionality not defined');
-});
-
-  xit('toggle Follow Plugin with malformated plugin ID', function(done) {
-      Follows.toggleFollowPlugin("xxx",(err) => {
-        expect(err).toEqual('Plugin does not exist');
-        done();
-      });
   });
 
-  xit('toggle Follow Plugin with null plugin ID', function(done) {
-      Follows.toggleFollowPlugin(null,(err) => {
-        expect(err).toEqual('Plugin ID cannot be null');
-        done();
-      });
-  });
-
-  xit('toggle Follow Plugin with invalid plugin ID', function(done) {
-    Follows.toggleFollowPlugin('60f49004784379051298ea38',(err) => {
-      expect(err).toEqual('Plugin does not exist');
-      done();
-    });
-  });
-
-  xit('toggle Follow Plugin with long invalid plugin id', function(done) {
-    Follows.toggleFollowPlugin('60f49004784379051298ea3760f4760f49004784379051298ea37',(err) => {
-      expect(err).toEqual('Plugin does not exist');
-     done();
-    });
-  });
-  
-  xit('toggle Follow Plugin with valid plugin id', function(done) {
-    Follows.toggleFollowPlugin('1627334094776-047554258642281355' , (err,resp) => {
+  it('toggle Follow Plugin with valid plugin id', function(done) {
+    Follows.toggleFollowPlugin((err,resp) => {
       expect(err).toEqual(null)
       expect(resp).not.toEqual(null);
       done();
     });
   });  
 
-  xit('toggle Follow Plugin for current plugin id', function(done) {
-    Follows.toggleFollowPlugin(authManager.currentUser._id,(err,resp) => {
-      expect(err).toEqual("You can't follow yourself");
-      expect(resp).toEqual(null);
-      done();
-    });
-  });
 });
 });
 

@@ -119,7 +119,7 @@ class Posts{
             let tempArray = [];
             tempArray.push({"_buildfire.index.array1.string1" : {"$regex":`displayName_(.|\n)*?${option.text.toLowerCase()}`}});
             tempArray.push({"_buildfire.index.array1.string1" : {"$regex":`pluginTitle_(.|\n)*?${option.text.toLowerCase()}`}});
-            tempArray.push({"_buildfire.index.array1.string1" : "isPublic_1"});
+            if(option?.isPublic)tempArray.push({"_buildfire.index.array1.string1" : "isPublic_1"});
             buildfire.appData.search({filter : {$or: tempArray} , sort:{createdOn : -1} , skip : option.skip || 0 , limit : option.limit || 15 } , Posts.TAG , (e , r) => e ?  callback(e) : callback(r));;
         }
     }
