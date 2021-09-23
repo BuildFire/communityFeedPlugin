@@ -9,27 +9,48 @@
   <script src="./js/analyticKey.js"></script>
   <script src="./js/follows.js"></script>
   <script src="./js/posts.js"></script>
-  <script src="./js/ui.js"></script>
+  <script src="./js/UI/header.js"></script>
+  <script src="./js/UI/UIHelper.js"></script>
   <link rel="stylesheet" href="./css/index.css">
   <title>Document</title>
+  <style>
+ 
+ 
+  </style>
+
+
 </head>
 <body>
-  <div id="hScrollableHeader" class="hScrollableHeader">
 
-    <h1>Hi</h1>
+  <div id="header"></div>
+
+  <div id="postsContainer" class="publicPost-container">
+
   </div>
-  <div class="postsContainer">
+
 
   </div>
 
 
   <script>
-    authManager.enforceLogin();
-    Posts.searchPosts({text:"foadnwxmdowaximdxwoaim"} , (err, res) => {
-      err ? console.log(err) : console.log(res);
-    });
-    let hScrollHeader = new scrollableHeader("hScrollableHeader");
-    hScrollHeader.init()
+    // Follows.clearAppData();
+    // Posts.clearAppData();
+    authManager.getCurrentUser(u =>{
+      let header = new Header("header");
+      // Follows.followUser("60f46102e44fed052975b0c3",(e , r) => e ? console.log(e) : console.log(r));
+      // Posts.addPost({
+      //   postText: "s is generally a great place to explore for tourists - their food are very well known, delicious, and you can find them almost everywhere, well known, delicious... "
+      //   ,postImages:[
+      //     "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8M3x8fGVufDB8fHx8&w=1000&q=80",
+      //     "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2l0eXxlbnwwfHwwfHw%3D&w=1000&q=80",
+      //     "https://img.freepik.com/free-photo/city-chicago-downtown-skyscrapers-lake-michigan-cityscape-illinois-usa_146539-29.jpg?size=626&ext=jpg",
+      //     "https://cdn.vox-cdn.com/thumbor/Ksi3v8e1tj1ZcQeRV1ZtmCYIM7k=/0x0:4284x2916/1200x800/filters:focal(1800x1116:2484x1800)/cdn.vox-cdn.com/uploads/chorus_image/image/61918529/NorthBroadSt_Landscape_1_M.Edlow.0.jpg",
+
+      //   ]
+      // },(err, r) =>{
+      //   err ? console.log(err) : console.log(r);
+      // })
+    })
   </script>
 </body>
 </html>

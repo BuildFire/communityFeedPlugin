@@ -18,6 +18,7 @@ class Posts{
     static TAG = "posts";
 
     static createPostObj = (post , user) =>{
+
         if(user && post){
             return new Post({
                 userId : user._id,
@@ -25,8 +26,8 @@ class Posts{
                 postText : post?.postText || null,
                 postImages : post?.postImages || [],
                 isPublic : post?.isPublic || false,
-                pluginInstance : {pluginInstanceId : buildfire.context.instanceId,pluginInstanceTitle : buildfire.context.title || buildfire.context.pluginId},
-                _buildfire:{index : Posts.buildIndex({displayName : user.displayName || user.username || user.email , userId : user._id , pluginTitle : buildfire.context.title || buildfire.context.pluginId , isPublic : post?.isPublic ? 1 : 0})}
+                pluginInstance : {pluginInstanceId : buildfire.getContext().instanceId,pluginInstanceTitle : buildfire.getContext().title || buildfire.getContext().pluginId},
+                _buildfire:{index : Posts.buildIndex({displayName : user.displayName || user.username || user.email , userId : user._id , pluginTitle : buildfire.getContext().title || buildfire.getContext().pluginId , isPublic : post?.isPublic ? 1 : 0})}
             });
         }
         else {
@@ -35,6 +36,7 @@ class Posts{
     }
 
     static addPost = (post , callback) =>{
+        console.log(authManager);
         if(!post) return callback("Post cannot be null")
         if(!post.postText && !post.postImages) return callback("Post text cannot be empty");
         let user = authManager.currentUser;
@@ -79,11 +81,13 @@ class Posts{
 
     static getPosts = (options , callback) =>{
         let tempArray = [];
-        if((options.hasOwnProperty('publicPosts') && options.publicPosts) || !options.hasOwnProperty('publicPosts')) tempArray.push({"$json.isPublic" : true});
+        if(!options) tempArray.push({"$json.isPublic" : true});
+        else if((options.hasOwnProperty('publicPosts') && options.publicPosts) || !options.hasOwnProperty('publicPosts')) tempArray.push({"$json.isPublic" : true});
         if(authManager.currentUser){
         Follows.getUserFollowData((err , resp) =>{
-                if((options.hasOwnProperty('byFollowedUsers') && options.byFollowedUsers) || !options.hasOwnProperty('byFollowedUsers')) resp.followedUsers.forEach(id => tempArray.push({"_buildfire.index.array1.string1" : `userId_${id}`}));
-                if((options.hasOwnProperty('byFollowedPlugins') && options.byFollowedPlugins) || !options.hasOwnProperty('byFollowedPlugins')) resp.followedPlugins.forEach(id => tempArray.push({"_buildfire.index.array1.string1" : `pluginTitle__${id}`.toLowerCase()}));
+            
+                if( ( (options.hasOwnProperty('byFollowedUsers') && options.byFollowedUsers) || !options.hasOwnProperty('byFollowedUsers')) && resp?.followedUsers) resp.followedUsers.forEach(id => tempArray.push({"_buildfire.index.array1.string1" : `userId_${id}`}));
+                if( ( (options.hasOwnProperty('byFollowedPlugins') && options.byFollowedPlugins) || !options.hasOwnProperty('byFollowedPlugins') ) && resp?.followedPlugins ) resp.followedPlugins.forEach(id => tempArray.push({"_buildfire.index.array1.string1" : `pluginTitle__${id}`.toLowerCase()}));
                 buildfire.appData.search({filter : {$or: tempArray} , skip : options?.skip || 0 , limit : options?.limit || 10 , sort:{createdOn : -1}} , Posts.TAG , (e , r) => e ? callback(e , null) : callback(null , r))                
             })
         }
@@ -125,13 +129,18 @@ class Posts{
     }
 
     static addPublicPost = (post , callback) =>{
+        console.log(buildfire.getContext())
         if(!post.postText && !post.postImages) return callback("Post text cannot be empty");
+
         buildfire.appData.insert(new Post({
             isPublic : true,
             postText : post.postText || "",
             postImages : post.postImages || [],
+            pluginInstance:{
+                pluginInstanceId: buildfire.getContext().instanceId,pluginInstanceTitle : buildfire.getContext().title || buildfire.getContext().pluginId
+            },
             _buildfire:{index : Posts.buildIndex({
-                displayName : "PUBLIC" , userId : "PUBLIC" , pluginTitle : buildfire.context.title || buildfire.context.pluginId , isPublic : 1})}
+                displayName : "PUBLIC" , userId : "PUBLIC" , pluginTitle : buildfire.getContext().title || buildfire.getContext().pluginId , isPublic : 1})}
         }),Posts.TAG , (e , r) => {
             e ? callback(e , null) : callback(null , r);
         } )

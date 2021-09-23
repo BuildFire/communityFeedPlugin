@@ -1,36 +1,266 @@
+
+/*
+Background Color: #FFFFFF
+Header Text: #5F5F5F
+Body Text: #5F5F5F (body text and user/plugin name under profile picture in top list of users and plugins)
+Icons: #31A3EE
+Primary Links & Buttons: #31A3EE (all links; highlighted name and ring when feed is filtered by a user or plugin - screen 3)
+Success Links & Buttons: #2CA265
+Info Links & Buttons: #69D5FF
+Warning Links & Buttons: #FABA41
+Danger Links & Buttons: #ED4B4BV
+Default Links & Buttons: #2177AE (plugin name - link)
+
+*/
 :root {
-    --main-bg-color: #ddd;
-    --text-color: black;
+    --title-bar-bg:#2177AE;
+    --title-bar-text-icons:#FFFFFF;
+    --bg-color:#FFFFFF;
+    --card-shadow: #FCFCFC;
+    --text: #5F5F5F;
+    --primary-links: #31A3EE;
+    --success-links-buttons: #2CA265;
+    --info-links-buttons: #69D5FF;
+    --warning-links-buttons: #FABA41;
+    --danger-links-buttons: #ED4B4B;
+    --default-links-buttons: #2177AE;
+    
+
 }
 *{
-    padding:0px;
-    margin:0px;
+    margin: 0;
+    padding: 0;
 }
-.header {
-    min-height: 15vh;
-    width: 100%;
-    background-color: #ddd;
+body{
+    background-color: #FFFFFF;
+    height: 100%;
 }
-.promptHeaderContainer{
-    padding:2% 3% 2% 3%;
-}
-.promptHeader{
-    font-size: 17px;
-}
-.prompt{
-    position: relative;
-    box-shadow: 5px 10px #888888;
-}
-.promptButtonContainer{
+.prompt-container{
     display: flex;
-    justify-content: flex-end;
-    margin-right: 5%;
+    flex-direction: column;
+    max-height: 25vh;
+    padding: 1% 5% 3% 4%;
+    background-color: var(--bg-color);
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.1);
 }
 
-.promptButton{
-    padding: 12px;
-    margin-left: 3%;
-    background-color: transparent;
-    border: 0px;
-    color: red;
+.prompt-btns-container{
+    display: flex;
+    justify-content: flex-end;
 }
+
+.prompt-btn{
+    font-size: 12px;
+    margin-right:5%;
+    padding: 3px;
+    background-color: transparent;
+    color: var(--primary-links);
+    border: 0px;
+    font-weight: 750;
+
+}
+
+.prompt-text{
+    font-size: 14px;
+}
+
+.posts{
+    
+    padding-left: 2.5%;
+    padding-right: 2.5%;
+    padding-top: 5px;
+}
+.publicPost-container{
+    width: 100%;
+    min-height: 85%;
+    height: auto;
+    padding: 7px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+.publicPost{
+    width: 100%;
+    padding: 7px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    height: auto;
+    box-shadow: 0px 3px 3px 2px rgba(0,0,0,0.1);
+}
+.publicPostTitle{
+    font-size: 14px;
+    color: var(--primary-links);
+    font-weight: 750;
+}
+.publicPostText{
+    font-size: 14px;
+    color: var(--text);
+}
+.publicPostImages{
+    width: 100%;
+    height: auto;
+    margin-top: 15px;
+}
+
+.publicPostImages > img{
+    width:150%;
+    max-height:100%;
+    margin-bottom: 5px;
+
+}
+
+.seeMoreButton{
+    height: 20px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    margin-right: 2.5%;
+    color: var(--primary-links);
+}
+.seeMoreButton > button{
+    background-color: transparent;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--primary-links);
+    border:0px;
+    cursor: pointer;
+}
+
+.seeMore{
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--primary-links);
+}
+
+.postTime{
+    float: left;
+    font-size: 13px;
+}
+
+.xxxx{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.remainingImages{
+    width: 100%;
+    height: auto;
+    margin-top: 5px;
+    display: none;
+}
+.remainingImages > img{
+    width:100%;
+    max-height:100%;
+    margin-bottom: 5px;
+}
+
+.inlineBlock{
+    display: inline;
+    margin-bottom: 5px;
+}
+.bold{
+    font-weight: 600;
+    cursor: pointer;
+}
+.remove{
+    display: none;
+}
+
+.profileSection{
+    display: flex;
+    height: 90px;
+    align-items: center;
+}
+.username{
+    font-size: 14px;
+    color: var(--primary-links);
+    font-weight: 750;
+    margin-bottom: 0px;
+}
+
+.postPluginSectionInfo{
+    margin-top: -11px;
+
+}
+
+.pluginTitle{
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--primary-links);
+    float: left;
+    display: inline;
+    vertical-align: middle;
+    text-align: center;
+    margin-right: 3px;
+}
+.profileImageContainer{
+    width: 70px;
+    height: 70px;
+    border-radius: 70px;
+    margin-right: 15px;
+}
+
+.profileImageContainer > img{
+    width: 100%;
+    height: 100%;
+    border-radius: 70px;
+    border: 1px solid #e5e5e5;
+}
+
+.overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #110d0d75;
+    width: 100%;
+    height: 100%;
+}
+
+.scrollable-parent {
+	width: 100%;
+    height: 13vh;
+	display: flex;
+	overflow-x: auto;
+	overflow-y: hidden;
+	margin-left: auto;
+	margin-right: auto;
+    border-bottom: 1px solid white;
+}
+
+.scrollable-child {
+    width: 20%;
+    height: 13vh;
+	margin-left: 0.5em;
+	margin-right: 0.5em;
+    cursor: pointer;
+}
+
+.scrollable-child-img {
+    width: 8vh;
+    height: 8vh;
+    margin-top: 1vh;
+    margin-left: 1.5vh;
+    border-radius: 75px;
+}
+.scrollable-child-username{
+    width: 100%;
+    height: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.scrollable-child-username > h2{
+    font-size: 10px;
+}
+
+.scrollable-child>.scrollable-child-img>img{
+    width: 100%;
+    height: 100%;
+    border-radius: 150px;
+}
+
+
+

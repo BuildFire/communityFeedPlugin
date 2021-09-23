@@ -6,11 +6,20 @@ const authManager = {
     },
     set currentUser(user) {
         authManager._currentUser = user; 
-        // authManager.onUserChange(user);
     },
     
+
+    getCurrentUser(callback){
+        buildfire.auth.getCurrentUser((e , u) =>{
+            if(e || !u) authManager.currentUser = null;
+            else authManager.currentUser = u;
+            return callback(u);
+        })
+    },
+
     enforceLogin() {
         buildfire.auth.getCurrentUser((err, user) => {
+            if(err) console.log(err);
             if (!user) {
                 buildfire.auth.login({ allowCancel: false }, (err, user) => {
                     if (!user)
@@ -24,29 +33,30 @@ const authManager = {
         });
        
     },
-    enforceLoginWithCb(cb) {
-        buildfire.auth.getCurrentUser((err, user) => {
-            if (!user) {
-                buildfire.auth.login({ allowCancel: false }, (err, user) => {
-                    if (!user)
-                        //  authManager.enforceLogin();
-                        return cb(0)
-                    else
-                        authManager.currentUser = user;
-                        return cb(1);
-                    });
-                }
-                else{
-                    authManager.currentUser = user;
-                    return cb(1);
-                }
-        });
-       
-    },
 
-    onUserChange(user) {
-        // authManager.currentUser = user;
+
+    enforceLoginWithCb(callback){
+        buildfire.auth.getCurrentUser((err, user) => {
+            if(err) console.log(err);
+            if (!user) {
+                buildfire.auth.login({ allowCancel: true }, (err, user) => {
+                    if (!user)
+                        return callback(false);
+                    else{
+                        authManager.currentUser = user;
+                        return callback(true)
+                    }
+                });
+            }
+            else{
+                authManager.currentUser = user;
+                return callback(true)
+            }
+
+        });
+        
     }
+
 };
 buildfire.auth.onLogout(() => {
     authManager.enforceLogin();
