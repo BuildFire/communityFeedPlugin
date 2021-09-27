@@ -4,7 +4,6 @@ class Header{
         this.scrollableContainer = null;
         this.loginPrompt = null;
         buildfire.auth.getCurrentUser((e , u) => {
-
             if(e || !u) this.initLoginPrompt();
             else this.initScrollableHeader();
         })

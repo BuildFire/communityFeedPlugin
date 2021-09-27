@@ -1,9 +1,0 @@
-follows :
-FollowUser - done
-FollowPlugin - done
-UnfollowUser - done
-UnfollowPlugin - done
-getFollowedUsers - done
-getFollowedPlugins - done
-toggleFollowUser - done
-toggleFollowPlugin - done
