@@ -18,9 +18,10 @@ const render = () =>{
             hideLoginPrompt();
             Follows.getUserFollowData((err, r) =>{
                 if(err || !r) return;
-                if(r?.followedPlugins && r?.followedUsers && r.followedPlugins.length > 0 && r.followedUsers.length > 0){
+                console.log(r);
+                if((r?.followedPlugins && r.followedPlugins.length > 0) || (r?.followedUsers  && r.followedUsers.length > 0)){
                     console.log("UHU");
-                    renderFollowingContainer(r?.followedUsers ? r.followedUsers : []);
+                    renderFollowingContainer(r?.followedUsers ? r.followedUsers : [], r?.followedPlugins ? r.followedPlugins : []);
                 }
                 else document.getElementById("followingContainer").style.display = "none";
             })

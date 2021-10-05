@@ -41,12 +41,15 @@ const renderFollowingContainer = (followedUsers, followedPlugins) =>{
     followedUsers && followedUsers.forEach(u =>{
         renderFollowedUser(u,container);
     });
+    followedPlugins && followedPlugins.forEach(p =>{
+        renderFollowedPlugin(p, container)
 
+    })
     
 }
 
 const renderPosts = (posts, prepend = false, callback) =>{
-    if(!posts || (posts && posts.length == 0)) return callback();
+    if(!posts || (posts && posts.length == 0) && callback) return callback();
     posts.forEach(p =>{
         if(p.data.isPublic) createPublicPostUI(p.data,"postsContainer",p.id, prepend);
         else createUserPost(p.data,"postsContainer",p.id, prepend)

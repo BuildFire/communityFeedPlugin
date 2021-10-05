@@ -62,6 +62,60 @@ const renderFollowedUser = (userId, parent) =>{
     });
     parent.appendChild(followingElement)
 }
+const renderFollowedPlugin = (pId, parent) =>{
+    let followingElement = createElement("div","",["followingElement"],`followingElement${pId}`);
+    let followingImageContainer = createElement("div","",["followingImageContainer"],`scrollableItem${pId}`);
+    followingElement.onclick = () =>{
+        buildfire.spinner.hide();
+        let element = document.getElementById(followingElement.id);
+        let postsContainer = document.getElementById("postsContainer");
+        postsContainer.innerHTML = "";
+        buildfire.spinner.show();
+        let activeState = element.childNodes[0];
+        if(activeState.classList.contains("activeFollowingElement")){
+            activeState.classList.remove("activeFollowingElement")
+            Posts.getPosts({},(err, r) =>{
+                buildfire.spinner.hide();
+                if(err || !r) console.error("Error");
+                else renderPosts(r)
+
+            })
+        }
+        else{
+            let list = document.getElementsByClassName("followingElement");
+            for (var i = 0; i < list.length; i++) {
+                list[i].childNodes[0].classList.remove("activeFollowingElement")
+            }
+    
+            activeState.classList.add("activeFollowingElement");
+            Posts.searchPosts({filter: pId},(err, r) =>{
+                buildfire.spinner.hide();
+                if(err) console.log(err);
+                else renderPosts(r)
+            })
+        }
+    }
+    console.log(pId);
+    buildfire.pluginInstance.get(pId, function(error, instance){
+        if (error) {
+            console.error(err);
+        } else if (instance) {
+            console.log(instance);
+            let followingUsernameContainer = createElement("div","",["followingUsernameContainer",`scrollableUsername${userId}`]);
+            let username = instance.title;
+            username = username.substring(0,10);
+            let scrollableChildUsernameText = createElement("h2",username+"..",[]);
+            followingUsernameContainer.appendChild(scrollableChildUsernameText);
+            followingElement.appendChild(followingUsernameContainer)
+            followingImageContainer.appendChild(createImage(buildfire.imageLib.cropImage(instance.iconUrl, {width:45,height:45}), false));
+            followingElement.appendChild(followingImageContainer);
+        }
+        else{
+            console.log("Couldn't find Instance");
+        }
+    });
+    parent.appendChild(followingElement)
+}
 
 const showMorePosts = () =>{
     let postsContainer = document.getElementById("postsContainer");
