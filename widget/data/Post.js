@@ -5,7 +5,7 @@ class Post {
       this.lastUpdatedOn = data.lastUpdatedOn; 
       this.lastUpdatedBy = data.lastUpdatedBy || null; 
       this.userId = data.userId || null;
-      this.displayName = data.displayName || null;
+      this.displayName = data.title || data.displayName || "Someone";
       this.postText = data.postText || null;      
       this.postImages  = data.postImages  || [];          
       this.pluginInstance  = data.pluginInstance || {};     

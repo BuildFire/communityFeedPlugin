@@ -1,69 +1,133 @@
-
-/*
-Background Color: #FFFFFF
-Header Text: #5F5F5F
-Body Text: #5F5F5F (body text and user/plugin name under profile picture in top list of users and plugins)
-Icons: #31A3EE
-Primary Links & Buttons: #31A3EE (all links; highlighted name and ring when feed is filtered by a user or plugin - screen 3)
-Success Links & Buttons: #2CA265
-Info Links & Buttons: #69D5FF
-Warning Links & Buttons: #FABA41
-Danger Links & Buttons: #ED4B4BV
-Default Links & Buttons: #2177AE (plugin name - link)
-
-*/
 :root {
-    --title-bar-bg:#2177AE;
-    --title-bar-text-icons:#FFFFFF;
-    --bg-color:#FFFFFF;
-    --card-shadow: #FCFCFC;
-    --text: #5F5F5F;
-    --primary-links: #31A3EE;
-    --success-links-buttons: #2CA265;
-    --info-links-buttons: #69D5FF;
-    --warning-links-buttons: #FABA41;
-    --danger-links-buttons: #ED4B4B;
-    --default-links-buttons: #2177AE;
-    
-
+    --backgroundColor: #FFFFFF;
+    --bodyText: #5F5F5F;
+    --dangerTheme: #FF1200;
+    --defaultTheme: #0B6637;
+    --footerMenuBackgroundColor: #FFFFFF;
+    --footerMenuIconColor: #45CAE6;
+    --headerText: #212121;
+    --icons: #2CA265;
+    --infoTheme: #69D5FF;
+    --primaryTheme: #31A3EE;
+    --successTheme: #2CA265;
+    --titleBar: #2177AE;
+    --titleBarTextAndIcons: #FFFFFF;
+    --warningTheme: #FABA41;
 }
+
 *{
     margin: 0;
     padding: 0;
+    font: inherit;
+    font-family: Helvetica, Sans-Serif, Arial;
 }
-body{
-    background-color: #FFFFFF;
-    height: 100%;
+.emptyState{
+    background-color: white;
+    margin-top: 15px;
+    position: relative;
+    width: 100%;
+    height: 50vh;
+    background-image: url('../assets/empty_page.svg') !important;
+    background-repeat: no-repeat !important;
+    background-attachment: absolute !important;
+    background-position: center !important;
 }
-.prompt-container{
+
+#container{
+    max-height: 100vh;
+    height: 100vh;
+    overflow-y: auto;
+    background-color: var(--backgroundColor);
+    
+}
+/* LOGIN PROMPT START */
+.loginPrompt{
     display: flex;
     flex-direction: column;
     max-height: 25vh;
     padding: 1% 5% 3% 4%;
-    background-color: var(--bg-color);
+    background-color: var(--backgroundColor);
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.1);
 }
 
-.prompt-btns-container{
+
+
+.loginPromptText{
+    font-size: 14px;
+    color: var(--primaryTheme);
+}
+
+.loginPromptButtonContainer{
     display: flex;
     justify-content: flex-end;
 }
 
-.prompt-btn{
+.loginPromptButton{
     font-size: 12px;
     margin-right:5%;
     padding: 3px;
     background-color: transparent;
-    color: var(--primary-links);
     border: 0px;
     font-weight: 750;
-
+    color: var(--primaryTheme);
+}
+/* LOGIN PROMPT END */
+/* FOLLOWING CONTAINER START */
+.followingContainer {
+	width: 100%;
+    height: 13vh;
+	display: flex;
+	overflow-x: auto;
+	overflow-y: hidden;
+	margin-left: auto;
+	margin-right: auto;
 }
 
-.prompt-text{
-    font-size: 14px;
+.followingElement {
+    width: 20%;
+    height: 13vh;
+	margin-left: 0.5em;
+	margin-right: 0.5em;
+    cursor: pointer;
 }
 
+.activeFollowingElement{
+    border: 2px solid var(--primaryTheme);
+}
+
+.followingImageContainer {
+    width: 8vh;
+    height: 8vh;
+    margin-top: 1vh;
+    margin-left: 1.5vh;
+    border-radius: 75px;
+}
+
+.followingImageContainer>img{
+    width: 100%;
+    height: 100%;
+    border-radius: 150px;
+}
+
+.followingUsernameContainer{
+    width: 100%;
+    height: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.followingUsernameContainer > h2{
+    font-size: 13px;
+    margin-top: -2px;
+    width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* FOLLOWING CONTAINER END */
+/* POSTS CONTAINER START */
 .posts{
     
     padding-left: 2.5%;
@@ -85,9 +149,11 @@ body{
     margin-bottom: 8px;
     height: auto;
     box-shadow: 0px 3px 3px 2px rgba(0,0,0,0.1);
+    border-radius:5px;
+
 }
 .publicPostTitle{
-    font-size: 14px;
+    font-size: 15px;
     color: var(--primary-links);
     font-weight: 750;
 }
@@ -105,7 +171,7 @@ body{
     width:150%;
     max-height:100%;
     margin-bottom: 5px;
-
+    border-radius:5px;
 }
 
 .seeMoreButton{
@@ -120,7 +186,7 @@ body{
     background-color: transparent;
     font-size: 12.5px;
     font-weight: 600;
-    color: var(--primary-links);
+    color: var(--primaryTheme);
     border:0px;
     cursor: pointer;
 }
@@ -135,13 +201,25 @@ body{
     float: left;
     font-size: 13px;
 }
-
-.xxxx{
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
+.profileImageContainer{
+    width: 45px;
+    height: 45px;
+    border-radius: 45px;
+    margin-right: 15px;
 }
 
+.profileImageContainer > img{
+    width: 100%;
+    height: 100%;
+    border-radius: 70px;
+    border: 1px solid #e5e5e5;
+}
+
+.profileSection{
+    display: flex;
+    height: 90px;
+    align-items: center;
+}
 .remainingImages{
     width: 100%;
     height: auto;
@@ -154,113 +232,28 @@ body{
     margin-bottom: 5px;
 }
 
-.inlineBlock{
-    display: inline;
-    margin-bottom: 5px;
-}
-.bold{
-    font-weight: 600;
-    cursor: pointer;
-}
-.remove{
-    display: none;
-}
-
-.profileSection{
-    display: flex;
-    height: 90px;
-    align-items: center;
-}
 .username{
     font-size: 14px;
-    color: var(--primary-links);
     font-weight: 750;
     margin-bottom: 0px;
+    color: var(--primaryTheme);
 }
 
 .postPluginSectionInfo{
-    margin-top: -11px;
+    margin-top: -15px;
 
 }
-
 .pluginTitle{
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    color: var(--primary-links);
+    color: var(--primaryTheme);
     float: left;
     display: inline;
     vertical-align: middle;
     text-align: center;
     margin-right: 3px;
 }
-.profileImageContainer{
-    width: 70px;
-    height: 70px;
-    border-radius: 70px;
-    margin-right: 15px;
-}
-
-.profileImageContainer > img{
-    width: 100%;
-    height: 100%;
-    border-radius: 70px;
-    border: 1px solid #e5e5e5;
-}
-
-.overlay{
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: #110d0d75;
-    width: 100%;
-    height: 100%;
-}
-
-.scrollable-parent {
-	width: 100%;
-    height: 13vh;
-	display: flex;
-	overflow-x: auto;
-	overflow-y: hidden;
-	margin-left: auto;
-	margin-right: auto;
-    border-bottom: 1px solid white;
-}
-
-.scrollable-child {
-    width: 20%;
-    height: 13vh;
-	margin-left: 0.5em;
-	margin-right: 0.5em;
-    cursor: pointer;
-}
-
-.scrollable-child-img {
-    width: 8vh;
-    height: 8vh;
-    margin-top: 1vh;
-    margin-left: 1.5vh;
-    border-radius: 75px;
-}
-.scrollable-child-username{
-    width: 100%;
-    height: 40%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
 
-.scrollable-child-username > h2{
-    font-size: 10px;
-}
-
-.scrollable-child>.scrollable-child-img>img{
-    width: 100%;
-    height: 100%;
-    border-radius: 150px;
-}
-
-
-
+/* POSTS CONTAINER END */

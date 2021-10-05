@@ -1,37 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="../../../scripts/buildfire.js"></script>
-  <script src="./data/Errors.js"></script>
-  <script src="./data/Follow.js"></script>
-  <script src="./data/Post.js"></script>
-  <script src="./dataAccess/Follows.js"></script>
-  <script src="./dataAccess/Posts.js"></script>
-  <script src="./data/analyticKeys.js"></script>
-  <script src="./js/UI/header.js"></script>
-  <script src="./js/UI/UIHelper.js"></script>
-  <link rel="stylesheet" href="./css/index.css">
-  <title>Document</title>  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/index.css"/>
+    <script src="../../../scripts/buildfire.js"></script>
+    <script src="../../../scripts/buildfire/components/drawer/drawer.js"></script>
+    <script src="./data/Errors.js"></script>
+    <script src="./data/Follow.js"></script>
+    <script src="./data/Post.js"></script>
+    <script src="./dataAccess/Follows.js"></script>
+    <script src="./dataAccess/Posts.js"></script>
+    <script src="./js/helperFunctions.js"></script>
+    <script src="./js/postsRender.js"></script>
+    <script src="./js/render.js"></script>
+    <script src="./js/Widget.js"></script>
 </head>
 <body>
-
-  <div id="header"></div>
-
-  <div id="postsContainer" class="publicPost-container">
-
+  <div id="container">
+    <div id = "loginPrompt" class="loginPrompt"></div>
+    <div id = "followingContainer" class="followingContainer"></div>
+    <div id = "emptyPostsContainer"></div>
+    <div id = "postsContainer" class="postsContainer"></div>
   </div>
-
-
-  </div>
-
 
   <script>
-  let header = new Header("header");
+    buildfire.auth.onLogin((user) => {
+      location.reload();
+    }, true);
+    buildfire.auth.onLogout(() => {
+      location.reload();
+    }, false);
+    buildfire.appData.onUpdate((event) => {
+      if(!event.data) location.reload();
+    });
 
+    let container = document.getElementById("container");
+    let loading = false;
+    container.onscroll = () =>{
+      let check = true;
+      let following = document.getElementById("followingContainer");
+      let list = following.childNodes;
+      for(let index in list){
+        let item = list[index];
+        let active = item && item.childNodes ? item.childNodes[0] : null;
+        if(active?.classList?.contains("activeFollowingElement")){
+          check = false;
+          break;
+        }
+      }
+      if(check && !loading){
+        console.log(document.getElementById("postsContainer").childNodes.length);
+        if (container.scrollHeight - container.scrollTop - container.clientHeight < 1){
+          loading = true;
+          Posts.getPosts({skip:document.getElementById("postsContainer").childNodes.length},(e, r) =>{
+            console.log(r);
+            renderPosts(r,false,(s) =>{
+              loading = false;
+            });
+          })
+        }
+      }
+    }
   </script>
-
 </body>
 </html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../assets/addPosts.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../../../../../../scripts/buildfire.js"></script>
+    <script src="../../../widget/data/Errors.js"></script>
+    <script src="../../../widget/data/Post.js"></script>
+    <script src="../../../widget/dataAccess/Posts.js"></script>
+</head>
+<body>
+    <div class="titleContainer">
+        <div class="subtitle">Posts / New Public Post</div>
+        <div class="blackline"></div>
+        <div class="title">Public Posts</div>
+    </div>
+
+    <div class="form">
+        <div class="row">
+            Title* <input placeholder="Enter title" type="text" id="title">
+        </div>
+        <div class="row">
+            Body*  <textarea placeholder="Enter Description" id="description" cols="30" rows="10"></textarea>
+        </div>
+    </div>
+
+    <div class="bottomContainer">
+        <button class="cancel" onclick="goBack()">Cancel</button>
+        <button class="save btn-success" onclick="addPost()">Save</button>
+    </div>
+
+    <script>
+        const addPost = () =>{
+            let title = document.getElementById("title");
+            let description = document.getElementById("description");
+            title.classList.remove("error");
+            description.classList.remove("error");
+
+            if(!title.value.replace(/\s/g, "")){
+                title.classList.add("error")
+            }
+            else if(!description.value.replace(/\s/g, "")){                
+                description.classList.add("error")
+            }
+            else{
+                Posts.addPublicPost({postTitle:title.value,postText:description.value},(err,r) =>{
+                    if(r){
+                        window.location.href = "../index.html"
+                    }   
+                })
+            }
+        }
+
+        const goBack = () =>{
+            window.location.href = "../index.html"
+
+        }
+    </script>
+</body>
+</html>

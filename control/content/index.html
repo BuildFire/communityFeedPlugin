@@ -2,44 +2,55 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../../../../scripts/buildfire.js"></script>
     <link rel="stylesheet" href="style.css"/>
-    <script src="./../../widget/data/analyticKeys.js"></script>
-    <!--
-    NOTE:
-    1. You can reference the file in SDK via relative path
-    2. The Control and Widget Should NOT share resources. They will be separated in production.
-    3. You may include any JS framework you want with your Widget and Control folders. However, keep in mind
-        to keep you plugin as light weight as possible for performance and transport reasons
-  -->
-
-    <!-- You can load helper.css to use our helper classes.
-    <link href="../../../../styles/helper.css" rel="stylesheet">
-    -->
-
-  <!-- JS -->
-  <script src="../../../../scripts/buildfire.js"></script>
-
-  <!--
-    <script src="../../../../scripts/angular/angular.min.js"></script>
-    <script src="../../../../scripts/angular/ui-bootstrap.min.js"></script>
-   <script src="../../../../scripts/jquery/jquery-1.11.2.min.js"></script>
-   -->
-
-
-   <script>
-
-    for (let propName in analyticKeys) {
-      buildfire.analytics.registerEvent(
-        analyticKeys[propName], 
-        {
-          silentNotification: true
-        }
-      );
-    }
-   </script>
+    <link rel="stylesheet" href="./assets/base.css">
+    <link rel="stylesheet" href="./assets/linearicons/cpIcons.css">
+    <link rel="stylesheet" href="./searchTable/searchTable2.css">
+    <script src="../../widget/data/Errors.js"></script>
+    <script src="../../widget/data/Post.js"></script>
+    <script src="../../widget/data/Follow.js"></script>
+    <script src="../../widget/data/analyticKeys.js"></script>
+    <script src="../../widget/dataAccess/Follows.js"></script>
+    <script src="../../widget/dataAccess/Posts.js"></script>
+    <script src="./searchTable/searchTableConfig.js"></script>
+    <script src="./searchTable/searchTableHelper.js"></script>
 </head>
 <body>
-<span>Settings - Hello world!</span>
+  <div class="titleContainer">
+    <div class="titleBlackline"></div>
+    <div class="title">Public Posts</div>
+  </div>
+  <div class="infoContainer">
+    Public posts will appear in everybody’s feed. Guests will be able to see only public posts until they log in.
+  </div>
+  <div class="searchContainer">
+    <div class="form-group form-buttons-input">
+      <div class="input-group">
+          <input type="text" class="form-control" placeholder="Search Title" id="title" />
+          <span class="input-group-btn">
+              <button class="btn btn-info" onclick="searchPosts()"><span class="icon icon-magnifier"></span></button>
+          </span>
+      </div>
+    </div>
+  </div>
+  <div class="addNewContainer">
+    <button class="btn btn-success"  onclick="addNewPost()">+ <span style="margin-left: 15px;padding-right: 5px;">Add</span></button>
+  </div>
+  <div class="tableContainer">
+    <table id="searchTable"></table>
+  </div>
+
+  <script>
+      let searchTableHelper = new SearchTableHelper("searchTable",Posts.TAG,searchTableConfig);
+      function load(){searchTableHelper.search()}
+      load();
+      const searchPosts = () => {
+        searchTableHelper.tbody.innerHTML='';
+        searchTableHelper._create('tr',searchTableHelper.tbody,'<td colspan="99"> searching...</td>',["loadingRow"],"loadingrow");
+        searchTableHelper._fetchPageOfData(0);
+      }
+      addNewPost = () => window.location.href = "./components/addNewPost.html";
+</script>
 </body>
 </html>
-

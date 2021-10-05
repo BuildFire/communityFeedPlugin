@@ -1,0 +1,38 @@
+table tbody {
+    display: block;
+    max-height: 350px;
+    overflow-y: auto;
+  }
+  
+  table thead, table tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+
+
+  thead > *{
+      cursor: pointer;
+      font-weight: 800;
+  }
+  tbody>tr{
+      height: 60px;
+  }
+
+  table{
+      border: 0px;
+  }
+  .deleteColumn{
+    width: 15%;
+    text-align: center;
+}
+.editColumn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+tbody > tr>:nth-child(1),tbody > tr>:nth-child(2),tbody > tr>:nth-child(3){
+    cursor: pointer;
+}

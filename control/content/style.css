@@ -1,1 +1,163 @@
 
+.row{
+    width: 102%;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+.buttonContainer{
+    padding: 5px;
+}
+.row>.buttonContainer>button{
+    background-color: rgb(91, 202, 88);
+    color: #ffffff;
+    border: 0px;
+    padding: 6.5% 0px;
+    border-radius: 5px;
+    width: 130px;
+    font-size: 17px;
+    text-align: left;
+    padding-left: 15px;
+    display: flex;
+    align-items: center;
+}
+.row>.buttonContainer>button>span{
+    margin-left: 20%;
+    font-size: 12px;
+}
+
+tbody>tr{
+    border: 1px solid rgb(216,216,216);
+   
+}
+
+thead{
+    height: 50px;
+}
+thead>:first-child{
+    padding-left: 10px;
+}
+
+
+tbody>tr>:first-child{
+    padding-left: 10px;
+}
+tr>td{
+    font-size: 1em;
+}
+
+.titleContainer{
+    width: 100%;
+    height: 10%;
+}
+.titleContainer > .blackline{
+    width: 50px;
+    height: 3px;
+    border-radius: 5px;
+    background-color: black;
+    margin-bottom: 10px;
+}
+
+.titleContainer > .title{
+    font-size: 21px;
+    font-weight: 800;
+    color: black;
+}
+
+.note{
+    width: 100%;
+    padding: 8px;
+    background-color: rgb(241, 241, 241);
+    color: rgb(144, 144, 144);
+    font-size: 16px;
+    margin-bottom: 2%;
+}
+.editColumn>.btn{
+    background-color: transparent !important;
+}
+.editColumn>.btn,.editColumn>.btn>*{
+    font-size: 20px;
+}
+
+.noPostsExistsTable{
+    width: 100%;
+    background: rgb(231, 231, 231);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    font-size: 17px;
+    font-weight: 800;
+    color: rgb(105, 105, 105);
+}
+
+.dateFilters{
+    width: 100%;
+    padding: 15px 15px;
+    background-color: #ffffff;
+    border: 1px solid #E5E5E5;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.1);
+    display: none;
+}
+
+.daterow{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.daterow>.left{
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
+}
+.daterow>.right{
+    justify-content: space-between;
+    display: flex;
+    flex: 1;
+    align-items: center;
+}
+.daterow>.right>.dateLabel{
+    margin-left: 20%;
+}
+
+.clearFilters{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 10px;
+}
+.clearFilters>*{
+    font-size: 13px;
+    cursor: pointer;
+}
+.left>.dateFilter>input,.right>.dateFilter>input{
+    padding: 0px 10px;
+    border-radius: 7px;
+    border: 1px solid #E5E5E5;
+}
+
+.infoContainer{
+    width: 100%;
+    padding: 8px;
+    background-color: rgb(241, 241, 241);
+    color: rgb(144, 144, 144);
+    font-size: 16px;
+    margin-bottom:2%;
+}
+
+.titleBlackline{
+    width: 50px;
+    height: 3px;
+    border-radius: 5px;
+    background-color: black;
+    margin-bottom: 10px;
+}
+.addNewContainer{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}

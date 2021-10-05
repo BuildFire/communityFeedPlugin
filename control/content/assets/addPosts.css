@@ -1,0 +1,71 @@
+.titleContainer{
+    width: 100%;
+    height: 10%;
+}
+.titleContainer > .blackline{
+    width: 50px;
+    height: 3px;
+    border-radius: 5px;
+    background-color: black;
+    margin-bottom: 10px;
+}
+
+.titleContainer > .title{
+    font-size: 21px;
+    font-weight: 800;
+    color: black;
+}
+
+.titleContainer > .subtitle{
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+.form{
+    margin-top: 5%;
+}
+.row{
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+    margin-bottom: 2%;
+}
+
+input , textarea{
+    padding: 1%;
+    font-size: 15px;
+    border: 1px solid #e5e5e5;
+}
+textarea{
+    resize: none;
+}
+.row > input, .row>textarea{
+    float: right;
+    width: 80%;
+}
+
+.bottomContainer{
+    position: absolute;
+    bottom: 0%;
+    left: 0%;
+    width: 100%;
+    display: flex;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: flex-end;
+    height: 47px;
+
+}
+.bottomContainer > button{
+    margin-right: 25px;
+    width: 12%;
+    border-radius: 5px;
+}
+.bottomContainer>.cancel{
+    background-color: transparent;
+    color: #00000085;
+    border: 1px solid #E5E5E5;
+}
+
+.error{
+    border-color: red;
+}
+
