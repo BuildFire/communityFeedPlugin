@@ -7,7 +7,7 @@
         let newText = post?.postText.substring(0, length) + "...";
         postDescription = createElement( "h3", newText, ["publicPostText", "inlineBlock"], `${postId}postDescription` );
         postContainer.appendChild(postDescription);
-        let postTextSeeMore = createElement( "h3", "See More", ["publicPostText", "seeMore", "inlineBlock", "bold"], `${postId}postDescription`);
+        let postTextSeeMore = createElement( "h3", "Read More", ["publicPostText", "seeMore", "inlineBlock", "bold"], `${postId}postDescription`);
         postContainer.appendChild(postTextSeeMore);
         let postFullDescription = createElement("h3",post.postText,["publicPostText", "inlineBlock", "remove"],`${postId}postDescription`);
         postContainer.appendChild(postFullDescription);
@@ -89,7 +89,7 @@
       {width:45,height:45}
     );
   
-    let userPicture = createImage(userPictureUrl);
+    let userPicture = createImage(userPictureUrl, false);
     profileImageContainer.appendChild(userPicture);
     let infoSection = createElement("div", "", ["infoSection"], `${postId}infoSection`);
     let username = createElement("h2", post.displayName, ["username"], `${postId}displayName`);

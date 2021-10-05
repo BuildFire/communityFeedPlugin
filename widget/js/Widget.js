@@ -18,8 +18,11 @@ const render = () =>{
             hideLoginPrompt();
             Follows.getUserFollowData((err, r) =>{
                 if(err || !r) return;
-                if( !(r?.followedPlugins && r?.followedPlugins.length > 0) && !(r?.followedUsers && r?.followedUsers.length > 0) ) return;
-                renderFollowingContainer(r?.followedUsers ? r.followedUsers : []);
+                if(r?.followedPlugins && r?.followedUsers && r.followedPlugins.length > 0 && r.followedUsers.length > 0){
+                    console.log("UHU");
+                    renderFollowingContainer(r?.followedUsers ? r.followedUsers : []);
+                }
+                else document.getElementById("followingContainer").style.display = "none";
             })
             Posts.getPosts({},(err, r) =>{
                 renderPosts(r);
@@ -35,7 +38,6 @@ buildfire.appearance.getAppTheme((err, appTheme) => {
     let root = document.documentElement;
     window.appTheme = {};
     Object.keys(appTheme.colors).map(key => {
-      console.log(key, appTheme.colors[key])
       window.appTheme[key] = appTheme.colors[key]
       root.style.setProperty('--' + key, appTheme.colors[key]);
     });

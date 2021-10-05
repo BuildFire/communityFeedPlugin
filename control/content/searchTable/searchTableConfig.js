@@ -1,4 +1,10 @@
 
+let timeRender = (d) =>{
+	let date = new Date(d).toLocaleString();
+	let modified = date.slice(0,-6) + " "+date.slice(-2);
+	return modified;
+}
+
 const searchTableConfig ={
 	options:{
 		showEditButton:false
@@ -21,7 +27,7 @@ const searchTableConfig ={
 		},
 		{
 			header:"Date-Time"
-			,data:"${new Date(data.createdOn).toLocaleString()}"
+			,data:"${timeRender(data.createdOn)}"
 			,type:"date"
 			,width:"25%"
 			,sortBy: 'createdOn'

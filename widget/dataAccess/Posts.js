@@ -179,7 +179,7 @@ class Posts{
             limit : options?.limit || 10 ,
             page: options?.page || 0, 
             pageSize: options?.pageSize || 10, 
-            sort: options?.sort || {createdOn : -1}
+            sort: options?.sort && Object.keys(options.sort).length > 0 ? options.sort :{createdOn : -1}
         }
         , Posts.TAG, (err, r) =>{
             console.log(err);

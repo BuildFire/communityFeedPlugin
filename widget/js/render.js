@@ -35,6 +35,7 @@ const renderFollowingContainer = (followedUsers, followedPlugins) =>{
     document.getElementById("loginPrompt").style.display = "none";
     // adding following container display
     let container = document.getElementById("followingContainer");
+    container.innerHTML = "";
     container.style.display = "flex";
     container.classList.add("followingContainer");
     followedUsers && followedUsers.forEach(u =>{
@@ -45,6 +46,7 @@ const renderFollowingContainer = (followedUsers, followedPlugins) =>{
 }
 
 const renderPosts = (posts, prepend = false, callback) =>{
+    if(!posts || (posts && posts.length == 0)) return callback();
     posts.forEach(p =>{
         if(p.data.isPublic) createPublicPostUI(p.data,"postsContainer",p.id, prepend);
         else createUserPost(p.data,"postsContainer",p.id, prepend)

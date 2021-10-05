@@ -1,0 +1,26 @@
+Svg:
+Empty state -- fixed
+
+Text:
+CP: 
+Guests -> Users -- fixed
+add a default state for order in the table -- fixed
+remove seconds from table -- fixed
+
+Widget: fix the coloring for border -- fixed
+        Show more -> Read more -- fixed
+
+CSS: Add text wrapping
+     Get rid of padding in case you are not following anyone
+     Check for dark theme
+     change the font to something that stand out
+     Try the daniel test on text input (WWWWWWWWW)
+Add a lot of posts
+
+
+Confirmation:
+confirm with Nemanja on drawer
+discuss with goran about post timestamps
+ask goran padding for followingContainer
+
+2 features to core , email in the view profile and check if its home screen

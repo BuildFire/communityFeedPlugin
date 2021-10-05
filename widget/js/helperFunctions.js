@@ -48,7 +48,7 @@ const renderFollowedUser = (userId, parent) =>{
             })
         }
     }
-    let userImage = createImage(buildfire.imageLib.cropImage(buildfire.auth.getUserPictureUrl({userId: userId}),{width:45,height:45}));
+    let userImage = createImage(buildfire.imageLib.cropImage(buildfire.auth.getUserPictureUrl({userId: userId}),{width:45,height:45}), false);
     followingImageContainer.appendChild(userImage);
     followingElement.appendChild(followingImageContainer);
     buildfire.auth.getUserProfile({ userId: userId }, (err, user) => {

@@ -1,5 +1,5 @@
 :root {
-    --backgroundColor: #FFFFFF;
+    --backgroundColor: #FABA41;
     --bodyText: #5F5F5F;
     --dangerTheme: #FF1200;
     --defaultTheme: #0B6637;
@@ -22,7 +22,6 @@
     font-family: Helvetica, Sans-Serif, Arial;
 }
 .emptyState{
-    background-color: white;
     margin-top: 15px;
     position: relative;
     width: 100%;
@@ -118,8 +117,8 @@
 }
 
 .followingUsernameContainer > h2{
-    font-size: 13px;
-    margin-top: -2px;
+    font-size: 10px;
+    margin-top: 0px;
     width: 100px;
     white-space: nowrap;
     overflow: hidden;
@@ -150,16 +149,22 @@
     height: auto;
     box-shadow: 0px 3px 3px 2px rgba(0,0,0,0.1);
     border-radius:5px;
+    padding-right: 8px;
 
 }
 .publicPostTitle{
     font-size: 15px;
     color: var(--primary-links);
     font-weight: 750;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 25%;
 }
 .publicPostText{
     font-size: 14px;
     color: var(--text);
+    overflow-wrap: break-word;
 }
 .publicPostImages{
     width: 100%;

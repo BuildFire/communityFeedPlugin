@@ -29,7 +29,9 @@ class SearchTableHelper{
 
 			let th = this._create('th',this.thead,colConfig.header,classes);
 			if(colConfig.sortBy) {
-				const icon = this._create('span', th, "", ['icon', 'icon-chevron-down','hidden']);
+				let icon;
+				if(colConfig.header == "Date-Time") icon = this._create('span', th, "", ['icon', 'icon-chevron-down']);
+				else icon = this._create('span', th, "", ['icon', 'icon-chevron-down','hidden']);
 				const _t = this;
 				th.addEventListener('click', function () {
 					let span = this.children[0];
