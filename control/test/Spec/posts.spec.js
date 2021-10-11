@@ -98,7 +98,7 @@ describe('Posts()', function () {
       });
     });
 
-    xit('addPost with both null image and null text', function (done) {
+    it('addPost with both null image and null text', function (done) {
       Posts.addPost({ postText: null, postImages: [] }, (err, resp) => {
         expect(resp.data).toEqual(jasmine.objectContaining({
           postImages: [],
@@ -165,7 +165,7 @@ describe('Posts()', function () {
       });
     });
 
-    xit('Get public posts for a user and check all returned posts', function (done) {
+    it('Get public posts for a user and check all returned posts', function (done) {
       Posts.getPosts({ userId: '604f8dcfbd6aa82ebb15fda2',isPublic: true }, (err, resp) => {
         let respSize = (resp.length) - 1;
         for (let step = 0; step < respSize; step++) {
@@ -177,7 +177,7 @@ describe('Posts()', function () {
       });
     });
 
-    xit('Get public posts for a user and check all returned posts', function (done) {
+    it('Get public posts for a user and check all returned posts', function (done) {
       Posts.getPosts({ userId : '604f8dcfbd6aa82ebb15fda2', publicPosts: true }, (err, resp) => {
         for (let step = 0; step < ((resp.length) - 1); step++) {
           expect(resp[step].data.isPublic).toEqual(true);
@@ -189,7 +189,7 @@ describe('Posts()', function () {
       });
     });
 
-    xit('getPosts of current user', function (done) {
+    it('getPosts of current user', function (done) {
       Posts.getPosts({userId: authManager.currentUser._id}, (err, resp) => {
         expect(err).toEqual(null);
         for(let step=0;step <(resp.length-1);step++){
@@ -203,11 +203,11 @@ describe('Posts()', function () {
       });
     });
 
-    xit('getPosts of current user by followered users', function (done) {
-      Posts.getPosts({byFollowedUsers : true }, (err, resp) => {
+    it('getPosts of current user by followed users', function (done) {
+      Posts.getPosts({byFollowedUsers : true}, (err, resp) => {
         expect(err).toEqual(null);
-        const byFollowedUsersArray = [getUserFollowData];
-        console.log('foll',byFollowedUsersArray);
+        //const byFollowedUsersArray = [Follows.getUserFollowData(resp)];
+        //console.log('foll',byFollowedUsersArray);
         for(let step=0;step <(resp.length-1);step++){
         expect(resp[step].data).toEqual(jasmine.objectContaining({
             "userId": authManager.currentUser._id,
@@ -248,7 +248,7 @@ describe('Posts()', function () {
       });
     });
 
-    xit('updatePost with invalid post id', function (done) {
+    it('updatePost with invalid post id', function (done) {
       Posts.updatePost('56789876', { postText: "updated-post text sample", postImages: ["updated-image test"] }, (err, resp) => {
         expect(err).toEqual("Couldn't find post with this ID.");
         expect(resp).toEqual(undefined);
@@ -256,7 +256,7 @@ describe('Posts()', function () {
       });
     });
 
-    xit('updatePost with post id does not exist', function (done) {
+    it('updatePost with post id does not exist', function (done) {
       Posts.updatePost('612e9ef743556405fd295b8Y', { postText: "updated-post text sample", postImages: ["updated-image test"] }, (err, resp) => {
         expect(err).toEqual("Couldn't find post with this ID.");
         expect(resp).toEqual(undefined);
@@ -264,7 +264,7 @@ describe('Posts()', function () {
       });
     });
 
-    xit('updatePost without providing post id', function (done) {
+    it('updatePost without providing post id', function (done) {
       Posts.updatePost({ postText: "updated-post text sample", postImages: ["updated-image test"] }, (err, resp) => {
         expect(err).toEqual('Post id does not exist');
         expect(resp).toEqual(undefined);
@@ -325,7 +325,7 @@ describe('Posts()', function () {
       });
     });
 
-    xit('updatePost private post with post image and text', function (done) {
+    it('updatePost private post with post image and text', function (done) {
       Posts.updatePost('612e7e420dbbbd0670657105', { isPublic: false, postImages: ['updatePost private post with post image and text'], postText: 'updated-updatePost private post with post image and text' }, (err, resp) => {
         expect(resp.data).toEqual(jasmine.objectContaining({
           postImages: ['updatePost private post with post image and text'],
@@ -337,7 +337,7 @@ describe('Posts()', function () {
       });
     });
 
-    xit('updatePost with both null image and null text', function (done) {
+    it('updatePost with both null image and null text', function (done) {
       Posts.updatePost('612e7e420dbbbd0670657105', { postText: null, postImages: [] }, (err, resp) => {
         expect(resp.data).toEqual(jasmine.objectContaining({
           postImages: [],
@@ -410,7 +410,7 @@ describe('Posts()', function () {
       });
     });
 
-    xit('updatePost for lastUpdatedBy', function (done) {
+    it('updatePost for lastUpdatedBy', function (done) {
       Posts.updatePost('613506917d8532067fdd4095', { lastUpdatedBy: '8990', postText: 'updatePost for fixed post'}, (err, resp) => {
         expect(err).toEqual(null);
         console.log(resp)
@@ -554,7 +554,7 @@ describe('Posts()', function () {
       });
     });
 
-    xit('getById for post id does not exist', function (done) {
+    it('getById for post id does not exist', function (done) {
       Posts.getById('612e58199cbbbd0670656df4', (err, resp) => {
         expect(err).toEqual("Couldn't find post with this ID.");
         expect(resp).toEqual(undefined);
@@ -562,7 +562,7 @@ describe('Posts()', function () {
       });
     });
 
-    xit('getById with invalid post id', function (done) {
+    it('getById with invalid post id', function (done) {
       Posts.getById('56789876', (err, resp) => {
         expect(err).toEqual("Couldn't find post with this ID.j");
         expect(resp).toEqual(undefined);
@@ -570,7 +570,7 @@ describe('Posts()', function () {
       });
     });
 
-    xit('getById with empty post id', function (done) {
+    it('getById with empty post id', function (done) {
       Posts.getById('', (err, resp) => {
         expect(err).toEqual("error");
         expect(resp).toEqual(undefined);
@@ -578,7 +578,7 @@ describe('Posts()', function () {
       });
     });
 
-    xit('getById without providing post id', function (done) {
+    it('getById without providing post id', function (done) {
       Posts.getById((err, resp) => {
         expect(err).toEqual('Post id does not existt');
         expect(resp).toEqual(undefined);
@@ -586,7 +586,7 @@ describe('Posts()', function () {
       });
     });
 
-    xit('getById private post for unfollowed user', function (done) {
+    it('getById private post for unfollowed user', function (done) {
       Posts.getById('612e9ef743556405fd295b8b', (err, resp) => {
         expect(err).toEqual('error');
         expect(resp).toEqual(undefined);
@@ -610,7 +610,7 @@ describe('Posts()', function () {
       });
     });
 
-    xit('getById by userId', function (done) {
+    it('getById by userId', function (done) {
       Posts.getById('60f49004784379051298ea37', (err, resp) => {
         expect(err).toEqual('jlfjljf');
         expect(resp).toEqual(undefined);
@@ -618,7 +618,7 @@ describe('Posts()', function () {
       });
     });
 
-    xit('getById by displayName', function (done) {
+    it('getById by displayName', function (done) {
       Posts.getById({ displayName: 'test name'}, (err, resp) => {
         expect(err).toEqual('oijojo');
         expect(resp).toEqual(undefined);
@@ -775,7 +775,7 @@ describe('Posts()', function () {
       });
     });
 
-    xit('searchPosts text for current user', function (done) {
+    it('searchPosts text for current user', function (done) {
       Posts.searchPosts({text : 'updatePost for fixed post' }, (err, resp) => {
         expect(err).toEqual(null);
         let respSize = resp.length;
@@ -825,7 +825,7 @@ describe('Posts()', function () {
       });
     });
 
-    xit('searchPosts for a one keyword text', function (done) {
+    it('searchPosts for a one keyword text', function (done) {
       Posts.searchPosts({text : 'sample' }, (err, resp) => {
         for(let step = 0 ; step<resp.length ;step++){
         expect(resp[step].data.postText).toContain('sample');
@@ -835,7 +835,7 @@ describe('Posts()', function () {
       });
     });
 
-    xit('searchPosts private post for unfollowed user', function (done) {
+    it('searchPosts private post for unfollowed user', function (done) {
       Posts.searchPosts({text : 'Hello this is a post :D'}, (err, resp) => {
         for(let step=0 ; step < resp.length ; step++){
         expect(resp[step].data.id).not.toEqual('612e9ef743556405fd295b8b');
@@ -845,7 +845,7 @@ describe('Posts()', function () {
       });
     });
 
-    xit('searchPosts public post for unfollowed user', function (done) {
+    it('searchPosts public post for unfollowed user', function (done) {
       Posts.searchPosts({text : 'post text sample'}, (err, resp) => {
         for(let step = 0 ; step <resp.length ; step++){
         expect(resp[step].id).not.toEqual('612fc03755ddae066e0df10d');
@@ -855,15 +855,16 @@ describe('Posts()', function () {
       });
     });
 
-    xit('searchPosts for post does not exist', function (done) {
+    it('searchPosts for post does not exist', function (done) {
       Posts.searchPosts({text : ')(*&^%$#@!ASDFG60f49004784379051298ea3?><":}{PO'}, (err, resp) => {
         expect(err).toEqual('Sorry, no matching posts were found.');
+        console.log(resp);
         expect(resp).toEqual(null);
         done();
       });
     });
 
-    xit('searchPosts for special characters', function (done) {
+    it('searchPosts for special characters', function (done) {
       Posts.searchPosts({ text: '%'}, (err, resp) => {
         expect(err).toEqual(null);
         for(let step = 0 ; step < resp.length ; step++){
@@ -874,7 +875,7 @@ describe('Posts()', function () {
       });
     });
 
-    xit('searchPosts for short text', function (done) {
+    it('searchPosts for short text', function (done) {
       Posts.searchPosts({ text: 'on'}, (err, resp) => {
         expect(err).toEqual(null);
         for(let step = 0 ; step < resp.length ; step++){
@@ -884,7 +885,7 @@ describe('Posts()', function () {
       });
     });
 
-    xit('searchPosts for capital text', function (done) {
+    it('searchPosts for capital text', function (done) {
       Posts.searchPosts({ text: 'SAMPLE'}, (err, resp) => {
         expect(err).toEqual(null);
         for(let step = 0 ; step < resp.length ; step++){
@@ -906,7 +907,7 @@ describe('Posts()', function () {
     });
 
     it('getCurrentUserPosts for current user', function (done) {
-      Posts.getCurrentUserPosts({ userId: authManager.currentUser._id}, (err, resp) => {
+      Posts.getCurrentUserPosts({skip:0,limit:2}, (err, resp) => {
         expect(err).toEqual(null);
         for(let step= 1 ; step < resp.length ; step++){
         expect(resp[step].data.userId).toEqual(authManager.currentUser._id);
@@ -915,7 +916,7 @@ describe('Posts()', function () {
       });
     });
 
-    xit('getCurrentUserPosts for current user public posts',function(done){
+    it('getCurrentUserPosts for current user public posts',function(done){
       Posts.getCurrentUserPosts({isPublic : true}, (err,resp) => {
         expect(err).toEqual(null);
         for(let step = 0 ; step < resp.length ; step++){
@@ -926,7 +927,7 @@ describe('Posts()', function () {
       done();
     })
 
-    xit('getCurrentUserPosts for current user private posts',function(done){
+    it('getCurrentUserPosts for current user private posts',function(done){
       Posts.getCurrentUserPosts({isPublic : false}, (err,resp) => {
         expect(err).toEqual(null);
         for(let step = 0 ; step < resp.length ; step++){
@@ -949,7 +950,7 @@ describe('Posts()', function () {
       expect(Posts.deletePost).toBeDefined('deletePost functionality not defined');
     });
 
-    xit('deletePost private post for current user',function(done){
+    it('deletePost private post for current user',function(done){
       var firstPost = '1234';
       Posts.getPosts({postText : 'post',userId : authManager.currentUser._id, isPublic:false} , (err,resp)=>{
         firstPost = resp[1].id;
@@ -974,7 +975,7 @@ describe('Posts()', function () {
     });*/      
     });
 
-    xit('deletePost public post for current user',function(done){
+    it('deletePost public post for current user',function(done){
       var firstPost = '1234';
       Posts.getPosts({userId : authManager.currentUser._id, isPublic:true} , (err,resp)=>{
         firstPost = resp[1].id;
@@ -986,7 +987,7 @@ describe('Posts()', function () {
       });
     });
 
-    xit('deletePost post with image only for current user',function(done){
+    it('deletePost post with image only for current user',function(done){
       var firstPost = '1234';
       Posts.getPosts({postText : 'image',userId : authManager.currentUser._id, isPublic:true} , (err,resp)=>{
         firstPost = resp[1].id;
@@ -998,7 +999,7 @@ describe('Posts()', function () {
       });
     });
 
-    xit('deletePost for unexistent post',function(done){
+    it('deletePost for unexistent post',function(done){
       Posts.deletePost('123454321234543', (err,resp) => {
         expect(err).toEqual('You can only delete your own posts');
         expect(resp).toBeUndefined();
@@ -1006,7 +1007,7 @@ describe('Posts()', function () {
       });
     });
 
-    xit('deletePost for empty post id',function(done){
+    it('deletePost for empty post id',function(done){
       Posts.deletePost('', (err,resp) => {
         expect(err).toEqual('You can only delete your own posts');
         expect(resp).toBeUndefined();
@@ -1014,7 +1015,7 @@ describe('Posts()', function () {
       });
     });
 
-    xit('deletePost for null post id',function(done){
+    it('deletePost for null post id',function(done){
       Posts.deletePost(null, (err,resp) => {
         expect(err).toEqual('You can only delete your own posts');
         expect(resp).toBeUndefined();
@@ -1022,15 +1023,15 @@ describe('Posts()', function () {
       });
     });
 
-    xit('deletePost public post for another user',function(done){
+    it('deletePost public post for another user',function(done){
       Posts.deletePost('612fc03755ddae066e0df10d', (err,resp) => {
         expect(err).toEqual('You can only delete your own posts');
         expect(resp).toBeUndefined();
         done();
       });
     });
-    
-    xit('deletePost private post for another user',function(done){
+
+    it('deletePost private post for another user',function(done){
       var firstPost = '1234';
       Posts.getPosts({userId : '60f49004784379051298ea37', isPublic:false} , (err,resp)=>{
         firstPost = resp[1].id;
