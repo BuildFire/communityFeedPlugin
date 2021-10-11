@@ -1,14 +1,18 @@
 const render = () =>{
+    
     buildfire.auth.getCurrentUser((e, user) =>{
         if(e || !user){
             renderLoginPrompt();
+            buildfire.spinner.show();
             Posts.getPosts({},(err, r) =>{
                 if(err || !r || (r && !r.length)){
+                    buildfire.spinner.hide();
                     renderEmptyPostsState();
                 }
                 else{
                     Posts.getPosts({byFollowedUsers: false, byFollowedPlugins: false},(err, r)=>{
                         if(err || !r || (r && !r.length)) return;
+                        buildfire.spinner.hide();
                         renderPosts(r);
                     })
                 }
@@ -16,16 +20,15 @@ const render = () =>{
         }
         else{
             hideLoginPrompt();
+            buildfire.spinner.show();
             Follows.getUserFollowData((err, r) =>{
-                if(err || !r) return;
-                console.log(r);
                 if((r?.followedPlugins && r.followedPlugins.length > 0) || (r?.followedUsers  && r.followedUsers.length > 0)){
-                    console.log("UHU");
                     renderFollowingContainer(r?.followedUsers ? r.followedUsers : [], r?.followedPlugins ? r.followedPlugins : []);
                 }
                 else document.getElementById("followingContainer").style.display = "none";
             })
             Posts.getPosts({},(err, r) =>{
+                buildfire.spinner.hide()
                 renderPosts(r);
             })
 
@@ -42,6 +45,7 @@ buildfire.appearance.getAppTheme((err, appTheme) => {
       window.appTheme[key] = appTheme.colors[key]
       root.style.setProperty('--' + key, appTheme.colors[key]);
     });
+    root.style.setProperty('--box-shadow',""+appTheme.colors["bodyText"]+"52");
   });
 
 

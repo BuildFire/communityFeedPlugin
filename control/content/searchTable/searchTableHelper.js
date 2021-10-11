@@ -89,20 +89,15 @@ class SearchTableHelper{
 	}
 
 	_fetchNextPage(){
-        console.log("FETCHING NEXT PAGE");
 		if(this.fetchingNextPage) return;
 		this.fetchingNextPage=true;
 		let t=this;
 		this._fetchPageOfData(this.tbody.childNodes.length,()=>{
 			t.fetchingNextPage = false;
-            console.log("FALSE FETCHING NEXT PAGE");
 		});
 	}
 
 	_fetchPageOfData(skip,callback){
-        // this.setTableLoading(true);
-        console.log("this.endReached");
-        console.log(this.endReached);
         if(skip > 0 && this.endReached) return;
         this.skip = skip;
         let options = {
@@ -117,7 +112,6 @@ class SearchTableHelper{
             else if(r && r.length == 0){
                 if(skip == 0) this.noPostsExists();
                 else this.endReached = true;
-                console.log("CHANGING THIS END REACHED TO TRUE");
             }
             else{
                 if(document.getElementById("noPostsExists")) document.getElementById("noPostsExists").style.display = "none";

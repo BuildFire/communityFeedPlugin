@@ -28,17 +28,17 @@ class Posts{
 
 
     static searchPosts = (options,callback) =>{
-        if(!options.filter) return console.error("Malformatted data");
+        if(!options.filter) return callback({code:errorsList.ERROR_400,message:"Malformatted data"});
         buildfire.appData.search({
             filter :{
                 $or:[
                     {$and:[{"_buildfire.index.array1.string1":`isPublic_0`},{"_buildfire.index.array1.string1":`userId_${options.filter}`}]},
                     {$and:[{"_buildfire.index.array1.string1":`isPublic_0`},{"_buildfire.index.array1.string1":`displayName_${options.filter}`}]},
+                    {$and:[{"_buildfire.index.array1.string1":`isPublic_0`},{"_buildfire.index.array1.string1":`pluginId_${options.filter}`}]},
                 ]
             }
-        ,skip: options.skip || 0, limit: options.limit || 50}, Posts.TAG,(err,r) =>{
+        ,skip: options.skip || 0, limit: options.limit || 50, sort:{createdOn: -1}}, Posts.TAG,(err,r) =>{
             if(err || !r) return callback({code:errorsList.ERROR_404,message:"Couldn't find matching data"});
-            console.log(r);
             return callback(null,r);
         });
     }
@@ -83,7 +83,7 @@ class Posts{
                 if(err || !r) return callback({code:errorsList.ERROR_404,message:"Couldn't find matching data"});
                 else if(r.data.userId != currentUser._id) return callback({code: errorsList.ERROR_402, message: "You are not authorized to modify this post"});
                 buildfire.appData.delete(id, Posts.TAG, (err, r) =>{
-                    if(err) return console.error(err);
+                    if(err) return callback({code:"An error Occured",message:err});
                     callback(r);
                 })
             })
@@ -167,10 +167,8 @@ class Posts{
     }
 
     static searchPublicPosts = (options, callback) =>{
-        console.log(options);
         let title = options.displayName;
         if(!title) title = "";
-        console.log(title);
         buildfire.appData.search({
             filter : {
                 $and:[{"_buildfire.index.array1.string1":`isPublic_1`},{"_buildfire.index.array1.string1" : {"$regex":`displayName_(.|\n)*?${title.toLowerCase()}`}}]
@@ -182,8 +180,6 @@ class Posts{
             sort: options?.sort && Object.keys(options.sort).length > 0 ? options.sort :{createdOn : -1}
         }
         , Posts.TAG, (err, r) =>{
-            console.log(err);
-            console.log(r);
             if(err) return callback({code:errorsList.ERROR_404,message:"Couldn't find matching data"})
             else return callback(null, r)
         })
@@ -208,7 +204,7 @@ class Posts{
 
     static getById = (id, callback) =>{
         buildfire.appData.getById(id , Posts.TAG , (e , r) => {
-            if(e || !r) return console.error(e);
+            if(e || !r) return callback({code:errorsList.ERROR_404,message:"Couldn't find post"})
             else return callback(null,r);
         });
     }

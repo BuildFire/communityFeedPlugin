@@ -15,7 +15,7 @@ const createImage = (src, loadInPreviewer = true) => {
   };
 
 
-const renderFollowedUser = (userId, parent) =>{
+const renderFollowedUser = (userId, parent, prepend = false) =>{
     let followingElement = createElement("div","",["followingElement"],`followingElement${userId}`);
     let followingImageContainer = createElement("div","",["followingImageContainer"],`scrollableItem${userId}`);
     followingElement.onclick = () =>{
@@ -29,7 +29,7 @@ const renderFollowedUser = (userId, parent) =>{
             activeState.classList.remove("activeFollowingElement")
             Posts.getPosts({},(err, r) =>{
                 buildfire.spinner.hide();
-                if(err || !r) console.error("Error");
+                if(err || !r) return;
                 else renderPosts(r)
 
             })
@@ -43,7 +43,7 @@ const renderFollowedUser = (userId, parent) =>{
             activeState.classList.add("activeFollowingElement");
             Posts.searchPosts({filter: userId},(err, r) =>{
                 buildfire.spinner.hide();
-                if(err) console.log(err);
+                if(err) return;
                 else renderPosts(r)
             })
         }
@@ -60,9 +60,10 @@ const renderFollowedUser = (userId, parent) =>{
         followingElement.appendChild(followingUsernameContainer)
       
     });
-    parent.appendChild(followingElement)
+    if(prepend) parent.prepend(followingElement);
+    else parent.appendChild(followingElement)
 }
-const renderFollowedPlugin = (pId, parent) =>{
+const renderFollowedPlugin = (pId, parent, prepend = false) =>{
     let followingElement = createElement("div","",["followingElement"],`followingElement${pId}`);
     let followingImageContainer = createElement("div","",["followingImageContainer"],`scrollableItem${pId}`);
     followingElement.onclick = () =>{
@@ -74,9 +75,9 @@ const renderFollowedPlugin = (pId, parent) =>{
         let activeState = element.childNodes[0];
         if(activeState.classList.contains("activeFollowingElement")){
             activeState.classList.remove("activeFollowingElement")
-            Posts.getPosts({},(err, r) =>{
+            Posts.getPosts({filter:pId},(err, r) =>{
                 buildfire.spinner.hide();
-                if(err || !r) console.error("Error");
+                if(err || !r) return;
                 else renderPosts(r)
 
             })
@@ -90,31 +91,27 @@ const renderFollowedPlugin = (pId, parent) =>{
             activeState.classList.add("activeFollowingElement");
             Posts.searchPosts({filter: pId},(err, r) =>{
                 buildfire.spinner.hide();
-                if(err) console.log(err);
+                if(err) return;
                 else renderPosts(r)
             })
         }
     }
-    console.log(pId);
     buildfire.pluginInstance.get(pId, function(error, instance){
-        if (error) {
-            console.error(err);
-        } else if (instance) {
-            console.log(instance);
-            let followingUsernameContainer = createElement("div","",["followingUsernameContainer",`scrollableUsername${userId}`]);
+        if (error) return;
+        else if (instance) {
+            let followingUsernameContainer = createElement("div","",["followingUsernameContainer",`scrollableUsername${pId}`]);
             let username = instance.title;
             username = username.substring(0,10);
             let scrollableChildUsernameText = createElement("h2",username+"..",[]);
             followingUsernameContainer.appendChild(scrollableChildUsernameText);
-            followingElement.appendChild(followingUsernameContainer)
             followingImageContainer.appendChild(createImage(buildfire.imageLib.cropImage(instance.iconUrl, {width:45,height:45}), false));
             followingElement.appendChild(followingImageContainer);
-        }
-        else{
-            console.log("Couldn't find Instance");
+            followingElement.appendChild(followingUsernameContainer)
+            if(prepend) parent.prepend(followingElement);
+            else parent.appendChild(followingElement)
+        
         }
     });
-    parent.appendChild(followingElement)
 }
 
 const showMorePosts = () =>{
@@ -128,6 +125,7 @@ const showMorePosts = () =>{
 const getNewPosts = () =>{
     let postsContainer = document.getElementById("postsContainer");
     let lastPostDate = postsContainer.childNodes[0];
+    if(!lastPostDate) return;
     lastPostDate = lastPostDate.getAttribute("postDateTime");
     Posts.getNewPosts({lastPostDate},(err, r)=>{
         if(err) return;
@@ -138,6 +136,7 @@ const getNewPosts = () =>{
 setInterval(() => {
     // CHECK IF FILTER IS APPLIED IN THE SCROLLABLE HEADER
     let check = true;
+    if(!document.getElementById("followingContainer")) return;
     let container = document.getElementById("followingContainer");
     let list = container.childNodes;
     for(let index in list){
@@ -151,3 +150,30 @@ setInterval(() => {
     if(check) getNewPosts();
     
 }, 3000);
+
+const getPostTime = (time) => {
+    var diffInMs = new Date().getTime() - new Date(time).getTime();
+    const inSecs = 1000;
+    const inMins = inSecs * 60;
+    const inHours = inMins * 60;
+    const inDays = inHours * 24;
+    var finalDiff;
+    if(diffInMs / inHours < 24) return "Today";
+    else if(diffInMs / inHours > 24 &&  diffInMs / inHours < 48) return "Yesterday";
+    else{
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"];
+    const dateObj = new Date(time);
+    const month = monthNames[dateObj.getMonth()];
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    const year = dateObj.getFullYear();
+    const output = day  + ' '+ month  + ' ' + year;
+    return output
+    }
+};
+
+
+const showMoreImages = (postId) => {
+    document.getElementById(`${postId}postRemainingImages`).classList.remove("hidden");
+    document.getElementById(`${postId}ShowMoreContainer`).classList.add("hidden");
+};

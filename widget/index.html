@@ -38,27 +38,33 @@
     let loading = false;
     container.onscroll = () =>{
       let check = true;
-      let following = document.getElementById("followingContainer");
-      let list = following.childNodes;
-      for(let index in list){
-        let item = list[index];
-        let active = item && item.childNodes ? item.childNodes[0] : null;
-        if(active?.classList?.contains("activeFollowingElement")){
-          check = false;
-          break;
-        }
+      if(document.getElementById("followingContainer")){
+        let following = document.getElementById("followingContainer");
+        let list = following.childNodes;
+        for(let index in list){
+          let item = list[index];
+          let active = item && item.childNodes ? item.childNodes[0] : null;
+          if(active?.classList?.contains("activeFollowingElement")){
+            check = false;
+            break;
+          }
+      }
       }
       if(check && !loading){
-        console.log(document.getElementById("postsContainer").childNodes.length);
         if (container.scrollHeight - container.scrollTop - container.clientHeight < 1){
+          buildfire.spinner.show();
           loading = true;
           Posts.getPosts({skip:document.getElementById("postsContainer").childNodes.length},(e, r) =>{
-            console.log(r);
+            buildfire.spinner.hide();
+            lastScroll = 0;
             renderPosts(r,false,(s) =>{
               loading = false;
             });
           })
         }
+
+
+        
       }
     }
   </script>
