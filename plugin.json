@@ -1,8 +1,9 @@
 {
   "author": "BuildFire",
-  "pluginName": "Community Feed",
-  "pluginDescription": "Community feed ",
-  "supportEmail": "devSupport@buildfire.com",
+  "pluginName": "Community Feed [Dev Ali] final version",
+  "pluginDescription": "Community Feed allows users to follow other users and see public posts from followed users in a single feed. Community Feed is a companion plugin to Community Wall.",
+  "pluginIcon": "icon.png",
+  "supportEmail": "support@buildfire.com",
   "control": {
     "content": {
       "enabled": true
