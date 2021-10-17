@@ -148,11 +148,8 @@
 }
 .publicPostTitle{
     font-weight: 550;
-    width: 95%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
     font-size: 16px; 
+    word-wrap: break-word;
     color: var(--bodyText) !important;
 }
 .postText{

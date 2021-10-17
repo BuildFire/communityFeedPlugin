@@ -63,7 +63,7 @@ const createPostHeader = (post, parent) =>{
 }
 
 const createPublicPostHeader = (post, parent) =>{
-  let displayName = post.data.displayName.length > 25 ? post.data.displayName.substring(0,25) : post.data.displayName; 
+  let displayName = post.data.displayName; 
   let postTitle = createElement( "h2", displayName, ["publicPostTitle"], `${post.id}postDisplayName`);
   parent.appendChild(postTitle);
 }
