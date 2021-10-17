@@ -7,14 +7,23 @@ const createPostBody = (post, parent) =>{
        let trimmedPostText = createElement("h3",trimmedText+"... ",["postText","inline"],`${id}postText`);
        let fullPostText = createElement("h3",data.postText,["postText","inline","hidden"],`${id}postTextFull`);
        let readMoreButton = createElement("h3","Read More",["postTextSeeMore","inline","bold"],`${id}postTextSeeMore`);
-       readMoreButton.onclick = () =>{
+       let readLessButton = createElement("h3","  Read Less",["postTextSeeMore","inline","bold","hidden"],`${id}postTextSeeLess`);
+       readLessButton.onclick = () =>{
+         trimmedPostText.classList.remove("hidden");
+         readMoreButton.classList.remove("hidden");         
+         fullPostText.classList.add("hidden")
+         readLessButton.classList.add("hidden");         
+        }
+        readMoreButton.onclick = () =>{
          trimmedPostText.classList.add("hidden");
+         readMoreButton.classList.add("hidden");         
          fullPostText.classList.remove("hidden")
-         readMoreButton.classList.add("hidden");
+         readLessButton.classList.remove("hidden");         
        }
        parent.appendChild(trimmedPostText);
        parent.appendChild(fullPostText);
        parent.appendChild(readMoreButton);
+       parent.appendChild(readLessButton);
       }else {
         let fullPostText = createElement("h3",data.postText,["postText","inline"],`${id}postTextFull`);
         parent.appendChild(fullPostText);
