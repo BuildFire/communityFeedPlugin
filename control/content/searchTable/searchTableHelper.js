@@ -163,7 +163,7 @@ class SearchTableHelper{
 					td=this._create('td',tr,output,classes);
 					td.onclick=()=>{
 						
-						buildfire.history.push(td.parentElement.getAttribute("objid"));
+						window.localStorage.setItem("posttobeedited",td.parentElement.getAttribute("objid"));
 						window.location.href="./components/editPost.html";
 					}
 				}

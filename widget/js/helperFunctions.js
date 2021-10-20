@@ -129,11 +129,16 @@ const showMorePosts = () =>{
 const getNewPosts = () =>{
     let postsContainer = document.getElementById("postsContainer");
     let lastPostDate = postsContainer.childNodes[0];
-    if(!lastPostDate) return;
-    lastPostDate = lastPostDate.getAttribute("postDateTime");
+    if(!lastPostDate) lastPostDate = new Date(1980);
+    else lastPostDate = lastPostDate.getAttribute("postDateTime");
     Posts.getNewPosts({lastPostDate},(err, r)=>{
-        if(err) return;
-        else renderPosts(r, true)
+        if(err || !r || r.length == 0) return;
+        else{
+            console.log("Hiding and deleting");
+            console.log(r);
+            hideEmptyPostsState();
+            renderPosts(r, true)
+        }
     })
 }
 

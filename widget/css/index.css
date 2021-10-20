@@ -35,9 +35,10 @@
 
 #container{
     max-height: 100vh;
-    height: 100vh;
+    height: auto;
     overflow-y: auto;
     background-color: var(--backgroundColor) !important;
+    
     
 }
 /* LOGIN PROMPT START */
@@ -48,6 +49,8 @@
     padding: 1% 5% 3% 4%;
     background-color: var(--backgroundColor) !important;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 10;
 }
 
 

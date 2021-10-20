@@ -3,6 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/index.css"/>
+    <link rel="stylesheet" href="./css/skeleton.css"/>
     <script src="../../../scripts/buildfire.js"></script>
     <script src="../../../scripts/buildfire/components/drawer/drawer.js"></script>
     <script src="./data/Errors.js"></script>
@@ -16,14 +17,152 @@
     <script src="./js/Widget.js"></script>
 </head>
 <body>
+
+
+  <div id="loginPrompt" class="loginPrompt"></div>
+
+
+  <div id="skeletonFollowingContainer" class="skeletonFollowingCotainer hidden">
+    <div class="skeletonFollowingElement">
+      <div class="skeletonFollowingImageContainer">
+        <div class="imgskeleton"></div>
+      </div>
+      <div class="skeletonFollowingUsernameContainer">
+        <div class="skeletonFollowingUsername"></div>
+      </div>
+    </div>
+    <div class="skeletonFollowingElement">
+      <div class="skeletonFollowingImageContainer">
+        <div class="imgskeleton"></div>
+      </div>
+      <div class="skeletonFollowingUsernameContainer">
+        <div class="skeletonFollowingUsername"></div>
+      </div>
+    </div>
+    <div class="skeletonFollowingElement">
+      <div class="skeletonFollowingImageContainer">
+        <div class="imgskeleton"></div>
+      </div>
+      <div class="skeletonFollowingUsernameContainer">
+        <div class="skeletonFollowingUsername"></div>
+      </div>
+    </div>
+    <div class="skeletonFollowingElement">
+      <div class="skeletonFollowingImageContainer">
+        <div class="imgskeleton"></div>
+      </div>
+      <div class="skeletonFollowingUsernameContainer">
+        <div class="skeletonFollowingUsername"></div>
+      </div>
+    </div>
+    <div class="skeletonFollowingElement">
+      <div class="skeletonFollowingImageContainer">
+        <div class="imgskeleton"></div>
+      </div>
+      <div class="skeletonFollowingUsernameContainer">
+        <div class="skeletonFollowingUsername"></div>
+      </div>
+    </div>
+  </div>
+
+
+    
   <div id="container">
-    <div id = "loginPrompt" class="loginPrompt"></div>
     <div id = "followingContainer" class="followingContainer"></div>
     <div id = "emptyPostsContainer"></div>
     <div id = "postsContainer" class="postsContainer"></div>
   </div>
 
+  <div id="authSkeleton">
+
+
+
+
+    <div class="skeletonPost">
+      <div class="skeletonInfoContainer">
+        <div  class="skeletonProfileImageContainer"></div>
+        <div class="skeletonInfo">
+          <div  class="skeletonUsername"></div>
+          <div  class="skeletonPluginTitle"></div>
+        </div>
+      </div>
+      <div class="skeletonLineLarge"></div>
+      <div class="skeletonLineMedium"></div>
+      <div class="skeletonLineSmall"></div>
+    </div>
+    <div class="skeletonPost">
+      <div class="skeletonInfoContainer">
+        <div  class="skeletonProfileImageContainer"></div>
+        <div class="skeletonInfo">
+          <div  class="skeletonUsername"></div>
+          <div  class="skeletonPluginTitle"></div>
+        </div>
+      </div>
+      <div class="skeletonLineLarge"></div>
+      <div class="skeletonLineMedium"></div>
+      <div class="skeletonLineSmall"></div>
+    </div>
+    <div class="skeletonPost">
+      <div class="skeletonInfoContainer">
+        <div  class="skeletonProfileImageContainer"></div>
+        <div class="skeletonInfo">
+          <div  class="skeletonUsername"></div>
+          <div  class="skeletonPluginTitle"></div>
+        </div>
+      </div>
+      <div class="skeletonLineLarge"></div>
+      <div class="skeletonLineMedium"></div>
+      <div class="skeletonLineSmall"></div>
+    </div>
+  </div>
+
+
+
+
+  <div id="unauthSkeleton" class="skeleton" >
+
+
+
+    <div class = "skeletonPostsContainer" >
+      <div class="skeletonPost">
+        <div class="skeletonLineTitle"></div>
+        <div class="skeletonLineLarge"></div>
+        <div class="skeletonLineMedium"></div>
+        <div class="skeletonLineSmall"></div>
+      </div>
+
+    </div>
+    <div class="skeletonPost">
+      <div class="skeletonLineTitle"></div>
+      <div class="skeletonLineLarge"></div>
+      <div class="skeletonLineMedium"></div>
+      <div class="skeletonLineSmall"></div>
+    </div>
+    <div class="skeletonPost">
+      <div class="skeletonLineTitle"></div>
+      <div class="skeletonLineLarge"></div>
+      <div class="skeletonLineMedium"></div>
+      <div class="skeletonLineSmall"></div>
+    </div>
+    <div class="skeletonPost">
+      <div class="skeletonLineTitle"></div>
+      <div class="skeletonLineLarge"></div>
+      <div class="skeletonLineMedium"></div>
+      <div class="skeletonLineSmall"></div>
+    </div>
+    
+  </div>
+
+
+
+
+
+
+
+
+
   <script>
+    buildfire.appearance.titlebar.show(null, (err) => console.log("Showing titlebar"));
     buildfire.auth.onLogin((user) => {
       location.reload();
     }, true);

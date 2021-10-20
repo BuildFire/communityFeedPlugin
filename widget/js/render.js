@@ -1,6 +1,6 @@
 const renderLoginPrompt = () =>{
     // remove following container if it exists
-    document.getElementById("followingContainer").style.display = "none";
+    // document.getElementById("followingContainer").style.display = "none";
     // start rendering login prompt
     let container = document.getElementById("loginPrompt");
     container.classList.add("loginPrompt")
@@ -28,8 +28,14 @@ const renderEmptyPostsState = () =>{
     // adding empty state class
     document.getElementById("emptyPostsContainer").classList.add("emptyState")
 }
+const hideEmptyPostsState = () =>{
+    // removing posts container if it exists
+    document.getElementById("postsContainer").style.display = "block";
+    // adding empty state class
+    document.getElementById("emptyPostsContainer").classList.add("hidden")
+}
 
-const renderFollowingContainer = (followedUsers, followedPlugins, prepend = false) =>{
+const renderFollowingContainer = (followedUsers, followedPlugins, prepend = false, callback) =>{
     // removing login prompt if it exists
     document.getElementById("loginPrompt").style.display = "none";
     // adding following container display
@@ -53,6 +59,9 @@ const renderFollowingContainer = (followedUsers, followedPlugins, prepend = fals
     if(shouldInject){
         document.getElementById("container").prepend(container);
     }
+    setTimeout(() => {        
+        return callback(true);
+    }, 200);
     
 }
 
