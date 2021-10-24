@@ -100,6 +100,7 @@ class Posts{
         })
     }
 
+
     static getPosts = (options , callback) =>{
         let tempArray = [];
         if(!options) tempArray.push({"$json.isPublic" : true});
@@ -113,7 +114,7 @@ class Posts{
             else{
                 Follows.getUserFollowData((err , resp) =>{            
                     resp?.followedUsers && resp.followedUsers.forEach(id => tempArray.push({"_buildfire.index.array1.string1" : `userId_${id}`}));
-                    resp?.followedPlugins && resp.followedPlugins.forEach(id => tempArray.push({"_buildfire.index.array1.string1" : `pluginId_${id}`.toLowerCase()}));
+                    resp?.followedPlugins && resp.followedPlugins.forEach(id => tempArray.push({"_buildfire.index.array1.string1":`pluginId_${id.toLowerCase()}`}));
                     buildfire.appData.search({filter : {$or: tempArray} , skip : options?.skip || 0 , limit : options?.limit || 6 , sort:{createdOn : -1}} , Posts.TAG , (e , r) =>{
                         e ? callback(e , null) : callback(null , r);
                     })                

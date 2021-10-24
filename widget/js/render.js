@@ -84,3 +84,4 @@ const animateEntry = () =>{
         }, 200);
     }
 }
+

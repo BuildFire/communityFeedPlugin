@@ -169,9 +169,7 @@
     buildfire.auth.onLogout(() => {
       location.reload();
     }, false);
-    buildfire.appData.onUpdate((event) => {
-      if(!event.data) location.reload();
-    });
+
 
     let container = document.getElementById("container");
     let loading = false;
@@ -200,12 +198,32 @@
               loading = false;
             });
           })
-        }
-
-
-        
+        } 
       }
     }
-  </script>
+    
+    let onUpdate = buildfire.appData.onUpdate((event) => {
+      console.log(event);
+      if(!event.data){
+        let id = `${event.id}publicPost`;
+        if(document.getElementById(id)){
+          document.getElementById(id).remove();
+        }
+      }
+      if(event.data.isPublic){
+        let id = `${event.id}publicPost`;
+        if(document.getElementById(id)){
+          let parent = document.getElementById(id);
+          parent.childNodes[0].innerHTML = event.data.displayName;
+          parent.childNodes[1].innerHTML = event.data.postText;
+        }
+        else{
+          console.log("new post");
+        }
+      }
+    });
+
+    
+ </script>
 </body>
 </html>

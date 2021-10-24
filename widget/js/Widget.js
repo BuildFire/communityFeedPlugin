@@ -89,17 +89,21 @@ const hideSkeleton = (isLoggedIn, followingContainer = true, posts = true) =>{
     document.getElementById("container").classList.remove("hidden");
     if(!isLoggedIn){
         document.getElementById("unauthSkeleton").classList.add("hidden");
-        if(posts) document.getElementById("emptyPostsContainer").classList.remove("hidden");
-        if(posts) document.getElementById("postsContainer").classList.remove("hidden");
+        if(posts){
+            document.getElementById("emptyPostsContainer").classList.remove("hidden");
+            document.getElementById("postsContainer").classList.remove("hidden");
+        }
     }
     else{
         if(followingContainer){
             document.getElementById("skeletonFollowingContainer").classList.add("hidden");
             document.getElementById("followingContainer").classList.remove("hidden");
         }
-        if(posts) document.getElementById("emptyPostsContainer").classList.remove("hidden");
-        if(posts) document.getElementById("postsContainer").classList.remove("hidden");
-        if(posts) document.getElementById("authSkeleton").classList.add("hidden");
+        if(posts){
+            document.getElementById("emptyPostsContainer").classList.remove("hidden");
+            document.getElementById("postsContainer").classList.remove("hidden");
+            document.getElementById("authSkeleton").classList.add("hidden");
+        }
 
         document.getElementById("container").classList.remove("hidden");
 

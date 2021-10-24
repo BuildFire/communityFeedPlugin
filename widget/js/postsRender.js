@@ -106,11 +106,23 @@ const createUserPostHeader = (post, parent) =>{
               else if(result.text == "See Profile") buildfire.auth.openProfile(userId);
               else if(result.text == "Unfollow") Follows.unfollowUser(userId,(err, r) => {
                 if(err || !r) return;
-                removeFollowingElement(userId);
+                let id = `scrollableItem${userId}`;
+                if(document.getElementById(id)){
+                  let item = document.getElementById(id);
+                  if(item.classList.contains("activeFollowingElement")){
+                    window.location.reload();
+                  }
+                  else renderFollowingContainer(r.data.followedUsers || [], r.data.followedPlugins || [], true);
+                }
+                else renderFollowingContainer(r.data.followedUsers || [], r.data.followedPlugins || [], true);
               });
               else if(result.text == "Follow") Follows.followUser(userId,(err, r) => {
                 if(err || !r) return;
-                renderFollowingContainer(r.data.followedUsers || [] , r.data.followedPlugins || [], true);
+                Posts.getPosts({},(err, r) =>{
+                  if(r && r.length > 0) renderPosts(r);
+                  else renderEmptyPostsState();
+                })
+                renderFollowingContainer(r.data.followedUsers || [], r.data.followedPlugins || [], true);
               });
               buildfire.components.drawer.closeDrawer();
 
