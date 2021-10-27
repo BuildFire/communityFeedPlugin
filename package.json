@@ -1,0 +1,10 @@
+{
+    "name": "communityfeed",
+    "version": "1.0.0",
+    "description": "This Buildfire plugin will show seminar notes.",
+    "main": "index.js",
+    "scripts": {
+      "build": "cd .. && rm -rf communityFeed.zip && zip -r communityFeed.zip communityFeed/ -x \\*node_modules\\* \\*.git\\* \\*test\\* \\*Jasmine-Project\\* \\*.gitignore\\* \\*.md\\* "
+    },
+    "license": "ISC"
+}
