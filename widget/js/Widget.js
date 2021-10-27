@@ -1,3 +1,17 @@
+const refreshFollowingContainer = () =>{
+    Follows.getUserFollowData((err,data) =>{
+        if(data){
+            let expectedLength = data.followedUsers.length + data.followedPlugins.length;
+            console.log(expectedLength);
+            if(expectedLength != lastLength){
+                renderFollowContainer();
+            } 
+        }
+    });
+}
+
+let lastLength = 0;
+
 const render = (callback) =>{
     buildfire.auth.getCurrentUser((e, user) =>{
         if(e || !user){
@@ -23,39 +37,61 @@ const render = (callback) =>{
                     })
                 }
             })
-        }
+        } 
         else{
+            let postCheckInterval = null;
             showSkeleton(true);
             hideLoginPrompt();
             buildfire.spinner.show();
-            Follows.getUserFollowData((err, r) =>{
-                if((r?.followedPlugins && r.followedPlugins.length > 0) || (r?.followedUsers  && r.followedUsers.length > 0)){
-                    setTimeout(() => {            
-                        renderFollowingContainer(r?.followedUsers ? r.followedUsers : [], r?.followedPlugins ? r.followedPlugins : [],false,(finished) =>{
-                            hideSkeleton(true,true, false);           
-                        });
-                    }, 1000);
-                }
-                else document.getElementById("followingContainer").style.display = "none";
-            })
+            renderFollowContainer();
             Posts.getPosts({},(err, r) =>{
                 buildfire.spinner.hide()
                 if(r && r.length > 0){
                     setTimeout(() => {            
                         renderPosts(r);
+                        let interval1 = setInterval(() => {
+                            getNewPosts();
+                        }, 3000);
+                        buildfire.auth.onLogout(() => {
+                            clearInterval(interval1);
+                        }, true);
+
+                        let interval2 = setInterval(() => {
+                            refreshFollowingContainer();
+                        }, 5000);
+                        buildfire.auth.onLogout(() => {
+                            clearInterval(interval2);
+                        }, true);
+
                         hideSkeleton(true,true, true); 
                     }, 1300);
                 }
                 else{
                     renderEmptyPostsState();
                     setTimeout(() => {            
-                        hideSkeleton(true,true, true);            
+                        hideSkeleton(true,true, true);      
                     }, 1500);
                 }
             })
         }
     })
 
+}
+
+
+const renderFollowContainer = () =>{
+    Follows.getUserFollowData((err, r) =>{
+        if((r?.followedPlugins && r.followedPlugins.length > 0) || (r?.followedUsers  && r.followedUsers.length > 0)){
+            lastLength = r.followedPlugins.length + r.followedUsers.length;
+            console.log(lastLength);
+            setTimeout(() => {            
+                renderFollowingContainer(r?.followedUsers ? r.followedUsers : [], r?.followedPlugins ? r.followedPlugins : [],false,(finished) =>{
+                    hideSkeleton(true,true, false);           
+                });
+            }, 1000);
+        }
+        else document.getElementById("followingContainer").style.display = "none";
+    })
 }
 
 buildfire.appearance.getAppTheme((err, appTheme) => {

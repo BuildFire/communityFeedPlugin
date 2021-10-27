@@ -10,10 +10,11 @@ class Posts{
             displayName = post.postTitle || buildfire.getContext().title ||buildfire.getContext().pluginId || "Someone";
         }
         else{
-            if(user.firstName && user.lastName) displayName = user.firstName + " " + user.lastName;
-            else if(user.firstName) displayName = user.firstName;
-            else if(user.displayName && user.displayName != user.email) displayName = user.displayName;
-            else displayName = "Someone";
+            if(user.displayName) displayName = user.displayName;
+            else if(!user.displayName && user.firstName && user.lastName) displayName = user.firstName + " " + user.lastName;
+            else if(!user.displayName && !user.lastName && user.firstName) displayName = user.firstName;
+            else if(!user.displayName && !user.firstName) displayName = "Someone";
+            else displayName = "Someone";            
         }
         return new Post({
             userId: !isPublic ? user._id : "publicPost",

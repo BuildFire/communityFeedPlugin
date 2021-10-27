@@ -168,7 +168,7 @@
     }, true);
     buildfire.auth.onLogout(() => {
       location.reload();
-    }, false);
+    }, true);
 
 
     let container = document.getElementById("container");
@@ -210,16 +210,25 @@
           document.getElementById(id).remove();
         }
       }
-      if(event.data.isPublic){
-        let id = `${event.id}publicPost`;
-        if(document.getElementById(id)){
-          let parent = document.getElementById(id);
-          parent.childNodes[0].innerHTML = event.data.displayName;
-          parent.childNodes[1].innerHTML = event.data.postText;
+      if(event.tag == Posts.TAG && event.data){
+        if(event.data.isPublic){
+          let id = `${event.id}publicPost`;
+          if(document.getElementById(id)){
+            let parent = document.getElementById(id);
+            parent.childNodes[0].innerHTML = event.data.displayName;
+            parent.childNodes[1].innerHTML = event.data.postText;
+          }
+          else{
+            console.log("new post");
+          }
         }
-        else{
-          console.log("new post");
-        }
+      }
+      else if(event.tag == Follows.TAG){
+        buildfire.auth.getCurrentUser((err,currentUser) =>{
+          if(event.data.userId === currentUser?._id){
+            renderFollowContainer();
+          }
+        });
       }
     });
 

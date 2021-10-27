@@ -6,6 +6,10 @@ const createElement = ( elementType, elementInnerHTML, elementClasses, elementId
     return e;
 };
 
+
+let activeElement = false;
+
+
 const createImage = (src, loadInPreviewer = true) => {
     let image = document.createElement("img");
     image.src = src;
@@ -27,8 +31,11 @@ const renderFollowedUser = (userId, parent, prepend = false) =>{
         let activeState = element.childNodes[0];
         if(activeState.classList.contains("activeFollowingElement")){
             activeState.classList.remove("activeFollowingElement")
+            activeElement = false;
             Posts.getPosts({},(err, r) =>{
                 buildfire.spinner.hide();
+                document.getElementById("postsContainer").innerHTML = "";
+                
                 if(err || !r) return;
                 else renderPosts(r)
 
@@ -41,8 +48,10 @@ const renderFollowedUser = (userId, parent, prepend = false) =>{
             }
     
             activeState.classList.add("activeFollowingElement");
+            activeElement = true;
             Posts.searchPosts({filter: userId},(err, r) =>{
                 buildfire.spinner.hide();
+                document.getElementById("postsContainer").innerHTML = "";
                 if(err) return;
                 else renderPosts(r)
             })
@@ -54,10 +63,11 @@ const renderFollowedUser = (userId, parent, prepend = false) =>{
     buildfire.auth.getUserProfile({ userId: userId }, (err, user) => {
         let followingUsernameContainer = createElement("div","",["followingUsernameContainer",`scrollableUsername${userId}`]);
         let username;
-        if(user.firstName && user.lastName) username = user.firstName + " " + user.lastName;
-        else if(user.firstName) username = user.firstName;
-        else if(user.displayName) username = user.displayName;
-        else username = "Someone";
+        if(user.displayName) username = user.displayName;
+        else if(!user.displayName && user.firstName && user.lastName) username = user.firstName + " " + user.lastName;
+        else if(!user.displayName && !user.lastName && user.firstName) username = user.firstName;
+        else if(!user.displayName && !user.firstName) username = "Someone";
+        
         username = username.substring(0,10);
         let scrollableChildUsernameText = createElement("h2",username+"..",[]);
         followingUsernameContainer.appendChild(scrollableChildUsernameText);
@@ -76,11 +86,14 @@ const renderFollowedPlugin = (pId, parent, prepend = false) =>{
         let postsContainer = document.getElementById("postsContainer");
         postsContainer.innerHTML = "";
         buildfire.spinner.show();
+        
         let activeState = element.childNodes[0];
         if(activeState.classList.contains("activeFollowingElement")){
+            activeElement = false;
             activeState.classList.remove("activeFollowingElement")
             Posts.getPosts({filter:pId},(err, r) =>{
                 buildfire.spinner.hide();
+                document.getElementById("postsContainer").innerHTML = "";
                 if(err || !r) return;
                 else renderPosts(r)
 
@@ -91,10 +104,12 @@ const renderFollowedPlugin = (pId, parent, prepend = false) =>{
             for (var i = 0; i < list.length; i++) {
                 list[i].childNodes[0].classList.remove("activeFollowingElement")
             }
-    
+            activeElement = true;
+
             activeState.classList.add("activeFollowingElement");
             Posts.searchPosts({filter: pId},(err, r) =>{
                 buildfire.spinner.hide();
+                document.getElementById("postsContainer").innerHTML = "";
                 if(err) return;
                 else renderPosts(r)
             })
@@ -126,39 +141,39 @@ const showMorePosts = () =>{
     })
 }
 
+let lastPostDate
+
 const getNewPosts = () =>{
+    if(activeElement){
+        console.log("wont be checking due to active element");
+        return;
+    }
     let postsContainer = document.getElementById("postsContainer");
-    let lastPostDate = postsContainer.childNodes[0];
-    if(!lastPostDate) lastPostDate = new Date(1980);
-    else lastPostDate = lastPostDate.getAttribute("postDateTime");
+    if(!lastPostDate && postsContainer){
+        lastPostDate = new Date(postsContainer.childNodes[0].getAttribute("postdatetime"))
+    }
+    else if(!lastPostDate && !postsContainer) new Date(1980);
+    var counter = 0;
     Posts.getNewPosts({lastPostDate},(err, r)=>{
-        if(err || !r || r.length == 0) return;
-        else{
-            console.log("Hiding and deleting");
-            console.log(r);
-            hideEmptyPostsState();
-            renderPosts(r, true)
+        if(counter == 0){
+            counter++;
+            if(err || !r || r.length == 0) return;
+            else{
+                lastPostDate = r[0].data.createdOn;
+                hideEmptyPostsState();
+                renderPosts(r, true)
+            }
         }
     })
 }
 
-setInterval(() => {
-    // CHECK IF FILTER IS APPLIED IN THE SCROLLABLE HEADER
-    let check = true;
-    if(!document.getElementById("followingContainer")) return;
-    let container = document.getElementById("followingContainer");
-    let list = container.childNodes;
-    for(let index in list){
-        let item = list[index];
-        let active = item && item.childNodes ? item.childNodes[0] : null;
-        if(active?.classList?.contains("activeFollowingElement")){
-            check = false;
-            break;
-        }
-    }
-    if(check) getNewPosts();
-    
-}, 3000);
+
+
+
+
+
+
+
 
 const getPostTime = (time) => {
     var diffInMs = new Date().getTime() - new Date(time).getTime();
@@ -186,3 +201,5 @@ const showMoreImages = (postId) => {
     document.getElementById(`${postId}postRemainingImages`).classList.remove("hidden");
     document.getElementById(`${postId}ShowMoreContainer`).classList.add("hidden");
 };
+
+

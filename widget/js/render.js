@@ -60,7 +60,7 @@ const renderFollowingContainer = (followedUsers, followedPlugins, prepend = fals
         document.getElementById("container").prepend(container);
     }
     setTimeout(() => {        
-        return callback(true);
+        if(callback)return callback(true);
     }, 200);
     
 }
