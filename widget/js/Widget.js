@@ -2,7 +2,6 @@ const refreshFollowingContainer = () =>{
     Follows.getUserFollowData((err,data) =>{
         if(data){
             let expectedLength = data.followedUsers.length + data.followedPlugins.length;
-            console.log(expectedLength);
             if(expectedLength != lastLength){
                 renderFollowContainer();
             } 
@@ -83,7 +82,6 @@ const renderFollowContainer = () =>{
     Follows.getUserFollowData((err, r) =>{
         if((r?.followedPlugins && r.followedPlugins.length > 0) || (r?.followedUsers  && r.followedUsers.length > 0)){
             lastLength = r.followedPlugins.length + r.followedUsers.length;
-            console.log(lastLength);
             setTimeout(() => {            
                 renderFollowingContainer(r?.followedUsers ? r.followedUsers : [], r?.followedPlugins ? r.followedPlugins : [],false,(finished) =>{
                     hideSkeleton(true,true, false);           

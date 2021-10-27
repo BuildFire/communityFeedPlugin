@@ -162,7 +162,7 @@
 
 
   <script>
-    buildfire.appearance.titlebar.show(null, (err) => console.log("Showing titlebar"));
+    buildfire.appearance.titlebar.show(null, (err) =>{return});
     buildfire.auth.onLogin((user) => {
       location.reload();
     }, true);
@@ -203,7 +203,6 @@
     }
     
     let onUpdate = buildfire.appData.onUpdate((event) => {
-      console.log(event);
       if(!event.data){
         let id = `${event.id}publicPost`;
         if(document.getElementById(id)){
@@ -217,9 +216,6 @@
             let parent = document.getElementById(id);
             parent.childNodes[0].innerHTML = event.data.displayName;
             parent.childNodes[1].innerHTML = event.data.postText;
-          }
-          else{
-            console.log("new post");
           }
         }
       }
