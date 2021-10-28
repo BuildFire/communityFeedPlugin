@@ -92,42 +92,48 @@ const createUserPostHeader = (post, parent) =>{
   username.onclick = () =>{
     buildfire.spinner.show();
     let userId = post.data.userId;
-    Follows.isFollowingUser(userId , (err , r) =>{
-      buildfire.spinner.hide();
-      buildfire.components.drawer.open(
-          {
-              enableFilter:false,
-              listItems: [
-                  {text:'See Profile'},
-                  {text: r ? 'Unfollow' : 'Follow'}                                        
-          ]
-          },(err, result) => {
-              if (err) return;
-              else if(result.text == "See Profile") buildfire.auth.openProfile(userId);
-              else if(result.text == "Unfollow") Follows.unfollowUser(userId,(err, r) => {
-                if(err || !r) return;
-                let id = `scrollableItem${userId}`;
-                if(document.getElementById(id)){
-                  let item = document.getElementById(id);
-                  if(item.classList.contains("activeFollowingElement")){
-                    window.location.reload();
-                  }
-                  else renderFollowingContainer(r.data.followedUsers || [], r.data.followedPlugins || [], true);
-                }
-                else renderFollowingContainer(r.data.followedUsers || [], r.data.followedPlugins || [], true);
-              });
-              else if(result.text == "Follow") Follows.followUser(userId,(err, r) => {
-                if(err || !r) return;
-                Posts.getPosts({},(err, r) =>{
-                  if(r && r.length > 0) renderPosts(r);
-                  else renderEmptyPostsState();
-                })
-                renderFollowingContainer(r.data.followedUsers || [], r.data.followedPlugins || [], true);
-              });
-              buildfire.components.drawer.closeDrawer();
-
-          }
-      );
+    buildfire.auth.getCurrentUser((err,currentUser) =>{
+      if(currentUser && currentUser._id == post.data.userId) return;
+      else{
+        Follows.isFollowingUser(userId , (err , r) =>{
+          buildfire.spinner.hide();
+          buildfire.components.drawer.open(
+              {
+                  enableFilter:false,
+                  listItems: [
+                      {text:'See Profile'},
+                      {text: r ? 'Unfollow' : 'Follow'}                                        
+              ]
+              },(err, result) => {
+                  if (err) return;
+                  else if(result.text == "See Profile") buildfire.auth.openProfile(userId);
+                  else if(result.text == "Unfollow") Follows.unfollowUser(userId,(err, r) => {
+                    if(err || !r) return;
+                    let id = `scrollableItem${userId}`;
+                    if(document.getElementById(id)){
+                      let item = document.getElementById(id);
+                      if(item.classList.contains("activeFollowingElement")){
+                        window.location.reload();
+                      }
+                      else renderFollowingContainer(r.data.followedUsers || [], r.data.followedPlugins || [], true);
+                    }
+                    else renderFollowingContainer(r.data.followedUsers || [], r.data.followedPlugins || [], true);
+                  });
+                  else if(result.text == "Follow") Follows.followUser(userId,(err, r) => {
+                    if(err || !r) return;
+                    Posts.getPosts({},(err, r) =>{
+                      if(r && r.length > 0) renderPosts(r);
+                      else renderEmptyPostsState();
+                    })
+                    renderFollowingContainer(r.data.followedUsers || [], r.data.followedPlugins || [], true);
+                  });
+                  buildfire.components.drawer.closeDrawer();
+    
+              }
+          );
+  
+      })
+      }
   })
   }
   let postPluginSectionInfo = createElement("div", "", ["postPluginSectionInfo",]);
