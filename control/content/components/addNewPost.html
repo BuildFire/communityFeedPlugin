@@ -11,20 +11,65 @@
     <script src="../../../widget/dataAccess/Posts.js"></script>
 </head>
 <body>
+    
     <div class="titleContainer">
         <div class="subtitle">Posts / New Public Post</div>
         <div class="blackline"></div>
         <div class="title">Public Posts</div>
     </div>
 
-    <div class="form">
-        <div class="row">
-            Title* <input placeholder="Enter Title" type="text" id="title">
+    <div class="grid">
+        <div class="left">
+            <div class="labelContainer">
+                <h3>Title*</h3>
+            </div>
         </div>
-        <div class="row">
-            Body*  <textarea placeholder="Enter Description" id="description" cols="30" rows="10"></textarea>
+        <div class="right">
+            <div class="inputContainer" >
+                <div class="input">
+                    <input placeholder="Enter Title" type="text" id="title">
+                </div>
+            </div>
         </div>
     </div>
+    <div class="grid xs" id="titleErrors" style="display: none;">
+        <div class="left"></div>
+        <div class="right">
+            <div class="inputContainer" >
+                <div class="errors">
+                    <h3 id="titleLengthError" style="display: none;">Title cannot be more than 100 characters</h3>
+                    <h3 id="titleEmptyError" style="display: none;">Title cannot be empty</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="grid" style="align-items: flex-start;">
+        <div class="left">
+            <div class="labelContainer">
+                <h3>Description*</h3>
+            </div>
+        </div>
+        <div class="right">
+            <div class="inputContainer" >
+                <div class="input">
+                    <textarea placeholder="Enter Description" id="description" cols="30" rows="8"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="grid xs" id="descErrors"  style="display: none;">
+        <div class="left"></div>
+        <div class="right">
+            <div class="inputContainer" >
+                <div class="errors">
+                    <h3 id="descLengthError" style="display: none;">Description cannot be more than 100 characters</h3>
+                    <h3 id="descEmptyError" style="display: none;">Description cannot be empty</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
     <div class="bottomContainer">
         <button class="cancel" onclick="goBack()">Cancel</button>
@@ -32,25 +77,73 @@
     </div>
 
     <script>
-        const addPost = () =>{
+
+        const validateForm = (callback) =>{
             let title = document.getElementById("title");
             let description = document.getElementById("description");
-            title.classList.remove("error");
-            description.classList.remove("error");
+            if(title.value.length == 0 || title.value.replace(/\s/g, "").length == 0){
+                showError("title", "empty");
+                return callback(true);
+            }
+            else if(title.value.length > 100){
+                showError("title", "length");
+                return callback(true);
+            }
+            else if(description.value.length == 0 || description.value.replace(/\s/g, "").length == 0){
+                showError("desc", "empty");
+                return callback(true);
+            }
+            else if(description.value.length > 100){
+                showError("desc", "length");
+                return callback(true);
+            }
+            return callback(null, true)
+        }
 
-            if(!title.value.replace(/\s/g, "")){
-                title.classList.add("error")
+        const clearAllErrors = () =>{
+            document.getElementById("titleErrors").style.display = "none";
+            document.getElementById("titleLengthError").style.display = "none";
+            document.getElementById("titleEmptyError").style.display = "none";
+            document.getElementById("descErrors").style.display = "none";
+            document.getElementById("descLengthError").style.display = "none";
+            document.getElementById("descEmptyError").style.display = "none";
+            document.getElementById("title").style.borderColor = "#e5e5e5";
+            document.getElementById("description").style.borderColor = "#e5e5e5";
+        }
+
+        const showError = (input, type) =>{
+            if(input == "title" && type == "length"){
+                document.getElementById("titleErrors").style.display = "grid";
+                document.getElementById("titleLengthError").style.display = "block";
+                document.getElementById("title").style.borderColor = "red";
             }
-            else if(!description.value.replace(/\s/g, "")){                
-                description.classList.add("error")
+            else if(input == "title" && type == "empty"){
+                document.getElementById("titleErrors").style.display = "grid";
+                document.getElementById("titleEmptyError").style.display = "block";
+                document.getElementById("title").style.borderColor = "red";
             }
-            else{
+            else if(input == "desc" && type == "length"){
+                document.getElementById("descErrors").style.display = "grid";
+                document.getElementById("descLengthError").style.display = "block";
+                document.getElementById("description").style.borderColor = "red";
+            }
+            else if(input == "desc" && type == "empty"){
+                document.getElementById("descErrors").style.display = "grid";
+                document.getElementById("descEmptyError").style.display = "block";
+                document.getElementById("description").style.borderColor = "red";
+            }
+        }
+
+        const addPost = () =>{
+            clearAllErrors();
+            validateForm((err,r) =>{
+                if(err) return;
                 Posts.addPublicPost({postTitle:title.value,postText:description.value},(err,r) =>{
                     if(r){
                         window.location.href = "../index.html"
                     }   
                 })
-            }
+            });
         }
 
         const goBack = () =>{

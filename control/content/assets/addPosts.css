@@ -1,59 +1,50 @@
 
-.titleContainer{
-    width: 100%;
-}
-.titleContainer > .blackline{
-    width: 50px;
-    height: 3px;
-    border-radius: 5px;
-    background-color: black;
-    margin-bottom: 10px;
+/* ------------------------- */
+.labelContainer > h3{
+    font-size: 14px;
 }
 
-.titleContainer > .title{
-    font-size: 21px;
-    font-weight: 800;
-    color: black;
+.grid{
+    margin-top: 2%;
+    display: grid;
+    grid-auto-columns: 1fr 4fr;
+    grid-auto-flow: column;
+    align-items: center;
 }
-
-.titleContainer > .subtitle{
-    font-size: 16px;
-    margin-bottom: 5px;
-    overflow-x: hidden;
-}
-.form{
-    margin-top: 5%;
-}
-.row{
-    margin-left: 0px !important;
-    margin-right: 0px !important;
-    margin-bottom: 2%;
-}
-
+ 
 input , textarea{
     padding: 1%;
     font-size: 15px;
     border: 1px solid #e5e5e5;
-}
-textarea{
     resize: none;
-}
-.row > input, .row>textarea{
     float: right;
-    width: 80%;
+    margin-right: 2% !important;
+    width: 98%;
+    border-radius: 3px;
 }
 
+.xs{
+    height: 30px;
+    margin-top: -2%;
+}
+.errors>*{
+    font-size: 13px;
+    color: red;
+}
 .bottomContainer{
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
     width: 100%;
     display: flex;
     justify-content: flex-end;
-    height: 47px;
-    margin-bottom: 25px;
-
+    align-items: center;
+    height: 45px;
 }
 .bottomContainer > button{
     margin-right: 25px;
     width: 12%;
+    height: 100%;
     border-radius: 5px;
 }
 .bottomContainer>.cancel{
@@ -61,8 +52,10 @@ textarea{
     color: #00000085;
     border: 1px solid #E5E5E5;
 }
-
-.error{
-    border-color: red;
+.blackline{
+    width: 50px;
+    height: 3px;
+    border-radius: 5px;
+    background-color: black;
+    margin-bottom: 10px;
 }
-
