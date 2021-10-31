@@ -90,11 +90,11 @@ const createUserPostHeader = (post, parent) =>{
   let username = createElement("h2", post.data.displayName, ["username"], `${postId}displayName`);
   username.style.cursor = "pointer";
   username.onclick = () =>{
-    buildfire.spinner.show();
     let userId = post.data.userId;
     buildfire.auth.getCurrentUser((err,currentUser) =>{
       if(currentUser && currentUser._id == post.data.userId) return;
       else{
+        buildfire.spinner.show();
         Follows.isFollowingUser(userId , (err , r) =>{
           buildfire.spinner.hide();
           buildfire.components.drawer.open(

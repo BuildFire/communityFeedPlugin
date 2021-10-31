@@ -143,11 +143,11 @@
     background: var(--backgroundColor) !important;
     box-shadow:  0 0 2px 0  var(--box-shadow), 0 2px 4px 0  var(--box-shadow);
     border-radius: 4px;
-    transform: translateX(100%);
-    transition: transform .3s;
+    animation: fadein 1s; 
 }
-.this-should-from-left {
-    transform: translateX(0%);
+@keyframes fadein {
+    from { opacity: 0.2; }
+    to   { opacity: 1; }
 }
 .publicPostTitle{
     font-weight: 550;
