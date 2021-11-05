@@ -30,7 +30,7 @@
             <div class="right">
                 <div class="inputContainer" >
                     <div class="input">
-                        <input placeholder="Enter Title" type="text" id="title">
+                        <input placeholder="Enter Title" type="text" id="title" oninput="clearAllErrors(true, false)">
                     </div>
                 </div>
             </div>
@@ -55,7 +55,7 @@
             <div class="right">
                 <div class="inputContainer" >
                     <div class="input">
-                        <textarea placeholder="Enter Description" id="description" cols="30" rows="8"></textarea>
+                        <textarea placeholder="Enter Description" id="description" cols="30" rows="8" oninput="clearAllErrors(false,true)"></textarea>
                     </div>
                 </div>
             </div>

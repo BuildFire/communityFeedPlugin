@@ -21,15 +21,19 @@
             return callback(null, true)
         }
 
-        const clearAllErrors = () =>{
-            document.getElementById("titleErrors").style.display = "none";
-            document.getElementById("titleLengthError").style.display = "none";
-            document.getElementById("titleEmptyError").style.display = "none";
-            document.getElementById("descErrors").style.display = "none";
-            document.getElementById("descLengthError").style.display = "none";
-            document.getElementById("descEmptyError").style.display = "none";
-            document.getElementById("title").style.borderColor = "#e5e5e5";
-            document.getElementById("description").style.borderColor = "#e5e5e5";
+        const clearAllErrors = (title = true, desc = true) =>{
+            if(title){
+                document.getElementById("titleErrors").style.display = "none";
+                document.getElementById("titleLengthError").style.display = "none";
+                document.getElementById("titleEmptyError").style.display = "none";
+                document.getElementById("title").style.borderColor = "#e5e5e5";
+            }
+            if(desc){
+                document.getElementById("descErrors").style.display = "none";
+                document.getElementById("descLengthError").style.display = "none";
+                document.getElementById("descEmptyError").style.display = "none";
+                document.getElementById("description").style.borderColor = "#e5e5e5";
+            }
         }
 
         const showError = (input, type) =>{
@@ -54,3 +58,5 @@
                 document.getElementById("description").style.borderColor = "red";
             }
         }
+
+

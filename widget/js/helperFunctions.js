@@ -144,10 +144,7 @@ const showMorePosts = () =>{
 let lastPostDate
 
 const getNewPosts = () =>{
-    if(activeElement){
-        console.log("wont be checking due to active element");
-        return;
-    }
+    if(activeElement) return;
     let postsContainer = document.getElementById("postsContainer");
     if(!lastPostDate && postsContainer){
         lastPostDate = new Date(postsContainer.childNodes[0].getAttribute("postdatetime"))
