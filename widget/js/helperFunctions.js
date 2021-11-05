@@ -156,6 +156,7 @@ const getNewPosts = () =>{
             counter++;
             if(err || !r || r.length == 0) return;
             else{
+                console.log("got new things that should be rendered");
                 lastPostDate = r[0].data.createdOn;
                 hideEmptyPostsState();
                 renderPosts(r, true)

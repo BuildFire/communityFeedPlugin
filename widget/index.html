@@ -207,6 +207,9 @@
         let id = `${event.id}publicPost`;
         if(document.getElementById(id)){
           document.getElementById(id).remove();
+          if(document.getElementById("postsContainer").childNodes.length == 0) {
+            renderEmptyPostsState();
+          }
         }
       }
       if(event.tag == Posts.TAG && event.data){

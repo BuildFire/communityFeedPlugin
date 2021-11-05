@@ -21,6 +21,19 @@ const render = (callback) =>{
                 if(err || !r || (r && !r.length)){
                     buildfire.spinner.hide();
                     renderEmptyPostsState();
+                    let interval1 = setInterval(() => {
+                        getNewPosts();
+                    }, 3000);
+                    let interval2 = setInterval(() => {
+                        refreshFollowingContainer();
+                    }, 5000);
+                    buildfire.auth.onLogout(() => {
+                        clearInterval(interval1);
+                    }, true);
+        
+                    buildfire.auth.onLogout(() => {
+                        clearInterval(interval2);
+                    }, true);
                     setTimeout(() => {            
                         hideSkeleton(false,false);            
                     }, 1500);
@@ -32,10 +45,24 @@ const render = (callback) =>{
                         setTimeout(() => {         
                             hideSkeleton(false,true);                           
                             renderPosts(r);
+                            let interval1 = setInterval(() => {
+                                getNewPosts();
+                            }, 3000);
+                            let interval2 = setInterval(() => {
+                                refreshFollowingContainer();
+                            }, 5000);
+                            buildfire.auth.onLogout(() => {
+                                clearInterval(interval1);
+                            }, true);
+                
+                            buildfire.auth.onLogout(() => {
+                                clearInterval(interval2);
+                            }, true);
                         }, 1500);
                     })
                 }
-            })
+            });
+
         } 
         else{
             let postCheckInterval = null;
@@ -51,13 +78,13 @@ const render = (callback) =>{
                         let interval1 = setInterval(() => {
                             getNewPosts();
                         }, 3000);
+                        let interval2 = setInterval(() => {
+                            refreshFollowingContainer();
+                        }, 5000);
                         buildfire.auth.onLogout(() => {
                             clearInterval(interval1);
                         }, true);
 
-                        let interval2 = setInterval(() => {
-                            refreshFollowingContainer();
-                        }, 5000);
                         buildfire.auth.onLogout(() => {
                             clearInterval(interval2);
                         }, true);
@@ -67,6 +94,19 @@ const render = (callback) =>{
                 }
                 else{
                     renderEmptyPostsState();
+                    let interval1 = setInterval(() => {
+                        getNewPosts();
+                    }, 3000);
+                    let interval2 = setInterval(() => {
+                        refreshFollowingContainer();
+                    }, 5000);
+                    buildfire.auth.onLogout(() => {
+                        clearInterval(interval1);
+                    }, true);
+
+                    buildfire.auth.onLogout(() => {
+                        clearInterval(interval2);
+                    }, true);
                     setTimeout(() => {            
                         hideSkeleton(true,true, true);      
                     }, 1500);
