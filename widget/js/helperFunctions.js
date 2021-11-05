@@ -139,7 +139,7 @@ const renderFollowedPlugin = (pId, parent, prepend = false) =>{
             username = username.substring(0,10);
             let scrollableChildUsernameText = createElement("h2",username+"..",[]);
             followingUsernameContainer.appendChild(scrollableChildUsernameText);
-            // followingImageContainer.appendChild(createImage(instance.iconUrl, false));
+            followingImageContainer.appendChild(createImage(instance.iconUrl, false));
             followingElement.appendChild(followingImageContainer);
             followingElement.appendChild(followingUsernameContainer)
             if(prepend) parent.prepend(followingElement);
@@ -167,7 +167,6 @@ const getNewPosts = () =>{
     }
     else if(!lastPostDate && (!postsContainer || (postsContainer && postsContainer.childNodes.length == 0)) ) lastPostDate =  new Date(1980);
     var counter = 0;
-    console.log(lastPostDate);
     Posts.getNewPosts({lastPostDate},(err, r)=>{
         if(counter == 0){
             counter++;
