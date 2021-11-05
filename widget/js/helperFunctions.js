@@ -146,7 +146,7 @@ let lastPostDate
 const getNewPosts = () =>{
     if(activeElement) return;
     let postsContainer = document.getElementById("postsContainer");
-    if(!lastPostDate && postsContainer){
+    if(!lastPostDate && postsContainer && postsContainer.childNodes.length > 0){
         lastPostDate = new Date(postsContainer.childNodes[0].getAttribute("postdatetime"))
     }
     else if(!lastPostDate && !postsContainer) new Date(1980);
