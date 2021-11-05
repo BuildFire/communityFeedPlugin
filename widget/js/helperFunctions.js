@@ -10,10 +10,25 @@ const createElement = ( elementType, elementInnerHTML, elementClasses, elementId
 let activeElement = false;
 
 
-const createImage = (src, loadInPreviewer = true) => {
+const createImage = (src, loadInPreviewer = true, isPostImage = false) => {
     let image = document.createElement("img");
     image.src = src;
-    image.style.cursor = "pointer"
+    if(!isPostImage){
+        if (image.complete) {
+            image.src =  buildfire.imageLib.cropImage(src, { width: 45, height: 45 });
+        } else {
+            image.onload = () => {
+                    if (image.src.indexOf('image.png') < 0) {
+                        image.src =  buildfire.imageLib.cropImage(src, { width: 45, height: 45 });
+                    }
+                }
+            image.onerror = () => {
+                    image.src =  "./assets/image.png"
+            };
+        }
+    }
+
+    image.style.cursor = "pointer";
     if (loadInPreviewer) image.onclick = () => buildfire.imagePreviewer.show({ images: [image.src] }, () => console.log("Image opened"));  
     return image;
   };
@@ -57,7 +72,8 @@ const renderFollowedUser = (userId, parent, prepend = false) =>{
             })
         }
     }
-    let userImage = createImage(buildfire.imageLib.cropImage(buildfire.auth.getUserPictureUrl({userId: userId}),{width:45,height:45}), false);
+    let userPictureUrl = buildfire.auth.getUserPictureUrl({userId: userId});
+    let userImage = createImage(userPictureUrl, false);
     followingImageContainer.appendChild(userImage);
     followingElement.appendChild(followingImageContainer);
     buildfire.auth.getUserProfile({ userId: userId }, (err, user) => {
@@ -123,7 +139,7 @@ const renderFollowedPlugin = (pId, parent, prepend = false) =>{
             username = username.substring(0,10);
             let scrollableChildUsernameText = createElement("h2",username+"..",[]);
             followingUsernameContainer.appendChild(scrollableChildUsernameText);
-            followingImageContainer.appendChild(createImage(buildfire.imageLib.cropImage(instance.iconUrl, {width:45,height:45}), false));
+            // followingImageContainer.appendChild(createImage(instance.iconUrl, false));
             followingElement.appendChild(followingImageContainer);
             followingElement.appendChild(followingUsernameContainer)
             if(prepend) parent.prepend(followingElement);
@@ -149,13 +165,15 @@ const getNewPosts = () =>{
     if(!lastPostDate && postsContainer && postsContainer.childNodes.length > 0){
         lastPostDate = new Date(postsContainer.childNodes[0].getAttribute("postdatetime"))
     }
-    else if(!lastPostDate && !postsContainer) new Date(1980);
+    else if(!lastPostDate && (!postsContainer || (postsContainer && postsContainer.childNodes.length == 0)) ) lastPostDate =  new Date(1980);
     var counter = 0;
+    console.log(lastPostDate);
     Posts.getNewPosts({lastPostDate},(err, r)=>{
         if(counter == 0){
             counter++;
             if(err || !r || r.length == 0) return;
             else{
+                console.log("data");
                 lastPostDate = r[0].data.createdOn;
                 hideEmptyPostsState();
                 renderPosts(r, true)

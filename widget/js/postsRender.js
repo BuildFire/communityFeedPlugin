@@ -33,12 +33,12 @@ const createPostBody = (post, parent) =>{
     let postImagesContainer = createElement("div","",["postImagesContainer"],`${id}postImagesContainer`);
     if (data.postImages.length > 3) {
       for (let i = 0; i < 3; i++) {
-        let image = createImage(buildfire.imageLib.resizeImage(data.postImages[i],{ size: "half_width", aspect: "16:9" }));
+        let image = createImage(data.postImages[i], true, true);
         postImagesContainer.appendChild(image);
       }
       let remainingImages = createElement("div","",["remainingImages","hidden"],`${id}postRemainingImages`);
       for (let i = 3; i < data.postImages.length; i++) {
-        let image = createImage(buildfire.imageLib.resizeImage(data.postImages[i],{ size: "half_width", aspect: "16:9" }));
+        let image = createImage(data.postImages[i], true, true);
         remainingImages.appendChild(image);
       }
       postImagesContainer.appendChild(remainingImages);
@@ -49,7 +49,7 @@ const createPostBody = (post, parent) =>{
       postImagesContainer.appendChild(seeMoreButton);
     } else {
       for (let i = 0; i < data.postImages.length; i++) {
-        let image = createImage(data.postImages[i]);
+        let image = createImage(data.postImages[i], true, true);
         postImagesContainer.appendChild(image);
       }
     }
@@ -79,10 +79,7 @@ const createUserPostHeader = (post, parent) =>{
   let postId = post.id;
   let profileSection = createElement( "div", "", ["profileSection"], `${postId}ProfileSection`);
   let profileImageContainer = createElement( "div", "", ["profileImageContainer"], `${postId}profileImageContainer`);
-  let userPictureUrl = buildfire.imageLib.cropImage(
-    buildfire.auth.getUserPictureUrl({userId: post.data.userId}),
-    {width:45,height:45}
-  );
+  let userPictureUrl = buildfire.auth.getUserPictureUrl({userId: post.data.userId});
 
   let userPicture = createImage(userPictureUrl, false);
   profileImageContainer.appendChild(userPicture);
