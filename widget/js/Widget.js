@@ -29,9 +29,6 @@ const render = (callback) =>{
                     }, 5000);
                     buildfire.auth.onLogout(() => {
                         clearInterval(interval1);
-                    }, true);
-        
-                    buildfire.auth.onLogout(() => {
                         clearInterval(interval2);
                     }, true);
                     setTimeout(() => {            
@@ -53,9 +50,6 @@ const render = (callback) =>{
                             }, 5000);
                             buildfire.auth.onLogout(() => {
                                 clearInterval(interval1);
-                            }, true);
-                
-                            buildfire.auth.onLogout(() => {
                                 clearInterval(interval2);
                             }, true);
                         }, 1500);
@@ -83,9 +77,6 @@ const render = (callback) =>{
                         }, 5000);
                         buildfire.auth.onLogout(() => {
                             clearInterval(interval1);
-                        }, true);
-
-                        buildfire.auth.onLogout(() => {
                             clearInterval(interval2);
                         }, true);
 
@@ -102,11 +93,9 @@ const render = (callback) =>{
                     }, 5000);
                     buildfire.auth.onLogout(() => {
                         clearInterval(interval1);
-                    }, true);
-
-                    buildfire.auth.onLogout(() => {
                         clearInterval(interval2);
                     }, true);
+
                     setTimeout(() => {            
                         hideSkeleton(true,true, true);      
                     }, 1500);
