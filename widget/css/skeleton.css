@@ -1,0 +1,172 @@
+:root {
+    --backgroundColor: #971717;
+    --bodyText: #5F5F5F;
+    --dangerTheme: #FF1200;
+    --defaultTheme: #0B6637;
+    --footerMenuBackgroundColor: #FFFFFF;
+    --footerMenuIconColor: #45CAE6;
+    --headerText: #212121;
+    --icons: #2CA265;
+    --infoTheme: #69D5FF;
+    --primaryTheme: #31A3EE;
+    --successTheme: #2CA265;
+    --titleBar: #2177AE;
+    --titleBarTextAndIcons: #FFFFFF;
+    --warningTheme: #FABA41;
+    --box-shadow: #fff;
+}
+*{
+    margin: 0;
+    padding: 0;
+    font: inherit;
+    font-family: Helvetica, Sans-Serif, Arial;
+}
+.skeletonPostsContainer{
+    margin-top: 16px;
+    height: auto;
+}
+
+.skeletonPost{
+    margin: 8px;
+    padding: 16px;
+    background: var(--backgroundColor) !important;
+    box-shadow:  0 0 2px 0  var(--box-shadow), 0 2px 4px 0  var(--box-shadow);
+    border-radius: 4px;
+}
+
+
+@keyframes skeletonLoading{
+    0%{
+        background-color: hsl(200, 20%, 70%);
+    }
+    100%{
+        background-color: hsl(200, 20%, 95%);
+    }
+}
+
+.skeletonInfoContainer{
+    display: flex;
+}
+
+.skeletonProfileContainer{
+    display: flex;
+}
+.skeletonInfo{
+    width: 80%;
+    margin-left: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: -15px;
+}
+.skeletonLineTitle{
+    width: 54%;
+    background-color: #E5E5E5;
+    height: 15px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    animation: skeletonLoading 1s linear infinite alternate;
+}
+.skeletonPluginTitle{
+    width: 25%;
+    background-color: #E5E5E5;
+    height: 10px;
+    border-radius: 15px;
+    margin-bottom: 5px;
+    animation: skeletonLoading 1s linear infinite alternate;
+}
+.skeletonFollowingUsername{
+    width: 45px;
+    background-color: #E5E5E5;
+    height: 8px;
+    border-radius: 15px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    animation: skeletonLoading 1s linear infinite alternate;
+}
+.skeletonUsername{
+    width: 15%;
+    background-color: #E5E5E5;
+    height: 15px;
+    border-radius: 15px;
+    margin-bottom: 5px;
+    animation: skeletonLoading 1s linear infinite alternate;
+}
+.skeletonLineSmall{
+    width: 54%;
+    background-color: #E5E5E5;
+    height: 15px;
+    border-radius: 15px;
+    margin-bottom: 5px;
+    animation: skeletonLoading 1s linear infinite alternate;
+}
+.skeletonLineMedium{
+    width: 70%;
+    background-color: #E5E5E5;
+    height: 15px;
+    border-radius: 15px;
+    margin-bottom: 5px;
+    animation: skeletonLoading 1s linear infinite alternate;
+}
+.skeletonLineLarge{
+    width: 100%;
+    background-color: #E5E5E5;
+    height: 15px;
+    border-radius: 15px;
+    margin-bottom: 5px;
+    animation: skeletonLoading 1s linear infinite alternate;
+}
+
+.skeletonProfileImageContainer{
+    width: 45px;
+    height: 45px;
+    background-color: #E5E5E5;
+    border-radius: 45px;
+    margin-bottom: 15px;
+    animation: skeletonLoading 1s linear infinite alternate;
+}
+
+.skeletonFollowingCotainer{
+    margin-top: 16px;
+	width: 100%;
+    height: auto;
+	display: flex;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.skeletonFollowingElement{
+    width: 20%;
+    height: 80px;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.skeletonFollowingUsernameContainer{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: -10px;
+}
+
+.skeletonFollowingImageContainer {
+    width: 44px;
+    height: 44px;
+    margin-top: 1vh;
+    margin-left: 1.5vh;
+    border-radius: 75px;
+    animation: skeletonLoading 1s linear infinite alternate;
+    margin-bottom: 15px;
+}
+
+.skeletonFollowingImageContainer>.imgskeleton{
+    width: 100%;
+    height: 100%;
+    border-radius: 150px;
+}

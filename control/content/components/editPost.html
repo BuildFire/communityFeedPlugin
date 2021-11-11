@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../../../../../../scripts/buildfire.js"></script>
+    <script src="../../../widget/data/Errors.js"></script>
+    <script src="../../../widget/data/Post.js"></script>
+    <script src="../../../widget/dataAccess/Posts.js"></script>
+    <link rel="stylesheet" href="../assets/addPosts.css">
+    <script src="./formValidation.js"></script>
+    <script src="./editPost.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="container">
+        <div class="titleContainer">
+            <div id="subtitle" class="subtitle">Posts / New Public Post</div>
+            <div class="blackline"></div>
+            <div class="title">Public Posts</div>
+        </div>
+    
+        <div class="grid">
+            <div class="left">
+                <div class="labelContainer">
+                    <h3>Title*</h3>
+                </div>
+            </div>
+            <div class="right">
+                <div class="inputContainer" >
+                    <div class="input">
+                        <input placeholder="Enter Title" type="text" id="title" oninput="clearAllErrors(true, false)">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="grid xs" id="titleErrors" style="display: none;">
+            <div class="left"></div>
+            <div class="right">
+                <div class="inputContainer" >
+                    <div class="errors">
+                        <h3 id="titleLengthError" style="display: none;">Title cannot be more than 100 characters</h3>
+                        <h3 id="titleEmptyError" style="display: none;">Title cannot be empty</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="grid" style="align-items: flex-start;">
+            <div class="left">
+                <div class="labelContainer">
+                    <h3>Description*</h3>
+                </div>
+            </div>
+            <div class="right">
+                <div class="inputContainer" >
+                    <div class="input">
+                        <textarea placeholder="Enter Description" id="description" cols="30" rows="8" oninput="clearAllErrors(false,true)"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="grid xs" id="descErrors"  style="display: none;">
+            <div class="left"></div>
+            <div class="right">
+                <div class="inputContainer" >
+                    <div class="errors">
+                        <h3 id="descLengthError" style="display: none;">Description cannot be more than 100 characters</h3>
+                        <h3 id="descEmptyError" style="display: none;">Description cannot be empty</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bottomContainer">
+            <button class="cancel" onclick="goBack()">Cancel</button>
+            <button class="save btn-success" onclick="addPost()">Save</button>
+        </div>
+    </div>
+
+
+
+    <script>
+
+    </script>
+</body>
+</html>

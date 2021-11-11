@@ -1,0 +1,229 @@
+:root {
+    --backgroundColor: #FABA41;
+    --bodyText: #5F5F5F;
+    --dangerTheme: #FF1200;
+    --defaultTheme: #0B6637;
+    --footerMenuBackgroundColor: #FFFFFF;
+    --footerMenuIconColor: #45CAE6;
+    --headerText: #212121;
+    --icons: #2CA265;
+    --infoTheme: #69D5FF;
+    --primaryTheme: #31A3EE;
+    --successTheme: #2CA265;
+    --titleBar: #2177AE;
+    --titleBarTextAndIcons: #FFFFFF;
+    --warningTheme: #FABA41;
+    --box-shadow: #fff;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    font: inherit;
+    font-family: Helvetica, Sans-Serif, Arial;
+}
+.emptyState{
+    margin-top: 15px;
+    position: relative;
+    width: 100%;
+    height: 50vh;
+    background-image: url('../assets/empty_page.svg') !important;
+    background-repeat: no-repeat !important;
+    background-attachment: absolute !important;
+    background-position: center !important;
+}
+
+#container{
+    max-height: 100vh;
+    height: auto;
+    overflow-y: auto;
+    background-color: var(--backgroundColor) !important;
+    
+    
+}
+/* LOGIN PROMPT START */
+.loginPrompt{
+    display: flex;
+    flex-direction: column;
+    max-height: 25vh;
+    padding: 1% 5% 3% 4%;
+    background-color: var(--backgroundColor) !important;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 10;
+}
+
+
+
+.loginPromptText{
+    font-size: 14px;
+    color: var(--primaryTheme) !important;
+}
+
+.loginPromptButtonContainer{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.loginPromptButton{
+    font-size: 12px;
+    margin-right:5%;
+    padding: 3px;
+    background-color: transparent;
+    border: 0px;
+    font-weight: 750;
+    color: var(--primaryTheme) !important;
+}
+/* LOGIN PROMPT END */
+/* FOLLOWING CONTAINER START */
+.followingContainer {
+    margin-top: 16px;
+	width: 100%;
+    height: auto;
+	display: flex;
+	overflow-x: auto;
+	overflow-y: hidden;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.followingElement {
+    width: 20%;
+    height: 80px;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.activeFollowingElement{
+    border: 2px solid var(--primaryTheme) !important;
+}
+
+.followingImageContainer {
+    width: 44px;
+    height: 44px;
+    margin-top: 1vh;
+    margin-left: 1.5vh;
+    border-radius: 75px;
+}
+
+.followingImageContainer>img{
+    width: 100%;
+    height: 100%;
+    border-radius: 150px;
+}
+
+.followingUsernameContainer{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: -10px;
+}
+
+.followingUsernameContainer > h2{
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--bodyText) !important;
+}
+
+/* FOLLOWING CONTAINER END */
+/* POSTS CONTAINER START */
+.postsContainer{
+    margin-top: 16px;
+}
+.post{
+    margin: 8px;
+    padding: 16px;
+    background: var(--backgroundColor) !important;
+    box-shadow:  0 0 2px 0  var(--box-shadow), 0 2px 4px 0  var(--box-shadow);
+    border-radius: 4px;
+    animation: fadein 1s; 
+}
+@keyframes fadein {
+    from { opacity: 0.2; }
+    to   { opacity: 1; }
+}
+.publicPostTitle{
+    font-weight: 550;
+    font-size: 16px; 
+    word-wrap: break-word;
+    color: var(--bodyText) !important;
+}
+.postText{
+    margin-top: 16px;
+    word-wrap: break-word;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--bodyText) !important;
+}
+.postTextSeeMore{
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--primaryTheme) !important;
+}
+.inline{
+    display: inline;
+}
+
+.profileSection{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    margin-bottom: 16px;
+}
+
+.profileImageContainer{
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+    margin-right: 8px;
+}
+.profileImageContainer > img{
+    width: 100%;
+    height: 100%;
+    border-radius: 40px;
+}
+
+.infoSection > h2{
+    font-size: 14px; 
+    color: var(--primaryTheme) !important;
+    width: 50vw;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px;
+    font-weight: 550;
+}
+.postPluginSectionInfo>*{
+    font-size: 12px; 
+    color: var(--bodyText) !important;
+    display: inline;
+    line-height: 0.5;
+}
+.postImagesContainer{
+    margin-top: 16px;
+}
+.remainingImages > img,.postImagesContainer > img{
+    margin-bottom: 8px;
+    width: 100%;
+}
+
+.seeMoreButton{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.seeMoreButton > button{
+    font-size: 14px;
+    border:0px;
+    background-color: transparent;
+    color: var(--primaryTheme) !important;
+}

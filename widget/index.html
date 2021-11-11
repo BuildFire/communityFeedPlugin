@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/index.css"/>
+    <link rel="stylesheet" href="./css/skeleton.css"/>
+    <script src="../../../scripts/buildfire.js"></script>
+    <script src="../../../scripts/buildfire/components/drawer/drawer.js"></script>
+    <script src="./data/Errors.js"></script>
+    <script src="./data/Follow.js"></script>
+    <script src="./data/Post.js"></script>
+    <script src="./dataAccess/Follows.js"></script>
+    <script src="./dataAccess/Posts.js"></script>
+    <script src="./js/helperFunctions.js"></script>
+    <script src="./js/postsRender.js"></script>
+    <script src="./js/render.js"></script>
+    <script src="./js/Widget.js"></script>
+</head>
+<body>
+
+
+  <div id="loginPrompt" class="loginPrompt"></div>
+
+
+  <div id="skeletonFollowingContainer" class="skeletonFollowingCotainer hidden">
+    <div class="skeletonFollowingElement">
+      <div class="skeletonFollowingImageContainer">
+        <div class="imgskeleton"></div>
+      </div>
+      <div class="skeletonFollowingUsernameContainer">
+        <div class="skeletonFollowingUsername"></div>
+      </div>
+    </div>
+    <div class="skeletonFollowingElement">
+      <div class="skeletonFollowingImageContainer">
+        <div class="imgskeleton"></div>
+      </div>
+      <div class="skeletonFollowingUsernameContainer">
+        <div class="skeletonFollowingUsername"></div>
+      </div>
+    </div>
+    <div class="skeletonFollowingElement">
+      <div class="skeletonFollowingImageContainer">
+        <div class="imgskeleton"></div>
+      </div>
+      <div class="skeletonFollowingUsernameContainer">
+        <div class="skeletonFollowingUsername"></div>
+      </div>
+    </div>
+    <div class="skeletonFollowingElement">
+      <div class="skeletonFollowingImageContainer">
+        <div class="imgskeleton"></div>
+      </div>
+      <div class="skeletonFollowingUsernameContainer">
+        <div class="skeletonFollowingUsername"></div>
+      </div>
+    </div>
+    <div class="skeletonFollowingElement">
+      <div class="skeletonFollowingImageContainer">
+        <div class="imgskeleton"></div>
+      </div>
+      <div class="skeletonFollowingUsernameContainer">
+        <div class="skeletonFollowingUsername"></div>
+      </div>
+    </div>
+  </div>
+
+
+    
+  <div id="container">
+    <div id = "followingContainer" class="followingContainer"></div>
+    <div id = "emptyPostsContainer"></div>
+    <div id = "postsContainer" class="postsContainer"></div>
+  </div>
+
+  <div id="authSkeleton">
+
+
+
+
+    <div class="skeletonPost">
+      <div class="skeletonInfoContainer">
+        <div  class="skeletonProfileImageContainer"></div>
+        <div class="skeletonInfo">
+          <div  class="skeletonUsername"></div>
+          <div  class="skeletonPluginTitle"></div>
+        </div>
+      </div>
+      <div class="skeletonLineLarge"></div>
+      <div class="skeletonLineMedium"></div>
+      <div class="skeletonLineSmall"></div>
+    </div>
+    <div class="skeletonPost">
+      <div class="skeletonInfoContainer">
+        <div  class="skeletonProfileImageContainer"></div>
+        <div class="skeletonInfo">
+          <div  class="skeletonUsername"></div>
+          <div  class="skeletonPluginTitle"></div>
+        </div>
+      </div>
+      <div class="skeletonLineLarge"></div>
+      <div class="skeletonLineMedium"></div>
+      <div class="skeletonLineSmall"></div>
+    </div>
+    <div class="skeletonPost">
+      <div class="skeletonInfoContainer">
+        <div  class="skeletonProfileImageContainer"></div>
+        <div class="skeletonInfo">
+          <div  class="skeletonUsername"></div>
+          <div  class="skeletonPluginTitle"></div>
+        </div>
+      </div>
+      <div class="skeletonLineLarge"></div>
+      <div class="skeletonLineMedium"></div>
+      <div class="skeletonLineSmall"></div>
+    </div>
+  </div>
+
+
+
+
+  <div id="unauthSkeleton" class="skeleton" >
+
+
+
+    <div class = "skeletonPostsContainer" >
+      <div class="skeletonPost">
+        <div class="skeletonLineTitle"></div>
+        <div class="skeletonLineLarge"></div>
+        <div class="skeletonLineMedium"></div>
+        <div class="skeletonLineSmall"></div>
+      </div>
+
+    </div>
+    <div class="skeletonPost">
+      <div class="skeletonLineTitle"></div>
+      <div class="skeletonLineLarge"></div>
+      <div class="skeletonLineMedium"></div>
+      <div class="skeletonLineSmall"></div>
+    </div>
+    <div class="skeletonPost">
+      <div class="skeletonLineTitle"></div>
+      <div class="skeletonLineLarge"></div>
+      <div class="skeletonLineMedium"></div>
+      <div class="skeletonLineSmall"></div>
+    </div>
+    <div class="skeletonPost">
+      <div class="skeletonLineTitle"></div>
+      <div class="skeletonLineLarge"></div>
+      <div class="skeletonLineMedium"></div>
+      <div class="skeletonLineSmall"></div>
+    </div>
+    
+  </div>
+
+
+
+
+
+
+
+
+
+  <script>
+    buildfire.appearance.titlebar.show(null, (err) =>{return});
+    buildfire.auth.onLogin((user) => {
+      location.reload();
+    }, true);
+    buildfire.auth.onLogout(() => {
+      location.reload();
+    }, true);
+
+
+    let container = document.getElementById("container");
+    let loading = false;
+    container.onscroll = () =>{
+      let check = true;
+      if(document.getElementById("followingContainer")){
+        let following = document.getElementById("followingContainer");
+        let list = following.childNodes;
+        for(let index in list){
+          let item = list[index];
+          let active = item && item.childNodes ? item.childNodes[0] : null;
+          if(active?.classList?.contains("activeFollowingElement")){
+            check = false;
+            break;
+          }
+      }
+      }
+      if(check && !loading){
+        if (container.scrollHeight - container.scrollTop - container.clientHeight < 1){
+          buildfire.spinner.show();
+          loading = true;
+          Posts.getPosts({skip:document.getElementById("postsContainer").childNodes.length},(e, r) =>{
+            buildfire.spinner.hide();
+            lastScroll = 0;
+            renderPosts(r,false,(s) =>{
+              loading = false;
+            });
+          })
+        } 
+      }
+    }
+    
+    let onUpdate = buildfire.appData.onUpdate((event) => {
+      if(!event.data){
+        let id = `${event.id}publicPost`;
+        if(document.getElementById(id)){
+          document.getElementById(id).remove();
+          if(document.getElementById("postsContainer").childNodes.length == 0) {
+            renderEmptyPostsState();
+          }
+        }
+      }
+      if(event.tag == Posts.TAG && event.data){
+        if(event.data.isPublic){
+          let id = `${event.id}publicPost`;
+          if(document.getElementById(id)){
+            let parent = document.getElementById(id);
+            parent.childNodes[0].innerHTML = event.data.displayName;
+            parent.childNodes[1].innerHTML = event.data.postText;
+          }
+        }
+      }
+      else if(event.tag == Follows.TAG){
+        buildfire.auth.getCurrentUser((err,currentUser) =>{
+          if(event.data.userId === currentUser?._id){
+            renderFollowContainer();
+          }
+        });
+      }
+    });
+
+    
+ </script>
+</body>
+</html>
