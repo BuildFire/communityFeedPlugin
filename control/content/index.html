@@ -3,6 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="../../../../scripts/buildfire.js"></script>
+    <link rel="stylesheet" href="./bf_base.css">
     <link rel="stylesheet" href="style.css"/>
     <link rel="stylesheet" href="./assets/base.css">
     <link rel="stylesheet" href="./assets/linearicons/cpIcons.css">
@@ -21,21 +22,20 @@
     <div class="titleBlackline"></div>
     <div class="title">Public Posts</div>
   </div>
-  <div class="infoContainer">
-    Public posts will appear in everybodys feed. Users will be able to see only public posts until they log in.
-  </div>
-  <div class="searchContainer">
+    <p class="info-note">
+      Public posts will appear in everybodys feed. Users will be able to see only public posts until they log in.
+    </p>  
+
+    <div class="searchContainer">
     <div class="form-group form-buttons-input">
-      <div class="input-group">
+      <div class="input-group search-bar">
           <input type="text" class="form-control" placeholder="Search Title" id="title" />
-          <span class="input-group-btn">
-              <button class="btn btn-info" onclick="searchPosts()"><span class="icon icon-magnifier"></span></button>
-          </span>
+          <button class="btn btn-info"><div class="search-icon" onclick="searchPosts()"></div></button>
       </div>
     </div>
   </div>
   <div class="addNewContainer">
-    <button class="btn btn-success"  onclick="addNewPost()">+ <span style="margin-left: 15px;padding-right: 5px;">Add</span></button>
+    <button class="btn btn-success btn-add"  onclick="addNewPost()">Add Post</button>
   </div>
   <div class="tableContainer">
     <table id="searchTable"></table>
