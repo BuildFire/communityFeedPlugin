@@ -171,7 +171,7 @@ class SearchTableHelper{
 		let t=this;
 		let tdContainer = this._create('td',tr,'',["editColumn"]);
 		if(this.config.options.showEditButton) {
-			let button =this._create('button', tdContainer, '<span class="icon icon-pencil"></span>', ["btn", "btn--icon"]);
+			let button =this._create('button', tdContainer, '<span class="icon icon-pencil3"></span>', ["btn", "btn--icon"]);
 			button.onclick=()=>{
 				window.localStorage.setItem("posttobeedited",tdContainer.parentElement.getAttribute("objid"));
 				window.location.href="./components/editPost.html";

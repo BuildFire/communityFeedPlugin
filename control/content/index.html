@@ -19,8 +19,7 @@
 </head>
 <body>
   <div class="titleContainer">
-    <div class="titleBlackline"></div>
-    <div class="title">Public Posts</div>
+    <h1 class="title">Public Posts</h1> 
   </div>
     <p class="info-note">
       Public posts will appear in everybodys feed. Users will be able to see only public posts until they log in.
@@ -42,6 +41,7 @@
   </div>
 
   <script>
+      // window.location.href = "./components/addNewPost.html"
       let searchTableHelper = new SearchTableHelper("searchTable",Posts.TAG,searchTableConfig);
       function load(){searchTableHelper.search()}
       load();
