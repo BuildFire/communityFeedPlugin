@@ -28,6 +28,7 @@
 tbody>tr{
     border: 0.5px solid rgb(216,216,216);
     border-bottom: 0px;
+    border-right: 0px;
    
 }
 tbody>tr:last-child{

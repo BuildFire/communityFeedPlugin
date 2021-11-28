@@ -16,7 +16,6 @@ input , textarea{
     padding: 1%;
     font-size: 15px;
     border: 1px solid #e5e5e5;
-    resize: none;
     float: right;
     margin-right: 2% !important;
     width: 98%;
@@ -32,18 +31,21 @@ input , textarea{
     color: red;
 }
 .bottomContainer{
+    position: fixed;
     width: 100%;
+    padding-top: 25px;
+    bottom: 0;
+    left: 0;
     display: flex;
     justify-content: flex-end;
-    align-items: center;
-    height: 45px;
-    margin-top: 2.5%;
-    margin-bottom: 1%;
+    align-items: flex-end;
+    background-color: var(--c-white);
+    box-shadow: 0 -0.125rem 0.5rem rgb(0 0 0 / 10%);
 }
 .bottomContainer > button{
     margin-right: 25px;
     width: 12%;
-    height: 100%;
+    height: 50%;
     border-radius: 5px;
 }
 .bottomContainer>.cancel{

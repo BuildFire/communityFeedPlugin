@@ -17,64 +17,42 @@
 <body>
     <div id="container">
         <div class="titleContainer">
-            <div id="subtitle" class="subtitle">Posts / New Public Post</div>
-            <div class="blackline"></div>
-            <div class="title">Public Posts</div>
-        </div>
+            <h1 class="title">Edit Post</h1> 
+          </div>
     
         <div class="grid">
             <div class="left">
                 <div class="labelContainer">
-                    <h3>Title*</h3>
+                    <h3>Title<span style="color: red;"> *</span></h3>
                 </div>
             </div>
             <div class="right">
                 <div class="inputContainer" >
                     <div class="input">
-                        <input placeholder="Enter Title" type="text" id="title" oninput="clearAllErrors(true, false)">
+                        <input type="text" id="title" oninput="checkIfCanSubmit()">
                     </div>
                 </div>
             </div>
         </div>
-        <div class="grid xs" id="titleErrors" style="display: none;">
-            <div class="left"></div>
-            <div class="right">
-                <div class="inputContainer" >
-                    <div class="errors">
-                        <h3 id="titleLengthError" style="display: none;">Title cannot be more than 100 characters</h3>
-                        <h3 id="titleEmptyError" style="display: none;">Title cannot be empty</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="grid" style="align-items: flex-start;">
+
+        <div class="grid" style="align-items: flex-start;margin-bottom: 14%;">
             <div class="left">
                 <div class="labelContainer">
-                    <h3>Description*</h3>
+                    <h3>Description<span style="color: red;"> *</span></h3>
                 </div>
             </div>
             <div class="right">
                 <div class="inputContainer" >
                     <div class="input">
-                        <textarea placeholder="Enter Description" id="description" cols="30" rows="8" oninput="clearAllErrors(false,true)"></textarea>
+                        <textarea  id="description" cols="30" rows="8" oninput="checkIfCanSubmit()"></textarea>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="grid xs" id="descErrors"  style="display: none;">
-            <div class="left"></div>
-            <div class="right">
-                <div class="inputContainer" >
-                    <div class="errors">
-                        <h3 id="descLengthError" style="display: none;">Description cannot be more than 100 characters</h3>
-                        <h3 id="descEmptyError" style="display: none;">Description cannot be empty</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
+
         <div class="bottomContainer">
-            <button class="btn btn-danger btn-outlined" onclick="goBack()">Cancel</button>
-            <button class="btn btn-success" onclick="addPost()">Save</button>
+            <button class="btn btn-secondary btn-outlined" onclick="goBack()">Cancel</button>
+            <button class="btn btn-success" id="saveButton" onclick="addPost()">Save</button>
         </div>
     </div>
 
