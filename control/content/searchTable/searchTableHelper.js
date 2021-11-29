@@ -161,11 +161,7 @@ class SearchTableHelper{
 
 					}
 					td=this._create('td',tr,output,classes);
-					td.onclick=()=>{
-						
-						window.localStorage.setItem("posttobeedited",td.parentElement.getAttribute("objid"));
-						window.location.href="./components/editPost.html";
-					}
+
 				}
 				if(colConfig.width)
 						td.style.width = colConfig.width;
@@ -173,17 +169,19 @@ class SearchTableHelper{
 		});
 
 		let t=this;
+		let tdContainer = this._create('td',tr,'',["editColumn"]);
 		if(this.config.options.showEditButton) {
-			let td =this._create('td', tr, '<button class="btn btn--icon"><span class="icon icon-pencil"></span></button>', ["editColumn"]);
-			td.onclick=()=>{
-				t.onEditRow(obj,tr);
+			let button =this._create('button', tdContainer, '<span class="icon icon-pencil3"></span>', ["btn", "btn--icon"]);
+			button.onclick=()=>{
+				window.localStorage.setItem("posttobeedited",tdContainer.parentElement.getAttribute("objid"));
+				window.location.href="./components/editPost.html";
 			};
 		}
 
 		if(this.config.options.showDeleteButton) {
-			let td = this._create('td', tr, '<button class="btn btn--icon"><span class="icon icon-cross2"></span></button>', ["editColumn"]);
+			let button =this._create('button', tdContainer, '<span class="icon icon-cross2"></span>', ["btn","btn--icon"]);
 			let t = this;
-			td.onclick=()=>{
+			button.onclick=()=>{
 				buildfire.notifications.confirm({
 					title:"Are you sure?"
 					,message:"Are you sure you want to delete this post?"

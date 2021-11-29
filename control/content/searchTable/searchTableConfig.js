@@ -7,8 +7,8 @@ let timeRender = (d) =>{
 
 const searchTableConfig ={
 	options:{
-		showEditButton:false
-		,showDeleteButton:true
+		showEditButton:true,
+		showDeleteButton:true
 	}
 	,columns:[
 		{
