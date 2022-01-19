@@ -134,7 +134,7 @@ const createUserPostHeader = (post, parent) =>{
   })
   }
   let postPluginSectionInfo = createElement("div", "", ["postPluginSectionInfo",]);
-  let pluginTitle = createElement( "h3", post.data.pluginInstance.pluginInstanceTitle, ["pluginTitle"], `${postId}pluginTitle`);
+  let pluginTitle = createElement( "h3", post.data.pluginInstance.pluginInstanceTitle.replace('%20',' '), ["pluginTitle"], `${postId}pluginTitle`);
   let postTimeText = getPostTime(post.data.createdOn);
   let postTime = createElement( "h3", " - " + postTimeText, ["postTime"], `${postId}postTime`  );
   pluginTitle.setAttribute("instanceId", post.data.pluginInstance.pluginInstanceId);
