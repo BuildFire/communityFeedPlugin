@@ -77,6 +77,7 @@ const renderFollowedUser = (userId, parent, prepend = false) =>{
     followingImageContainer.appendChild(userImage);
     followingElement.appendChild(followingImageContainer);
     buildfire.auth.getUserProfile({ userId: userId }, (err, user) => {
+        if(err || !user) return console.error('User not found.');
         let followingUsernameContainer = createElement("div","",["followingUsernameContainer",`scrollableUsername${userId}`]);
         let username;
         if(user.displayName) username = user.displayName;
