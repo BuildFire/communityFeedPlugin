@@ -64,6 +64,7 @@ const render = (callback) =>{
             hideLoginPrompt();
             buildfire.spinner.show();
             renderFollowContainer();
+            startDeletedUsersSync(user._id);
             Posts.getPosts({},(err, r) =>{
                 buildfire.spinner.hide()
                 if(r && r.length > 0){
@@ -106,6 +107,73 @@ const render = (callback) =>{
 
 }
 
+const processUser = (userId, callback) => {
+    Promise.all([
+        Posts.softDeletePosts(userId),
+        Follows.removeDeletedUserFollowData(userId),
+        Follows.removeDeletedUserFromFollowersData(userId)
+    ]).then((data) => {
+        callback();
+    });
+
+}
+const processDeletedUsers = (users, callback) => {
+    const iterateUsers = (users, index, callback) => {
+        if (index < users.length) {
+            processUser(users[index].userId, () => {
+                iterateUsers(users, index + 1, callback);
+            });
+        } else {
+            callback()
+        }
+    }
+    iterateUsers(users, 0, () => { 
+        callback(); 
+    });
+}
+
+const startDeletedUsersSync = (loggedInUserId) => {
+    const getDeletedUsers = (date, callback) => {
+        buildfire.auth.getDeletedUsers({ fromDate: new Date(date) }, (err, result) => {
+            if (err) return console.error(err);
+            callback(err, result);
+        });
+    }
+
+    UsersDeletionStateAccess.get().then((lastDate) => {
+        if (!lastDate.deletedUsersLastSync)
+            lastDate.deletedUsersLastSync = new Date(new Date().setDate(new Date().getDate() - 30));
+
+        const saveLastDate = (callback) => {
+            lastDate.deletedUsersLastSync = new Date();
+            UsersDeletionStateAccess.save(loggedInUserId, lastDate)
+            .then(() => {
+                if(callback) callback();
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+        }
+
+        const processUsers = () => {
+            getDeletedUsers(lastDate.deletedUsersLastSync, (err, result) => {
+                if (err) return console.error(err);
+                if (result.length) {
+                    processDeletedUsers(result, () => {
+                        saveLastDate(() => {
+                            processUsers();
+                        });
+                    });
+                } else {
+                    saveLastDate();
+                }
+            });
+        }
+        processUsers();
+    }).catch((error) => {
+        console.error(error);
+    });
+};
 
 const renderFollowContainer = () =>{
     Follows.getUserFollowData((err, r) =>{

@@ -1,9 +1,30 @@
 class Posts{
     static TAG = "posts";
 
-
     static lastPostTime = "";
     static skip = 0;
+
+    static softDeletePosts = (userId) => {
+        return new Promise((resolve, reject) => {
+            buildfire.appData.searchAndUpdate({
+                "userId": userId
+            }, {
+                $set: {
+                    'postText': "MESSAGE DELETED",
+                    'postImages': [],
+                    'deletedOn': new Date(),
+                    'originalCreatedBy': userId,
+                    'createdBy': null,
+                    'userId': null,
+                    'displayName': null,
+                }
+            }, 'posts', (err, result) => {
+                if (err) return reject(err);
+                resolve(result);
+            });
+        });
+    }
+    
     static createPost = (post, user, isPublic = false) =>{
         let displayName = "Someone";
         if(isPublic){

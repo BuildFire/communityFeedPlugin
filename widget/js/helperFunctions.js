@@ -182,14 +182,6 @@ const getNewPosts = () =>{
     })
 }
 
-
-
-
-
-
-
-
-
 const getPostTime = (time) => {
     var diffInMs = new Date().getTime() - new Date(time).getTime();
     const inSecs = 1000;
@@ -211,10 +203,18 @@ const getPostTime = (time) => {
     }
 };
 
-
 const showMoreImages = (postId) => {
     document.getElementById(`${postId}postRemainingImages`).classList.remove("hidden");
     document.getElementById(`${postId}ShowMoreContainer`).classList.add("hidden");
 };
 
 
+const splitArrayIntoChunks = (array) => {
+    let chunkSize = 10, chunks = [];
+
+    for (let i = 0; i < array.length; i += chunkSize) {
+        chunks.push(array.slice(i, i + chunkSize));
+    }
+
+    return chunks;
+}

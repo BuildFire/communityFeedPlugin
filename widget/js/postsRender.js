@@ -79,14 +79,17 @@ const createUserPostHeader = (post, parent) =>{
   let postId = post.id;
   let profileSection = createElement( "div", "", ["profileSection"], `${postId}ProfileSection`);
   let profileImageContainer = createElement( "div", "", ["profileImageContainer"], `${postId}profileImageContainer`);
-  let userPictureUrl = buildfire.auth.getUserPictureUrl({userId: post.data.userId});
+  let userPictureUrl = null;
+  if(!post.data.deletedOn)
+      buildfire.auth.getUserPictureUrl({userId: post.data.userId});
 
   let userPicture = createImage(userPictureUrl, false);
   profileImageContainer.appendChild(userPicture);
   let infoSection = createElement("div", "", ["infoSection"], `${postId}infoSection`);
-  let username = createElement("h2", post.data.displayName, ["username"], `${postId}displayName`);
+  let username = createElement("h2", post.data.displayName ? post.data.displayName : 'Someone', ["username"], `${postId}displayName`);
   username.style.cursor = "pointer";
   username.onclick = () =>{
+    if(post.data.deletedOn) return;
     let userId = post.data.userId;
     buildfire.auth.getCurrentUser((err,currentUser) =>{
       if(currentUser && currentUser._id == post.data.userId) return;

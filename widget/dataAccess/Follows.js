@@ -1,6 +1,88 @@
 class Follows {
   static TAG = "follows";
 
+  static removeDeletedUserFollowData(userId) {
+    return new Promise((resolve, reject) => {
+      buildfire.appData.search({ filter: { "_buildfire.index.string1": userId } }, Follows.TAG, (err, result) => {
+        if (err) return console.error(err);
+        Promise.all(
+          result.map(el => {
+            return new Promise((resolve, reject) => {
+              buildfire.appData.delete(el.id, Follows.TAG, (err, deleted) => {
+                if (err) return reject(err);
+                if (deleted && deleted.status == 'deleted') resolve();
+                else reject();
+              })
+            });
+          })).then(() => {
+            resolve();
+          }).catch((err) => console.error(err));
+      });
+    });
+  }
+
+  static removeDeletedUserFromFollowersData(userId) {
+    return new Promise((resolve, reject) => {
+      let searchOptions = {
+        filter: {
+          '$json.followedUsers': { "$in": [userId] }
+        },
+        limit: 50,
+        skip: 0
+      }, records = [];
+
+
+      const deleteFollowers = (followers, callback) => {
+        followers.forEach(follower => {
+          follower.data.followedUsers = follower.data.followedUsers.filter(el => el !== userId);
+        });
+
+        Promise.all(
+          followers.map(follower => {
+            return new Promise((resolve, reject) => {
+              buildfire.appData.update(follower.id, follower.data, 'follows', (err, updated) => {
+                if (err) return reject(err);
+                if (updated && updated.id) resolve();
+                else reject();
+              })
+            });
+          })).then(() => {
+            callback();
+          }).catch((err) => console.error(err));
+      }
+
+      const processFollowers = (followers, index) => {
+        let splittedFollowers = splitArrayIntoChunks(followers);
+
+        const iterateFollowers = (followersChunk, index) => {
+          if (index < followersChunk.length) {
+            deleteFollowers(followersChunk[index], () => {
+              iterateFollowers(splittedFollowers, index + 1);
+            });
+          } else {
+            resolve(followers);
+          }
+        }
+        iterateFollowers(splittedFollowers, 0);
+      }
+
+      const getAllFollowers = () => {
+        buildfire.appData.search(searchOptions, 'follows', (err, result) => {
+          if (err) console.error(err);
+
+          if (result.length < searchOptions.limit) {
+            records = records.concat(result);
+            processFollowers(records, 0);
+          } else {
+            searchOptions.skip = searchOptions.skip + searchOptions.limit;
+            records = records.concat(result);
+            return getAllFollowers();
+          }
+        });
+      }
+      getAllFollowers();
+    });
+  }
   
   static createFollowData = (user, fUser, fPlugin) => {
     let data = {userId: user._id,_buildfire: { index: Follows.buildIndex(user._id) }};
