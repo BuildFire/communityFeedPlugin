@@ -1,0 +1,49 @@
+{
+  "sections": {
+    "general": {
+      "title": "General",
+      "labels": {
+        "loginPrompt": {
+          "title": "Login Prompt",
+          "placeholder": "Login to see posts from friends and groups you follow",
+          "defaultValue": "Login to see posts from friends and groups you follow"
+        },
+        "loginJoin": {
+          "title": "Login Prompt Join",
+          "placeholder": "JOIN",
+          "defaultValue": "JOIN"
+        },
+        "follow": {
+          "title": "Follow",
+          "placeholder": "Follow",
+          "defaultValue": "Follow"
+        },
+        "unfollow": {
+          "title": "Unfollow",
+          "placeholder": "Unfollow",
+          "defaultValue": "Unfollow"
+        },
+        "seeProfile": {
+          "title": "See Profile",
+          "placeholder": "See Profile",
+          "defaultValue": "See Profile"
+        },
+        "messageDeleted": {
+          "title": "Message Deleted",
+          "placeholder": "This message was deleted.",
+          "defaultValue": "This message was deleted."
+        },
+        "readMore": {
+          "title": "Read More",
+          "placeholder": "Read More",
+          "defaultValue": "Read More"
+        },
+        "readLess": {
+          "title": "Read Less",
+          "placeholder": "Read Less",
+          "defaultValue": "Read Less"
+        }
+      }
+    }
+  }
+}

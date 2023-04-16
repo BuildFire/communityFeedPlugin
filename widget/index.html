@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="buildfire" content="enablePluginJsonLoad">
     <link rel="stylesheet" href="./css/index.css"/>
     <link rel="stylesheet" href="./css/skeleton.css"/>
     <script src="../../../scripts/buildfire.js"></script>
@@ -13,7 +14,6 @@
     <script src="./dataAccess/Follows.js"></script>
     <script src="./dataAccess/Posts.js"></script>
     <script src="./dataAccess/UsersDeletionStateAccess.js"></script>
-    <script src="./js/deletedUsersSync.js"></script>
     <script src="./js/helperFunctions.js"></script>
     <script src="./js/postsRender.js"></script>
     <script src="./js/render.js"></script>
@@ -22,8 +22,14 @@
 <body>
 
 
-  <div id="loginPrompt" class="loginPrompt"></div>
-
+  <div id="loginPrompt" class="loginPrompt">
+    <div class="loginPromptTextContainer">
+      <h3 class="loginPromptText" bfString="general.loginPrompt"></h3>
+    </div>
+    <div class="loginPromptButtonContainer">
+      <button class="loginPromptButton" bfString="general.loginJoin"></button>
+    </div>
+  </div>
 
   <div id="skeletonFollowingContainer" class="skeletonFollowingCotainer hidden">
     <div class="skeletonFollowingElement">
@@ -77,10 +83,6 @@
   </div>
 
   <div id="authSkeleton">
-
-
-
-
     <div class="skeletonPost">
       <div class="skeletonInfoContainer">
         <div  class="skeletonProfileImageContainer"></div>
@@ -123,7 +125,6 @@
 
 
   <div id="unauthSkeleton" class="skeleton" >
-
 
 
     <div class = "skeletonPostsContainer" >

@@ -218,3 +218,16 @@ const splitArrayIntoChunks = (array) => {
 
     return chunks;
 }
+
+const getString = (key) => {
+    let response;
+    buildfire.language.get({ stringKey: key }, (err, res) => {
+        if (err) {
+            return err;
+        }
+
+        response = res;
+        return;
+    });
+    return response;
+}

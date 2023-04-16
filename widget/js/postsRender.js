@@ -5,9 +5,9 @@ const createPostBody = (post, parent) =>{
      if(data.postText.length > postTrimLength){
        let trimmedText = data.postText.substring(0, postTrimLength);
        let trimmedPostText = createElement("h3",trimmedText+"... ",["postText","inline"],`${id}postText`);
-       let fullPostText = createElement("h3",data.postText,["postText","inline","hidden"],`${id}postTextFull`);
-       let readMoreButton = createElement("h3","Read More",["postTextSeeMore","inline","bold"],`${id}postTextSeeMore`);
-       let readLessButton = createElement("h3","  Read Less",["postTextSeeMore","inline","bold","hidden"],`${id}postTextSeeLess`);
+       let fullPostText = createElement("h3",data.deletedOn ? getString('general.messageDeleted') : data.postText,["postText","inline","hidden"],`${id}postTextFull`);
+       let readMoreButton = createElement("h3",getString("general.readMore"),["postTextSeeMore","inline","bold"],`${id}postTextSeeMore`);
+       let readLessButton = createElement("h3",getString("general.readLess"),["postTextSeeMore","inline","bold","hidden"],`${id}postTextSeeLess`);
        readLessButton.onclick = () =>{
          trimmedPostText.classList.remove("hidden");
          readMoreButton.classList.remove("hidden");         
@@ -25,7 +25,7 @@ const createPostBody = (post, parent) =>{
        parent.appendChild(readMoreButton);
        parent.appendChild(readLessButton);
       }else {
-        let fullPostText = createElement("h3",data.postText,["postText","inline"],`${id}postTextFull`);
+        let fullPostText = createElement("h3",data.deletedOn ? getString('general.messageDeleted') : data.postText,["postText","inline"],`${id}postTextFull`);
         parent.appendChild(fullPostText);
      }
   }
@@ -101,13 +101,13 @@ const createUserPostHeader = (post, parent) =>{
               {
                   enableFilter:false,
                   listItems: [
-                      {text:'See Profile'},
-                      {text: r ? 'Unfollow' : 'Follow'}                                        
+                      {text: getString('general.seeProfile') },
+                      {text: r ?  getString('general.unfollow') : getString('general.follow')}                                        
               ]
               },(err, result) => {
                   if (err) return;
-                  else if(result.text == "See Profile") buildfire.auth.openProfile(userId);
-                  else if(result.text == "Unfollow") Follows.unfollowUser(userId,(err, r) => {
+                  else if(result.text == getString('general.seeProfile') ) buildfire.auth.openProfile(userId);
+                  else if(result.text == getString('general.unfollow')) Follows.unfollowUser(userId,(err, r) => {
                     if(err || !r) return;
                     let id = `scrollableItem${userId}`;
                     if(document.getElementById(id)){
@@ -119,7 +119,7 @@ const createUserPostHeader = (post, parent) =>{
                     }
                     else renderFollowingContainer(r.data.followedUsers || [], r.data.followedPlugins || [], true);
                   });
-                  else if(result.text == "Follow") Follows.followUser(userId,(err, r) => {
+                  else if(result.text == getString('general.follow')) Follows.followUser(userId,(err, r) => {
                     if(err || !r) return;
                     Posts.getPosts({},(err, r) =>{
                       if(r && r.length > 0) renderPosts(r);
