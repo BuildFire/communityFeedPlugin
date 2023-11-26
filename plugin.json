@@ -4,6 +4,7 @@
   "pluginDescription": "Community Feed allows users to follow other users and see public posts from followed users in a single feed. Community Feed is a companion plugin to Community Wall.",
   "pluginIcon": "icon.png",
   "supportEmail": "support@buildfire.com",
+  "supportSite": "https://learn.appdocumentation.com/en/articles/8545797-community-feed",
   "control": {
     "content": {
       "enabled": true
