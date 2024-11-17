@@ -20,10 +20,10 @@ const createImage = (src, loadInPreviewer = true) => {
 };
 
 const validateImage = (image) => {
-    return new Promise((resolve, rejetc) => {
+    return new Promise((resolve) => {
         const img = document.createElement('img');
         img.onload = () => resolve(true);
-        img.onerror = () => reject(false);
+        img.onerror = () => resolve(false);
         img.src = image;
     });
 };
