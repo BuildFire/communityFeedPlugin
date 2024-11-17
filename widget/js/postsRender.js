@@ -10,15 +10,15 @@ const createPostBody = (post, parent) =>{
        let readLessButton = createElement("h3","  Read Less",["postTextSeeMore","inline","bold","hidden"],`${id}postTextSeeLess`);
        readLessButton.onclick = () =>{
          trimmedPostText.classList.remove("hidden");
-         readMoreButton.classList.remove("hidden");         
+         readMoreButton.classList.remove("hidden");
          fullPostText.classList.add("hidden")
-         readLessButton.classList.add("hidden");         
+         readLessButton.classList.add("hidden");
         }
         readMoreButton.onclick = () =>{
          trimmedPostText.classList.add("hidden");
-         readMoreButton.classList.add("hidden");         
+         readMoreButton.classList.add("hidden");
          fullPostText.classList.remove("hidden")
-         readLessButton.classList.remove("hidden");         
+         readLessButton.classList.remove("hidden");
        }
        parent.appendChild(trimmedPostText);
        parent.appendChild(fullPostText);
@@ -63,7 +63,7 @@ const createPostHeader = (post, parent) =>{
 }
 
 const createPublicPostHeader = (post, parent) =>{
-  let displayName = post.data.displayName; 
+  let displayName = post.data.displayName;
   let postTitle = createElement( "h2", displayName, ["publicPostTitle"], `${post.id}postDisplayName`);
   parent.appendChild(postTitle);
 }
@@ -81,7 +81,7 @@ const createUserPostHeader = (post, parent) =>{
   let profileImageContainer = createElement( "div", "", ["profileImageContainer"], `${postId}profileImageContainer`);
   let userPictureUrl = buildfire.auth.getUserPictureUrl({userId: post.data.userId});
 
-  let userPicture = createImage(userPictureUrl, false);
+  let userPicture = createUserImage(userPictureUrl);
   profileImageContainer.appendChild(userPicture);
   let infoSection = createElement("div", "", ["infoSection"], `${postId}infoSection`);
   let username = createElement("h2", post.data.displayName, ["username"], `${postId}displayName`);
@@ -99,7 +99,7 @@ const createUserPostHeader = (post, parent) =>{
                   enableFilter:false,
                   listItems: [
                       {text:'See Profile'},
-                      {text: r ? 'Unfollow' : 'Follow'}                                        
+                      {text: r ? 'Unfollow' : 'Follow'}
               ]
               },(err, result) => {
                   if (err) return;
@@ -125,10 +125,10 @@ const createUserPostHeader = (post, parent) =>{
                     renderFollowingContainer(r.data.followedUsers || [], r.data.followedPlugins || [], true);
                   });
                   buildfire.components.drawer.closeDrawer();
-    
+
               }
           );
-  
+
       })
       }
   })
@@ -148,7 +148,7 @@ const createUserPostHeader = (post, parent) =>{
   parent.appendChild(profileSection);
 }
 
-  
+
 const createPublicPostUI = (post, parentId, prepend = false) => {
   let parent = document.getElementById(parentId);
   let postContainer = createElement( "div", "", ["post"], `${post.id}publicPost`);
@@ -158,9 +158,9 @@ const createPublicPostUI = (post, parentId, prepend = false) => {
   if(!prepend) parent.appendChild(postContainer);
   else parent.prepend(postContainer);
 };
-  
 
-  
+
+
 const createUserPost = (post, parentId, prepend = false) => {
   let parent = document.getElementById(parentId);
   let postContainer = createElement("div", "", ["post"], `${post.id}Post`);
@@ -173,5 +173,5 @@ const createUserPost = (post, parentId, prepend = false) => {
   if(!prepend) parent.appendChild(postContainer);
   else parent.prepend(postContainer);
 };
-  
+
 
