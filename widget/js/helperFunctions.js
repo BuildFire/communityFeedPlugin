@@ -11,11 +11,15 @@ let activeElement = false;
 
 
 const createImage = (src, loadInPreviewer = true) => {
-    let image = document.createElement("img");
-    image.src = src;
+    const resizedImage = buildfire.imageLib.resizeImage(src, { size: 'xl', aspect: '1:1' });
+
+    let image = document.createElement('img');
+    image.src = resizedImage;
 
     image.style.cursor = "pointer";
-    if (loadInPreviewer) image.onclick = () => buildfire.imagePreviewer.show({ images: [image.src] }, () => console.log("Image opened"));
+    if (loadInPreviewer) {
+        image.onclick = () => buildfire.imagePreviewer.show({ images: [src] }, () => console.log("Image opened"));
+    }
     return image;
 };
 
@@ -29,7 +33,8 @@ const validateImage = (image) => {
 };
 
 const createUserImage = (imageSrc) => {
-    const userImage = createImage('https://app.buildfire.com/app/media/avatar.png', false);
+    const userImage = document.createElement('img');
+    userImage.src = 'https://app.buildfire.com/app/media/avatar.png';
     const imageContainer = createElement('div', '', ['loading-image', 'profile-image-container'], null);
     imageContainer.appendChild(userImage);
 
