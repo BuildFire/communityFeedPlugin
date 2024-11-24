@@ -14,6 +14,8 @@
     --titleBarTextAndIcons: #FFFFFF;
     --warningTheme: #FABA41;
     --box-shadow: #fff;
+    --bf-theme-body-text-rgb: 189, 195, 199;
+    --bf-theme-background-rgb: 189, 195, 199;
 }
 
 *{
@@ -38,8 +40,8 @@
     height: auto;
     overflow-y: auto;
     background-color: var(--backgroundColor) !important;
-    
-    
+
+
 }
 /* LOGIN PROMPT START */
 .loginPrompt{
@@ -78,13 +80,13 @@
 /* FOLLOWING CONTAINER START */
 .followingContainer {
     margin-top: 16px;
-	width: 100%;
+    width: 100%;
     height: auto;
-	display: flex;
-	overflow-x: auto;
-	overflow-y: hidden;
-	margin-left: auto;
-	margin-right: auto;
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .followingElement {
@@ -143,7 +145,7 @@
     background: var(--backgroundColor) !important;
     box-shadow:  0 0 2px 0  var(--box-shadow), 0 2px 4px 0  var(--box-shadow);
     border-radius: 4px;
-    animation: fadein 1s; 
+    animation: fadein 1s;
 }
 @keyframes fadein {
     from { opacity: 0.2; }
@@ -151,7 +153,7 @@
 }
 .publicPostTitle{
     font-weight: 550;
-    font-size: 16px; 
+    font-size: 16px;
     word-wrap: break-word;
     color: var(--bodyText) !important;
 }
@@ -192,7 +194,7 @@
 }
 
 .infoSection > h2{
-    font-size: 14px; 
+    font-size: 14px;
     color: var(--primaryTheme) !important;
     width: 50vw;
     white-space: nowrap;
@@ -202,7 +204,7 @@
     font-weight: 550;
 }
 .postPluginSectionInfo>*{
-    font-size: 12px; 
+    font-size: 12px;
     color: var(--bodyText) !important;
     display: inline;
     line-height: 0.5;
@@ -226,4 +228,36 @@
     border:0px;
     background-color: transparent;
     color: var(--primaryTheme) !important;
+}
+
+.profile-image-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+}
+
+.profile-image-container.loading-image::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(90deg, rgba(var(--bf-theme-background-rgb), 0) 0, rgba(var(--bf-theme-background-rgb), 0.2) 20%, rgba(var(--bf-theme-background-rgb), 0.5) 60%, rgba(var(--bf-theme-background-rgb), 0));
+    -webkit-animation: shimmer 2s infinite;
+    animation: shimmer 2s infinite;
+    content: "";
+}
+
+@-webkit-keyframes shimmer {
+    100% {
+        transform: translateX(100%);
+    }
+}
+@keyframes shimmer {
+    100% {
+        transform: translateX(100%);
+    }
 }

@@ -10,29 +10,43 @@ const createElement = ( elementType, elementInnerHTML, elementClasses, elementId
 let activeElement = false;
 
 
-const createImage = (src, loadInPreviewer = true, isPostImage = false) => {
-    let image = document.createElement("img");
-    image.src = src;
-    if(!isPostImage){
-        if (image.complete) {
-            image.src =  buildfire.imageLib.cropImage(src, { width: 45, height: 45 });
-        } else {
-            image.onload = () => {
-                    if (image.src.indexOf('image.png') < 0) {
-                        image.src =  buildfire.imageLib.cropImage(src, { width: 45, height: 45 });
-                    }
-                }
-            image.onerror = () => {
-                    image.src =  "./assets/image.png"
-            };
-        }
-    }
+const createImage = (src, loadInPreviewer = true) => {
+    const resizedImage = buildfire.imageLib.resizeImage(src, { size: 'xl', aspect: '1:1' });
+
+    let image = document.createElement('img');
+    image.src = resizedImage;
 
     image.style.cursor = "pointer";
-    if (loadInPreviewer) image.onclick = () => buildfire.imagePreviewer.show({ images: [image.src] }, () => console.log("Image opened"));  
+    if (loadInPreviewer) {
+        image.onclick = () => buildfire.imagePreviewer.show({ images: [src] }, () => console.log("Image opened"));
+    }
     return image;
-  };
+};
 
+const validateImage = (image) => {
+    return new Promise((resolve) => {
+        const img = document.createElement('img');
+        img.onload = () => resolve(true);
+        img.onerror = () => resolve(false);
+        img.src = image;
+    });
+};
+
+const createUserImage = (imageSrc) => {
+    const userImage = document.createElement('img');
+    userImage.src = 'https://app.buildfire.com/app/media/avatar.png';
+    const imageContainer = createElement('div', '', ['loading-image', 'profile-image-container'], null);
+    imageContainer.appendChild(userImage);
+
+    validateImage(imageSrc).then((isValid) => {
+        imageContainer.classList.remove('loading-image');
+        if (isValid) {
+            userImage.src = buildfire.imageLib.cropImage(imageSrc, { width: 45, height: 45 });
+        }
+    });
+
+    return imageContainer;
+};
 
 const renderFollowedUser = (userId, parent, prepend = false) =>{
     let followingElement = createElement("div","",["followingElement"],`followingElement${userId}`);
@@ -50,7 +64,7 @@ const renderFollowedUser = (userId, parent, prepend = false) =>{
             Posts.getPosts({},(err, r) =>{
                 buildfire.spinner.hide();
                 document.getElementById("postsContainer").innerHTML = "";
-                
+
                 if(err || !r) return;
                 else renderPosts(r)
 
@@ -61,7 +75,7 @@ const renderFollowedUser = (userId, parent, prepend = false) =>{
             for (var i = 0; i < list.length; i++) {
                 list[i].childNodes[0].classList.remove("activeFollowingElement")
             }
-    
+
             activeState.classList.add("activeFollowingElement");
             activeElement = true;
             Posts.searchPosts({filter: userId},(err, r) =>{
@@ -73,7 +87,7 @@ const renderFollowedUser = (userId, parent, prepend = false) =>{
         }
     }
     let userPictureUrl = buildfire.auth.getUserPictureUrl({userId: userId});
-    let userImage = createImage(userPictureUrl, false);
+    let userImage = createUserImage(userPictureUrl);
     followingImageContainer.appendChild(userImage);
     followingElement.appendChild(followingImageContainer);
     buildfire.auth.getUserProfile({ userId: userId }, (err, user) => {
@@ -84,12 +98,12 @@ const renderFollowedUser = (userId, parent, prepend = false) =>{
         else if(!user.displayName && user.firstName && user.lastName) username = user.firstName + " " + user.lastName;
         else if(!user.displayName && !user.lastName && user.firstName) username = user.firstName;
         else if(!user.displayName && !user.firstName) username = "Someone";
-        
+
         username = username.substring(0,10);
         let scrollableChildUsernameText = createElement("h2",username+"..",[]);
         followingUsernameContainer.appendChild(scrollableChildUsernameText);
         followingElement.appendChild(followingUsernameContainer)
-      
+
     });
     if(prepend) parent.prepend(followingElement);
     else parent.appendChild(followingElement)
@@ -103,7 +117,7 @@ const renderFollowedPlugin = (pId, parent, prepend = false) =>{
         let postsContainer = document.getElementById("postsContainer");
         postsContainer.innerHTML = "";
         buildfire.spinner.show();
-        
+
         let activeState = element.childNodes[0];
         if(activeState.classList.contains("activeFollowingElement")){
             activeElement = false;
@@ -145,7 +159,7 @@ const renderFollowedPlugin = (pId, parent, prepend = false) =>{
             followingElement.appendChild(followingUsernameContainer)
             if(prepend) parent.prepend(followingElement);
             else parent.appendChild(followingElement)
-        
+
         }
     });
 }
